@@ -2,6 +2,20 @@
 
 ![Logo](docs/logo.jpg)
 
-az bicep build --file main.bicep --stdout
+## Deploy
 
-az deployment sub create --name demoSubDeployment --location centralus --template-file main.bicep
+```bash
+cd terraform && terraform init
+```
+
+Update the `env.tfvars.tpl` and rename it `env.tfvars`. Run the plan:
+
+```bash
+terraform plan -out plan.out -var-file env.tfvars
+```
+
+Then apply the changes:
+
+```bash
+terraform apply plan.out
+```
