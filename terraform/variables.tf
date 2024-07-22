@@ -1,0 +1,58 @@
+variable "environment" {
+  description = "The environment deployed"
+  type        = string
+  default     = "dev"
+  validation {
+    condition     = can(regex("(dev|stg|prd)", var.environment))
+    error_message = "The environment value must be a valid."
+  }
+}
+
+variable "domain" {
+  description = "The name of the project's domain"
+  type        = string
+  default     = "bo"
+}
+
+variable "application" {
+  type        = string
+  default     = "hol"
+  description = "The application name"
+}
+
+variable "location" {
+  type        = string
+  default     = "eastus2"
+  description = "The Azure region where the resources should be created"
+}
+
+variable "tags" {
+  type        = map(any)
+  description = "The custom tags for all resources"
+  default     = {}
+}
+
+variable "projects" {
+  type = map(object({
+    name                       = string
+    maximum_dev_boxes_per_user = number
+    env_types                  = list(string)
+  }))
+  description = "The projects to be added in the Dev Center"
+}
+
+variable "environment_catalogs" {
+  type = map(object({
+    name   = string
+    branch = string
+    path   = string
+    uri    = string
+  }))
+  description = "The environments catalogs to be added in the Dev Center"
+}
+
+variable "key_vault_autorized_users_ids" {
+  type        = list(string)
+  description = "The list of the user's object ids authorized to access the Key Vault"
+  default     = []
+}
