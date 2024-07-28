@@ -14,17 +14,30 @@ resource "azapi_resource" "projects_env_types" {
   name      = each.value.env_type
   location  = azurerm_resource_group.this.location
   parent_id = azurerm_dev_center_project.projects[each.value.name].id
-  tags      = local.tags_azapi
-  
+
+  tags = merge(
+    local.tags_azapi,
+    tomap(
+      {
+        "DevCenterProjectName"   = each.value.name,
+        "ProjectEnvironmentType" = each.value.env_type,
+      }
+    )
+  )
+
   identity {
-    type = "SystemAssigned"
+    type = "UserAssigned"
+    identity_ids = [
+      azurerm_user_assigned_identity.projects_acr.id
+    ]
   }
 
   body = jsonencode({
     properties = {
       creatorRoleAssignment = {
         roles = {
-          "45d50f46-0b78-4001-a660-4198cbe8cd05" = {} // DevCenter Dev Box User
+          # "45d50f46-0b78-4001-a660-4198cbe8cd05" = {} // DevCenter Dev Box User
+          "b24988ac-6180-42a0-ab88-20f7382dd24c" = {}
         }
       }
       deploymentTargetId = data.azurerm_subscription.primary.id
