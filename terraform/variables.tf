@@ -56,3 +56,21 @@ variable "key_vault_autorized_users_ids" {
   description = "The list of the user's object ids authorized to access the Key Vault"
   default     = []
 }
+
+variable "vnet_address_prefix" {
+  type        = string
+  description = "Vnet Address prefix"
+  default     = "10.0"
+}
+
+variable "vnet_address_suffix" {
+  type        = string
+  description = "Vnet Address suffix"
+  default     = ".0.0/16"
+}
+
+variable "dev_boxes_subnet_address_suffix" {
+  type        = string
+  description = "Dev Boxes Subnet Address suffix"
+  default     = ".0.0/24"
+}
