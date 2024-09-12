@@ -22,7 +22,6 @@ resource "azurerm_key_vault" "this" {
       "Get",
       "List",
       "Set",
-      "Get",
       "Delete",
       "Purge",
       "Recover"
@@ -42,21 +41,6 @@ resource "azurerm_key_vault" "this" {
       "Get",
       "List",
     ]
-  }
-
-  dynamic "access_policy" {
-    for_each = var.key_vault_autorized_users_ids
-    content {
-      tenant_id = data.azurerm_client_config.current.tenant_id
-      object_id = access_policy.value
-
-      secret_permissions = [
-        "Get",
-        "List",
-        "Set",
-      ]
-    }
-
   }
 }
 

@@ -8,22 +8,14 @@ resource "azurerm_dev_center_project" "projects" {
   tags                       = local.tags
 }
 
-resource "azapi_resource" "projects_env_types" {
-  for_each  = { for idx, project in local.projects_env_types : idx => project }
-  type      = "Microsoft.DevCenter/projects/environmentTypes@2023-04-01"
-  name      = each.value.env_type
-  location  = azurerm_resource_group.this.location
-  parent_id = azurerm_dev_center_project.projects[each.value.name].id
+resource "azurerm_dev_center_project_environment_type" "projects_env_types" {
+  for_each              = { for idx, project in local.projects_env_types : idx => project }
+  name                  = each.value.env_type
+  location              = azurerm_resource_group.this.location
+  dev_center_project_id = azurerm_dev_center_project.projects[each.value.name].id
+  deployment_target_id  = "/subscriptions/${data.azurerm_client_config.current.subscription_id}"
 
-  tags = merge(
-    local.tags_azapi,
-    tomap(
-      {
-        "DevCenterProjectName"   = each.value.name,
-        "ProjectEnvironmentType" = each.value.env_type,
-      }
-    )
-  )
+  tags = local.tags
 
   identity {
     type = "UserAssigned"
@@ -32,19 +24,7 @@ resource "azapi_resource" "projects_env_types" {
     ]
   }
 
-  body = jsonencode({
-    properties = {
-      creatorRoleAssignment = {
-        roles = {
-          # "45d50f46-0b78-4001-a660-4198cbe8cd05" = {} // DevCenter Dev Box User
-          "b24988ac-6180-42a0-ab88-20f7382dd24c" = {}
-        }
-      }
-      deploymentTargetId = data.azurerm_subscription.primary.id
-      status             = "Enabled"
-      # userRoleAssignments = {
-      #   data.azurerm_client_config.current.object_id = "45d50f46-0b78-4001-a660-4198cbe8cd05"
-      # }
-    }
-  })
+  creator_role_assignment_roles = [
+    "b24988ac-6180-42a0-ab88-20f7382dd24c" // Contributor
+  ]
 }

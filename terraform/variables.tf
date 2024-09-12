@@ -51,12 +51,6 @@ variable "environment_catalogs" {
   description = "The environments catalogs to be added in the Dev Center"
 }
 
-variable "key_vault_autorized_users_ids" {
-  type        = list(string)
-  description = "The list of the user's object ids authorized to access the Key Vault"
-  default     = []
-}
-
 variable "vnet_address_prefix" {
   type        = string
   description = "Vnet Address prefix"

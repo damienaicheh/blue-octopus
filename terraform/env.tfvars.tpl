@@ -9,8 +9,8 @@ projects = {
     maximum_dev_boxes_per_user = 2
     env_types                  = ["dev", "stg"]
   },
-  "smart_building" = {
-    name                       = "smart-building"
+  "showcase" = {
+    name                       = "showcase"
     maximum_dev_boxes_per_user = 2
     env_types                  = ["dev", "stg"]
   }
@@ -29,8 +29,10 @@ environment_catalogs = {
     path   = "/environments"
     uri    = "https://github.com/microsoft/hands-on-lab-platform-engineering-for-ops.git"
   }
+  "ade_terraform_experiment" = {
+    name   = "ade_terraform_experiment"
+    branch = "main"
+    path   = "/"
+    uri    = "  https://github.com/damienaicheh/ade_terraform_experiments.git"
+  }
 }
-
-key_vault_autorized_users_ids = [
-  "00000000-0000-0000-0000-54e70723e382"
-]
