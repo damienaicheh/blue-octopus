@@ -41,7 +41,7 @@ variable "vnet_address_prefix" {
 variable "vnet_address_suffix" {
   type        = string
   description = "Vnet Address suffix"
-  default     = "0.0/16"
+  default     = ".0.0/16"
 }
 
 variable "paas_subnet_address_suffix" {
