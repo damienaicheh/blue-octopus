@@ -8,7 +8,7 @@
 cd terraform && terraform init
 ```
 
-````bash
+```bash
 export ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
 ```
 
