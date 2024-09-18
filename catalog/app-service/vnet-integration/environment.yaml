@@ -1,13 +1,13 @@
 name: AppServiceVNetIntegration
 summary: VNet Integration of an App Service
 description: Deploys an App Service inside a VNet and the associated private endpoint
+runner: Terraform
+#aichehda/deployment-environments-runners-terraform:latest
 templatePath: provider.tf
+
 parameters:
 - id: "vnet_address_prefix"
   name: "VNet Address Prefix (Optional)"
   description: "VNet Address Prefix to set to the VNet which contains the resources"
   type: "string"
   default: "10.0"
-runner: Terraform
-
-#aichehda/deployment-environments-runners-terraform:latest
