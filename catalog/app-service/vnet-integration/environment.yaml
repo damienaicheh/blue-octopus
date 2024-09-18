@@ -8,4 +8,6 @@ parameters:
   description: "VNet Address Prefix to set to the VNet which contains the resources"
   type: "string"
   default: "10.0"
-runner: aichehda/deployment-environments-runners-terraform:latest
+runner: Terraform
+
+#aichehda/deployment-environments-runners-terraform:latest
