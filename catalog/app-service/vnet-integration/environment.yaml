@@ -1,4 +1,4 @@
-name: 'App Service VNet Integration'
+name: AppServiceVNetIntegration
 summary: VNet Integration of an App Service
 description: Deploys an App Service inside a VNet and the associated private endpoint
 templatePath: provider.tf
