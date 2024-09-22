@@ -1,8 +1,8 @@
 name: AppServiceVNetIntegration
 summary: VNet Integration of an App Service
 description: Deploys an App Service inside a VNet and the associated private endpoint
-# runner: https://dockerhub.io/aichehda/deployment-environments-runners-terraform:1.9.3
-runner: dockerhub.io/aichehda/deployment-environments-runners-terraform:1.9.3
+runner: https://dockerhub.io/aichehda/deployment-environments-runners-terraform:1.9.3
+# runner: dockerhub.io/aichehda/deployment-environments-runners-terraform:1.9.3 KO
 
 # runner: acrdeveaboholc5ca.azurecr.io/deployment-environments-runners-terraform:1.9.3 # OK
 templatePath: provider.tf
