@@ -44,3 +44,10 @@ resource "azurerm_role_assignment" "dev_center_project_admin" {
   role_definition_name = "DevCenter Project Admin"
   principal_id         = data.azurerm_client_config.current.object_id
 }
+
+# Resources assign to each project environment type to be able to pull images from ACR.
+resource "azurerm_role_assignment" "projects_acr_pull" {
+  scope                = azurerm_container_registry.this.id
+  role_definition_name = "AcrPull"
+  principal_id         = azurerm_user_assigned_identity.projects_acr.principal_id
+}
