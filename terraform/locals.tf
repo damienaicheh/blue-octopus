@@ -3,12 +3,12 @@ locals {
   resource_suffix_kebabcase = join("-", local.resource_lowercase_array)
   resource_suffix_lowercase = join("", local.resource_lowercase_array)
 
-  env_types = flatten([for k, v in var.projects :
+  env_types = distinct(flatten([for k, v in var.projects :
     [for key, env in v.env_types :
       env
-  ]])
+  ]]))
 
-  projects_env_types = flatten([for k, v in var.projects :
+  projects_env_types = distinct(flatten([for k, v in var.projects :
     [for key, env in v.env_types :
       {
         id       = join("|", [k, env])
@@ -16,7 +16,7 @@ locals {
         env_type = env
       }
     ]
-  ])
+  ]))
 
   tags = merge(
     var.tags,

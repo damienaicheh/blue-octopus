@@ -9,10 +9,10 @@ resource "azurerm_dev_center_project" "projects" {
 }
 
 resource "azurerm_dev_center_project_environment_type" "projects_env_types" {
-  for_each              = { for idx, project in local.projects_env_types : idx => project }
+  for_each              = { for idx, project in local.projects_env_types : project.id => project }
   name                  = each.value.env_type
   location              = azurerm_resource_group.this.location
-  dev_center_project_id = azurerm_dev_center_project.projects[each.value.name].id
+  dev_center_project_id = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.this.name}/providers/Microsoft.DevCenter/projects/${each.value.name}"
   deployment_target_id  = "/subscriptions/${data.azurerm_client_config.current.subscription_id}"
 
   tags = local.tags
