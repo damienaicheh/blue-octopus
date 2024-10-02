@@ -1,6 +1,5 @@
 module "vm_spk1" {
   source              = "./../../modules/vm"
-  starter_script      = "jumpbox-setup-cli-tools.sh"
   resource_suffix     = format("%s-%s", "spk1", local.resource_suffix_kebabcase)
   resource_group_name = local.resource_group_name
   location            = local.resource_group_location
@@ -11,7 +10,6 @@ module "vm_spk1" {
 
 module "vm_spk2" {
   source              = "./../../modules/vm"
-  starter_script      = "jumpbox-setup-cli-tools.sh"
   resource_suffix     = format("%s-%s", "spk2", local.resource_suffix_kebabcase)
   resource_group_name = local.resource_group_name
   location            = local.resource_group_location
@@ -22,7 +20,6 @@ module "vm_spk2" {
 
 module "vm_spk3" {
   source              = "./../../modules/vm"
-  starter_script      = "jumpbox-setup-cli-tools.sh"
   resource_suffix     = format("%s-%s", "spk3", local.resource_suffix_kebabcase)
   resource_group_name = local.resource_group_name
   location            = var.location_spk3

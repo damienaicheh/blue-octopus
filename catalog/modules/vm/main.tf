@@ -52,7 +52,7 @@ resource "azurerm_virtual_machine_extension" "vm_extension_linux" {
   type_handler_version = "2.1"
   settings             = <<SETTINGS
     {
-      "script": "${filebase64("${path.module}/scripts/${var.starter_script}")}"
+      "script": "${filebase64("${path.module}/${var.starter_script}")}"
     }
 SETTINGS
 }

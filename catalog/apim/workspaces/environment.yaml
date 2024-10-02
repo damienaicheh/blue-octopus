@@ -1,0 +1,12 @@
+name: ApimWorkspaces
+summary: APIM Workspaces
+description: Deploys an APIM in Premium with one Workspace with a demo API.
+runner: aichehda/deployment-environments-runners-terraform:1.9.6
+templatePath: provider.tf
+
+parameters:
+- id: "vnet_spk1_address_prefix"
+  name: "VNet Spoke 1 Address Prefix (Optional)"
+  description: "VNet Address Prefix to set to the VNet which contains the resources in a first region"
+  type: "string"
+  default: "10.10"
