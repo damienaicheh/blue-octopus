@@ -1,7 +1,7 @@
 name: AppServiceVNetIntegration
 summary: VNet Integration of an App Service
 description: Deploys an App Service inside a VNet and the associated private endpoint
-runner: aichehda/deployment-environments-runners-terraform:latest
+runner: aichehda/deployment-environments-runners-terraform:1.9.6
 templatePath: provider.tf
 
 parameters:

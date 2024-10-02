@@ -1,7 +1,7 @@
 name: FirewallWithDnsInHub
 summary: Azure Firewall with Dns Private Resolver in Hub sandbox
 description: Deploys 1 Hub and 3 VNets in a Hub-Spoke topology with Azure Firewall with Dns Private Resolver to connect all of them
-runner: aichehda/deployment-environments-runners-terraform:latest
+runner: aichehda/deployment-environments-runners-terraform:1.9.6
 templatePath: provider.tf
 
 parameters:
