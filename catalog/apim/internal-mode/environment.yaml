@@ -1,6 +1,6 @@
-name: ApimWorkspaces
-summary: APIM Workspaces
-description: Deploys an APIM in Premium with one Workspace with a demo API.
+name: ApimVNetInternalMode
+summary: APIM VNet Internal Mode
+description: Deploys an APIM in a VNet using internal mode.
 runner: aichehda/deployment-environments-runners-terraform:1.9.6
 templatePath: provider.tf
 
