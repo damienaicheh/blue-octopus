@@ -1,0 +1,36 @@
+name: FirewallWithDnsInHub
+summary: Azure Firewall with Dns Private Resolver in Hub sandbox
+description: Deploys 1 Hub and 3 VNets in a Hub-Spoke topology with Azure Firewall with Dns Private Resolver to connect all of them
+runner: aichehda/deployment-environments-runners-terraform:latest
+templatePath: provider.tf
+
+parameters:
+- id: "vnet_hub_address_prefix"
+  name: "VNet Hub Address Prefix (Optional)"
+  description: "VNet Address Prefix to set to the Hub VNet"
+  type: "string"
+  default: "10.0"
+
+- id: "vnet_dns_address_prefix"
+  name: "VNet Dns Private Resolver Address Prefix (Optional)"
+  description: "VNet Address Prefix to set to the Dns Private Resolver VNet"
+  type: "string"
+  default: "10.1"
+
+- id: "vnet_spk1_address_prefix"
+  name: "VNet Spoke 1 Address Prefix (Optional)"
+  description: "VNet Address Prefix to set to the VNet which contains the resources in a first region"
+  type: "string"
+  default: "10.10"
+
+- id: "vnet_spk2_address_prefix"
+  name: "VNet Spoke 2 Address Prefix (Optional)"
+  description: "VNet Address Prefix to set to the VNet which contains the resources in a first region"
+  type: "string"
+  default: "10.20"
+
+- id: "vnet_spk3_address_prefix"
+  name: "VNet Spoke3 Address Prefix (Optional)"
+  description: "VNet Address Prefix to set to the VNet which contains the resources in a secondary region"
+  type: "string"
+  default: "10.30"
