@@ -1,5 +1,5 @@
 module "bastion" {
-  source              = "./../../modules/bastion"
+  source              = "./modules/bastion"
   resource_suffix     = local.resource_suffix_kebabcase
   resource_group_name = local.resource_group_name
   location            = local.resource_group_location
