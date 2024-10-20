@@ -5,7 +5,7 @@ variable "domain" {
 }
 
 variable "workload" {
-  description = "Azure deployment domain"
+  description = "Azure deployment workload"
   type        = string
   default     = "api"
 }
