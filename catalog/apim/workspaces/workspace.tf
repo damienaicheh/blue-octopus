@@ -17,7 +17,7 @@ resource "azapi_resource" "gateway_workspace_1" {
   type      = "Microsoft.ApiManagement/gateways@2023-09-01-preview"
   name      = format("apim-gw-wkp-1-%s", local.resource_suffix_kebabcase)
   location  = azurerm_api_management.this.location
-  parent_id = azurerm_resource_group.this.id
+  parent_id = local.resource_group_id
   tags      = local.tags_azapi
   body = jsonencode({
     properties = {
