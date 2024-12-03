@@ -43,3 +43,10 @@ resource "azurerm_subnet" "subnet_workspace_1_spk1" {
     }
   }
 }
+
+resource "azurerm_subnet" "subnet_vm_spk1" {
+  name                 = "VMSubnet"
+  resource_group_name  = local.resource_group_name
+  virtual_network_name = azurerm_virtual_network.spk1.name
+  address_prefixes     = [format("%s%s", var.vnet_spk1_address_prefix, var.vm_subnet_address_suffix)]
+}

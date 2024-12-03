@@ -80,6 +80,12 @@ variable "apim_workspace_1_subnet_address_suffix" {
   default     = ".3.0/24"
 }
 
+variable "vm_subnet_address_suffix" {
+  type        = string
+  description = "Virtual Network Subnet Address Suffix"
+  default     = ".4.0/26"
+}
+
 variable "vm_default_password" {
   type      = string
   default   = "P@ssw0rd123"
