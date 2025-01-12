@@ -17,6 +17,8 @@ resource "azurerm_api_management" "this" {
   }
 
   depends_on = [
+    azurerm_subnet.subnet_apim_spk1,
+    azurerm_network_security_group.apim_spk1,
     azurerm_private_dns_zone.azure_api_net,
   ]
 }
