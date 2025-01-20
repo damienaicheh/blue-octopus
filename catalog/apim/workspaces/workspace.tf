@@ -41,8 +41,8 @@ resource "azapi_resource" "gateway_workspace_1" {
   ]
 
   timeouts {
-    create = "5h"
-    update = "5h"
+    create = "10h"
+    update = "10h"
   }
 }
 
