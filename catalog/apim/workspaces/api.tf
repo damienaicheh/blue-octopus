@@ -13,6 +13,9 @@ resource "azapi_resource" "colors_api" {
       value       = "https://colors-api.azurewebsites.net/swagger/v1/swagger.json"
     }
   })
+  depends_on = [
+    azapi_resource.workspace_1
+  ]
 }
 
 resource "azapi_resource" "pets_store_api_version_sets" {
@@ -26,6 +29,9 @@ resource "azapi_resource" "pets_store_api_version_sets" {
       versioningScheme  = "Header"
     }
   })
+  depends_on = [
+    azapi_resource.workspace_1
+  ]
 }
 
 resource "azapi_resource" "pets_store_api" {
@@ -48,4 +54,7 @@ resource "azapi_resource" "pets_store_api" {
       subscriptionRequired = false
     }
   })
+  depends_on = [
+    azapi_resource.workspace_1
+  ]
 }
