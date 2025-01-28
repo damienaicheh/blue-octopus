@@ -44,3 +44,5 @@ terraform.rc
 .terraform/*
 
 *plan.out
+
+__azurite_db_blob_**
