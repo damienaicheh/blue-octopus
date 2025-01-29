@@ -1,8 +1,3 @@
-moved {
-  from = azapi_resource.AIServicesResource
-  to   = azapi_resource.ai_services_eus2
-}
-
 resource "azapi_resource" "ai_services_eus2" {
   type      = "Microsoft.CognitiveServices/accounts@2024-10-01"
   name      = format("ais-%s", local.resource_suffix_kebabcase)
@@ -32,7 +27,7 @@ resource "azapi_resource" "ai_services_eus2" {
 
 resource "azapi_resource" "ai_services_connection_eus2" {
   type      = "Microsoft.MachineLearningServices/workspaces/connections@2024-10-01"
-  name      = format("ais-con-%s", local.resource_suffix_kebabcase)
+  name      = format("con-%s", azapi_resource.ai_services_eus2.name)
   parent_id = azapi_resource.hub.id
 
   body = {
