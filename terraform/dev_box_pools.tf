@@ -100,7 +100,7 @@ resource "azapi_resource" "showcase_internal_teams_backend_project_pool" {
   tags      = local.tags_azapi
   body = jsonencode({
     properties = {
-       devBoxDefinitionName  = azapi_resource.go_dev_box_definition.name
+      devBoxDefinitionName  = azapi_resource.go_dev_box_definition.name
       licenseType           = "Windows_Client"
       localAdministrator    = "Enabled"
       networkConnectionName = "managedNetwork"

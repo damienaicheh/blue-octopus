@@ -14,7 +14,7 @@ resource "azapi_resource" "java_dev_box_definition" {
       sku = {
         name = "general_i_8c32gb256ssd_v2"
       }
-    },    
+    },
   })
 }
 

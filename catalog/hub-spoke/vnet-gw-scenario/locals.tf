@@ -12,7 +12,7 @@ locals {
     try(data.azurerm_resource_group.this[0].location, null),
     try(azurerm_resource_group.this[0].location, null)
   )
-  
+
   tags = merge(
     var.tags,
     tomap(

@@ -13,7 +13,7 @@ resource "azapi_resource" "apim" {
       virtualNetworkConfiguration = {
         subnetResourceId = azurerm_subnet.subnet_apim_spk1.id
       }
-      virtualNetworkType = "External"
+      virtualNetworkType    = "External"
       developerPortalStatus = "Enabled"
     }
     sku = {

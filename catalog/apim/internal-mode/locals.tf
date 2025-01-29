@@ -1,6 +1,6 @@
 locals {
-  resource_suffix                = [lower(var.environment), lower(var.region), lower(var.domain), lower(var.workload), random_id.resource_group_name_suffix.hex]
-  resource_suffix_kebabcase      = join("-", local.resource_suffix)
+  resource_suffix           = [lower(var.environment), lower(var.region), lower(var.domain), lower(var.workload), random_id.resource_group_name_suffix.hex]
+  resource_suffix_kebabcase = join("-", local.resource_suffix)
 
   resource_group_name = coalesce(
     try(data.azurerm_resource_group.this[0].name, null),

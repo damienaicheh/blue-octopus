@@ -34,6 +34,6 @@ resource "azurerm_cognitive_deployment" "image_generation_model" {
   }
 
   sku {
-    name     = "Standard"
+    name = "Standard"
   }
 }

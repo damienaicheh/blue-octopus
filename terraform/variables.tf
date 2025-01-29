@@ -49,7 +49,7 @@ variable "environment_catalogs" {
     uri    = string
   }))
   description = "The environments catalogs to be added in the Dev Center"
-  default = {}
+  default     = {}
 }
 
 variable "vnet_address_prefix" {
