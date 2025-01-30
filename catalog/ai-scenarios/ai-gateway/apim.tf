@@ -9,10 +9,7 @@ resource "azapi_resource" "apim" {
       publicNetworkAccess = "Enabled"
       publisherName       = "Me"
       publisherEmail      = "admin@me.io"
-      virtualNetworkConfiguration = {
-        subnetResourceId = azurerm_subnet.subnet_apim_spk1.id
-      }
-      virtualNetworkType    = "External"
+      virtualNetworkType    = "None"
       developerPortalStatus = "Enabled"
     }
     sku = {
@@ -24,10 +21,20 @@ resource "azapi_resource" "apim" {
     }
   }
   response_export_values = ["properties.gatewayUrl"]
+}
+
+resource "azurerm_api_management_logger" "this" {
+  name                = format("apim-logger-%s", local.resource_suffix_kebabcase)
+  api_management_name = azapi_resource.apim.name
+  resource_group_name = local.resource_group_name
+  resource_id         = azurerm_application_insights.this.id
+
+  application_insights {
+    instrumentation_key = azurerm_application_insights.this.instrumentation_key
+  }
 
   depends_on = [
-    azurerm_subnet.subnet_apim_spk1,
-    azurerm_network_security_group.apim_spk1,
-    azurerm_subnet_network_security_group_association.apim_spk1
+    azurerm_application_insights.this,
+    azapi_resource.apim
   ]
 }
