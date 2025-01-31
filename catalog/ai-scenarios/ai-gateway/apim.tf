@@ -6,9 +6,9 @@ resource "azapi_resource" "apim" {
 
   body = {
     properties = {
-      publicNetworkAccess = "Enabled"
-      publisherName       = "Me"
-      publisherEmail      = "admin@me.io"
+      publicNetworkAccess   = "Enabled"
+      publisherName         = "Me"
+      publisherEmail        = "admin@me.io"
       virtualNetworkType    = "None"
       developerPortalStatus = "Enabled"
     }
@@ -20,7 +20,7 @@ resource "azapi_resource" "apim" {
       type = "SystemAssigned"
     }
   }
-  response_export_values = ["properties.gatewayUrl"]
+  response_export_values = ["*"]
 }
 
 resource "azurerm_api_management_logger" "this" {
