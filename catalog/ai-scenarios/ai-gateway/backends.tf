@@ -1,6 +1,6 @@
 resource "azapi_resource" "openai_backend" {
   type      = "Microsoft.ApiManagement/service/backends@2024-06-01-preview"
-  name      = "openai"
+  name      = local.backend_id
   parent_id = azapi_resource.apim.id
   body = {
     properties = {

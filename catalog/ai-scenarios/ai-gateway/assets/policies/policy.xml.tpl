@@ -5,7 +5,7 @@
         <set-header name="Authorization" exists-action="override">  
             <value>@("Bearer " + (string)context.Variables["managed-id-access-token"])</value>  
         </set-header>
-        <!-- <set-backend-service backend-id="{backend-id}" /> -->
+        <set-backend-service backend-id="${backend-id}" />
         <azure-openai-token-limit counter-key="@(context.Request.IpAddress)"
             tokens-per-minute="500" estimate-prompt-tokens="false" remaining-tokens-variable-name="remainingTokens">
         </azure-openai-token-limit>        

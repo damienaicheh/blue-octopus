@@ -20,6 +20,8 @@ locals {
     try(azurerm_resource_group.this[0].location, null)
   )
 
+  backend_id = "openai-backend-pool"
+
   tags = merge(
     var.tags,
     tomap(

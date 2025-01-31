@@ -30,4 +30,6 @@ resource "azapi_resource" "api_policy" {
       value  = data.template_file.policy.rendered
     }
   }
+
+  depends_on = [azapi_resource.openai_backend]
 }
