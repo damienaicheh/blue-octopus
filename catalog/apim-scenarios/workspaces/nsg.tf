@@ -113,4 +113,8 @@ resource "azurerm_network_security_group" "apim_spk1" {
     source_address_prefix      = "VirtualNetwork"
     destination_address_prefix = "AzureMonitor"
   }
+
+  depends_on = [
+    azurerm_subnet.subnet_apim_spk1
+  ]
 }
