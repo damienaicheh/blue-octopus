@@ -1,7 +1,6 @@
 locals {
   resource_suffix           = [lower(var.environment), lower(var.region), lower(var.domain), lower(var.workload), random_id.resource_group_name_suffix.hex]
   resource_suffix_kebabcase = join("-", local.resource_suffix)
-  resource_suffix_lowercase = join("", local.resource_suffix)
 
   resource_group_id = coalesce(
     try(data.azurerm_resource_group.this[0].id, null),
@@ -21,7 +20,7 @@ locals {
     tomap(
       {
         "Environment" = var.environment,
-        "ProjectName" = "ai-scenarios/ai-foundry",
+        "ProjectName" = "apim/workspaces",
         "Domain"      = var.domain
       }
     )
@@ -34,10 +33,5 @@ locals {
         "TypeOfDeployment" = "azapi"
       }
     )
-  )
-
-  open_ai_access_users = concat(
-    [data.azurerm_client_config.current.object_id],
-    var.open_ai_users
   )
 }

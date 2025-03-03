@@ -23,7 +23,7 @@ locals {
     tomap(
       {
         "Environment" = var.environment,
-        "ProjectName" = "ai",
+        "ProjectName" = "ai-scenarios/ai-basics",
         "Domain"      = var.domain
       }
     )

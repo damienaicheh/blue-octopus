@@ -20,7 +20,21 @@ locals {
     try(azurerm_resource_group.this[0].location, null)
   )
 
-  backend_id = "openai-backend-pool"
+  backend_id                         = "openai1"
+  diagnostic_settings_body_bytes     = 8192
+  diagnostic_settings_headers_to_log = ["Content-type", "User-agent", "x-ms-region", "x-ratelimit-remaining-tokens", "x-ratelimit-remaining-requests"]
+
+  open_ai_resources = [
+    {
+      name     = format("oai-%s", join("-", [lower(var.environment), lower(var.region), lower(var.domain), lower(var.workload), random_id.resource_group_name_suffix.hex]))
+      location = var.location
+    },
+    {
+      name     = format("oai-%s", join("-", [lower(var.environment), lower(var.region_swc), lower(var.domain), lower(var.workload), random_id.resource_group_name_suffix.hex]))
+      location = var.location_swc
+    },
+  ]
+
 
   tags = merge(
     var.tags,

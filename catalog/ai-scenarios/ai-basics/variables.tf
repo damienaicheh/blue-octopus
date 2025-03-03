@@ -7,7 +7,7 @@ variable "domain" {
 variable "workload" {
   description = "Azure deployment workload"
   type        = string
-  default     = "mdl"
+  default     = "bsc"
 }
 
 variable "environment" {

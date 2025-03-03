@@ -1,10 +1,11 @@
 resource "azapi_resource" "openai_backend" {
+  for_each  = { for instance in local.open_ai_resources : instance.name => instance }
   type      = "Microsoft.ApiManagement/service/backends@2024-06-01-preview"
   name      = local.backend_id
   parent_id = azapi_resource.apim.id
   body = {
     properties = {
-      url      = "${azurerm_cognitive_account.open_ai.endpoint}/openai"
+      url      = "${azurerm_cognitive_account.open_ai[each.key].endpoint}openai"
       protocol = "http"
       circuitBreaker = {
         rules = [
@@ -34,22 +35,21 @@ resource "azapi_resource" "openai_backend" {
 }
 
 # resource "azapi_resource" "openai_backend_pool" {
-#   type = "Microsoft.ApiManagement/service/backends@2024-06-01-preview"
-#   name = "string"
+#   for_each  = { for instance in local.open_ai_resources : instance.name => instance }
+#   type      = "Microsoft.ApiManagement/service/backends@2024-06-01-preview"
+#   name      = "openai-backend-pool"
+#   parent_id = azapi_resource.apim.id
 #   body = {
+#     type = "Pool"
 #     properties = {
-#       description = "string"
+#       description = "Load balancer for multiple OpenAI endpoints"
 #       pool = {
 #         services = [
 #           {
-#             id = "string"
-#             priority = int
-#             weight = int
+#             id = "/backends/${azurerm_cognitive_account.open_ai[each.key].name}'"
 #           }
 #         ]
 #       }
-#       type = "string"
-#       url = "string"
 #     }
 #   }
 # }

@@ -27,14 +27,15 @@ resource "azurerm_api_management_logger" "this" {
   name                = format("apim-logger-%s", local.resource_suffix_kebabcase)
   api_management_name = azapi_resource.apim.name
   resource_group_name = local.resource_group_name
-  resource_id         = azurerm_application_insights.this.id
+  resource_id         = azapi_resource.application_insights.id
+  buffered            = false
 
   application_insights {
-    instrumentation_key = azurerm_application_insights.this.instrumentation_key
+    instrumentation_key = azapi_resource.application_insights.output.properties.InstrumentationKey
   }
 
   depends_on = [
-    azurerm_application_insights.this,
+    azapi_resource.application_insights,
     azapi_resource.apim
   ]
 }

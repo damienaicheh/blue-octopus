@@ -26,6 +26,12 @@ variable "location" {
   default     = "eastus2"
 }
 
+variable "location_spk2" {
+  description = "Azure deployment location"
+  type        = string
+  default     = "francecentral"
+}
+
 variable "region" {
   description = "Azure deployment region"
   type        = string
@@ -42,6 +48,12 @@ variable "vnet_spk1_address_prefix" {
   type        = string
   description = "Vnet Spk1 Address prefix"
   default     = "10.10"
+}
+
+variable "vnet_spk2_address_prefix" {
+  type        = string
+  description = "Vnet Address prefix"
+  default     = "10.20"
 }
 
 variable "vnet_address_suffix" {

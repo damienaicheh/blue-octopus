@@ -8,7 +8,13 @@
         <set-backend-service backend-id="${backend-id}" />
         <azure-openai-token-limit counter-key="@(context.Request.IpAddress)"
             tokens-per-minute="500" estimate-prompt-tokens="false" remaining-tokens-variable-name="remainingTokens">
-        </azure-openai-token-limit>        
+        </azure-openai-token-limit>    
+        <azure-openai-emit-token-metric namespace="openai">
+            <dimension name="Subscription ID" value="@(context.Subscription.Id)" />
+            <dimension name="Client IP" value="@(context.Request.IpAddress)" />
+            <dimension name="API ID" value="@(context.Api.Id)" />
+            <dimension name="User ID" value="@(context.Request.Headers.GetValueOrDefault("x-user-id","N/A"))"/>
+        </azure-openai-emit-token-metric>    
     </inbound>
     <backend>
         <base />

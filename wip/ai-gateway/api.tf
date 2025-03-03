@@ -32,4 +32,5 @@ resource "azapi_resource" "api_policy" {
   }
 
   depends_on = [azapi_resource.openai_backend]
+  schema_validation_enabled = false
 }
