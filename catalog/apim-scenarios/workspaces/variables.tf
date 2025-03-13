@@ -106,7 +106,7 @@ variable "workspace" {
     description  = string
   })
   default = {
-    name         = "workspace-e-commerce"
+    name         = "workspace-1"
     display_name = "E-Commerce Team"
     description  = "This is the Workspace for the E-Commerce Team"
   }

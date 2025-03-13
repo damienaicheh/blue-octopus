@@ -6,7 +6,14 @@ resource "azurerm_api_management" "this" {
   publisher_email      = "admin@me.io"
   virtual_network_type = "Internal"
   sku_name             = var.apim_sku_name
-  tags                 = local.tags
+  tags = merge(
+    local.tags,
+    tomap(
+      {
+        "CostControl" = "Ignore"
+      }
+    )
+  )
 
   identity {
     type = "SystemAssigned"
