@@ -27,7 +27,7 @@ resource "azurerm_monitor_diagnostic_setting" "apim" {
   # }
 }
 
-resource "azurerm_monitor_diagnostic_setting" "apims" {
+resource "azurerm_monitor_diagnostic_setting" "workspace_1" {
   name                           = "apim-diagnostic-settings-${azapi_resource.workspace_1.name}"
   target_resource_id             = azapi_resource.workspace_1.id
   log_analytics_destination_type = "Dedicated"
