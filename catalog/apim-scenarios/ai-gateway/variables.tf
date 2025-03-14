@@ -7,7 +7,7 @@ variable "domain" {
 variable "workload" {
   description = "Azure deployment workload"
   type        = string
-  default     = "gw"
+  default     = "api"
 }
 
 variable "environment" {
@@ -32,18 +32,6 @@ variable "region" {
   default     = "eus2"
 }
 
-variable "location_swc" {
-  description = "Azure deployment location"
-  type        = string
-  default     = "swedencentral"
-}
-
-variable "region_swc" {
-  description = "Azure deployment region"
-  type        = string
-  default     = "swc"
-}
-
 variable "tags" {
   type        = map(any)
   description = "The custom tags for all resources"
@@ -54,10 +42,4 @@ variable "resource_group_name" {
   type        = string
   description = "The name of the resource group"
   default     = ""
-}
-
-variable "open_ai_users" {
-  type        = list(string)
-  description = "The list of OpenAI users"
-  default     = []
 }

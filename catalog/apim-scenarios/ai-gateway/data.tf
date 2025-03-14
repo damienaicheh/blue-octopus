@@ -8,6 +8,6 @@ data "azurerm_resource_group" "this" {
 data "template_file" "policy" {
   template = file("${path.module}/assets/policies/policy.xml.tpl")
   vars = {
-    backend-id = local.backend_id
+    backend-pool-id = local.backend_pool_name
   }
 }

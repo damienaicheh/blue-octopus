@@ -1,6 +1,6 @@
 resource "azapi_resource" "openai_api" {
   type      = "Microsoft.ApiManagement/service/apis@2024-06-01-preview"
-  name      = "open-api"
+  name      = "openai-api"
   parent_id = azapi_resource.apim.id
   body = {
     properties = {
@@ -18,19 +18,4 @@ resource "azapi_resource" "openai_api" {
       subscriptionRequired = true
     }
   }
-}
-
-resource "azapi_resource" "api_policy" {
-  type      = "Microsoft.ApiManagement/service/apis/policies@2024-06-01-preview"
-  name      = "policy"
-  parent_id = azapi_resource.openai_api.id
-  body = {
-    properties = {
-      format = "xml"
-      value  = data.template_file.policy.rendered
-    }
-  }
-
-  depends_on = [azapi_resource.openai_backend]
-  schema_validation_enabled = false
 }

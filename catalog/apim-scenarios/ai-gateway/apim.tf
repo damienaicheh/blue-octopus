@@ -6,9 +6,9 @@ resource "azapi_resource" "apim" {
 
   body = {
     properties = {
-      publicNetworkAccess   = "Enabled"
-      publisherName         = "Me"
-      publisherEmail        = "admin@me.io"
+      publicNetworkAccess = "Enabled"
+      publisherName       = "Me"
+      publisherEmail      = "admin@me.io"
       virtualNetworkType    = "None"
       developerPortalStatus = "Enabled"
     }
