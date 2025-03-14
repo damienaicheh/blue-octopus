@@ -65,3 +65,18 @@ resource "azapi_resource" "workspace_1_gateway_connection" {
     update = "5h"
   }
 }
+
+resource "azapi_resource" "workspace_1_application_insights" {
+  type = "Microsoft.ApiManagement/service/workspaces/loggers@2023-09-01-preview"
+  name = format("apim-%s-applicationinsights", var.workspace.name)
+  parent_id = azapi_resource.workspace_1.id
+  body = jsonencode({
+    properties = {
+      credentials = {
+        instrumentationKey = azurerm_application_insights.workspace_1.instrumentation_key
+      }
+      loggerType = "applicationInsights"
+      resourceId = azurerm_application_insights.workspace_1.id
+    }
+  })
+}
