@@ -11,9 +11,9 @@ resource "azapi_resource" "attached_networks_eastus2" {
   type      = "Microsoft.DevCenter/devcenters/attachednetworks@2022-11-11-preview"
   name      = "EastUs2NetworkConnection"
   parent_id = azurerm_dev_center.this.id
-  body = jsonencode({
+  body = {
     properties = {
       networkConnectionId = azurerm_dev_center_network_connection.this.id
     }
-  })
+  }
 }

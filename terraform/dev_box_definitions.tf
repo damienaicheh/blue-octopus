@@ -4,7 +4,7 @@ resource "azapi_resource" "java_dev_box_definition" {
   location  = azurerm_resource_group.this.location
   parent_id = azurerm_dev_center.this.id
   tags      = local.tags_azapi
-  body = jsonencode({
+  body = {
     properties = {
       hibernateSupport = "Enabled"
       imageReference = {
@@ -15,7 +15,7 @@ resource "azapi_resource" "java_dev_box_definition" {
         name = "general_i_8c32gb256ssd_v2"
       }
     },
-  })
+  }
 }
 
 # Wait for Hibernate to be supported
@@ -34,7 +34,7 @@ resource "azapi_resource" "dotnet_dev_box_definition" {
   location  = azurerm_resource_group.this.location
   parent_id = azurerm_dev_center.this.id
   tags      = local.tags_azapi
-  body = jsonencode({
+  body = {
     properties = {
       hibernateSupport = "Enabled"
       imageReference = {
@@ -45,7 +45,7 @@ resource "azapi_resource" "dotnet_dev_box_definition" {
         name = "general_i_16c64gb512ssd_v2"
       }
     }
-  })
+  }
 }
 
 resource "azapi_resource" "go_dev_box_definition" {
@@ -54,7 +54,7 @@ resource "azapi_resource" "go_dev_box_definition" {
   location  = azurerm_resource_group.this.location
   parent_id = azurerm_dev_center.this.id
   tags      = local.tags_azapi
-  body = jsonencode({
+  body = {
     properties = {
       hibernateSupport = "Enabled"
       imageReference = {
@@ -65,7 +65,7 @@ resource "azapi_resource" "go_dev_box_definition" {
         name = "general_i_16c64gb512ssd_v2"
       }
     }
-  })
+  }
 }
 
 

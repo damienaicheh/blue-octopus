@@ -4,7 +4,7 @@ resource "azapi_resource" "eshop_internal_teams_frontend_project_pool" {
   location  = azurerm_resource_group.this.location
   parent_id = azurerm_dev_center_project.projects["eshop"].id
   tags      = local.tags_azapi
-  body = jsonencode({
+  body = {
     properties = {
       devBoxDefinitionName  = azapi_resource.dotnet_dev_box_definition.name
       licenseType           = "Windows_Client"
@@ -20,7 +20,7 @@ resource "azapi_resource" "eshop_internal_teams_frontend_project_pool" {
         status             = "Enabled"
       }
     }
-  })
+  }
 }
 
 resource "azapi_resource" "eshop_partners_teams_backend_project_pool" {
@@ -29,7 +29,7 @@ resource "azapi_resource" "eshop_partners_teams_backend_project_pool" {
   location  = azurerm_resource_group.this.location
   parent_id = azurerm_dev_center_project.projects["eshop"].id
   tags      = local.tags_azapi
-  body = jsonencode({
+  body = {
     properties = {
       devBoxDefinitionName  = azapi_resource.java_dev_box_definition.name
       licenseType           = "Windows_Client"
@@ -42,7 +42,7 @@ resource "azapi_resource" "eshop_partners_teams_backend_project_pool" {
         status             = "Enabled"
       }
     }
-  })
+  }
 }
 
 resource "azapi_resource" "showcase_internal_teams_frontend_project_pool" {
@@ -51,7 +51,7 @@ resource "azapi_resource" "showcase_internal_teams_frontend_project_pool" {
   location  = azurerm_resource_group.this.location
   parent_id = azurerm_dev_center_project.projects["showcase"].id
   tags      = local.tags_azapi
-  body = jsonencode({
+  body = {
     properties = {
       devBoxDefinitionName  = azapi_resource.dotnet_dev_box_definition.name
       licenseType           = "Windows_Client"
@@ -67,7 +67,7 @@ resource "azapi_resource" "showcase_internal_teams_frontend_project_pool" {
         status             = "Enabled"
       }
     }
-  })
+  }
 }
 
 resource "azapi_resource" "showcase_partners_teams_backend_project_pool" {
@@ -76,7 +76,7 @@ resource "azapi_resource" "showcase_partners_teams_backend_project_pool" {
   location  = azurerm_resource_group.this.location
   parent_id = azurerm_dev_center_project.projects["showcase"].id
   tags      = local.tags_azapi
-  body = jsonencode({
+  body = {
     properties = {
       devBoxDefinitionName  = azapi_resource.java_dev_box_definition.name
       licenseType           = "Windows_Client"
@@ -89,7 +89,7 @@ resource "azapi_resource" "showcase_partners_teams_backend_project_pool" {
         status             = "Enabled"
       }
     }
-  })
+  }
 }
 
 resource "azapi_resource" "showcase_internal_teams_backend_project_pool" {
@@ -98,7 +98,7 @@ resource "azapi_resource" "showcase_internal_teams_backend_project_pool" {
   location  = azurerm_resource_group.this.location
   parent_id = azurerm_dev_center_project.projects["showcase"].id
   tags      = local.tags_azapi
-  body = jsonencode({
+  body = {
     properties = {
       devBoxDefinitionName  = azapi_resource.go_dev_box_definition.name
       licenseType           = "Windows_Client"
@@ -114,5 +114,5 @@ resource "azapi_resource" "showcase_internal_teams_backend_project_pool" {
         status             = "Enabled"
       }
     }
-  })
+  }
 }
