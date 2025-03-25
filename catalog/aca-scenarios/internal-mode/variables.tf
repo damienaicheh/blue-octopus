@@ -73,3 +73,15 @@ variable "container_app_environment_subnet_address_suffix" {
   description = "Azure Container App Environment Subnet Address Suffix"
   default     = ".1.64/27"
 }
+
+variable "vm_subnet_address_suffix" {
+  type        = string
+  description = "Virtual Machines Subnet Address Suffix"
+  default     = ".1.96/27"
+}
+
+variable "vm_default_password" {
+  type      = string
+  default   = "P@ssw0rd123"
+  sensitive = true
+}

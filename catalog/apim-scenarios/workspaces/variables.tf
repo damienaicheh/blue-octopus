@@ -82,7 +82,7 @@ variable "apim_workspace_1_subnet_address_suffix" {
 
 variable "vm_subnet_address_suffix" {
   type        = string
-  description = "Virtual Network Subnet Address Suffix"
+  description = "Virtual Machines Subnet Address Suffix"
   default     = ".4.0/26"
 }
 

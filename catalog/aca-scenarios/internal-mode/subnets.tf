@@ -1,4 +1,4 @@
-resource "azurerm_subnet" "subnet_appgw_spk1" {
+resource "azurerm_subnet" "subnet_appgw" {
   name                 = "AppGwSubnet"
   resource_group_name  = local.resource_group_name
   virtual_network_name = azurerm_virtual_network.this.name
@@ -26,4 +26,11 @@ resource "azurerm_subnet" "subnet_container_app_environment" {
       actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
     }
   }
+}
+
+resource "azurerm_subnet" "subnet_vm" {
+  name                 = "VMSubnet"
+  resource_group_name  = local.resource_group_name
+  virtual_network_name = azurerm_virtual_network.this.name
+  address_prefixes     = [format("%s%s", var.vnet_address_prefix, var.vm_subnet_address_suffix)]
 }
