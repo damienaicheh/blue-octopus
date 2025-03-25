@@ -67,8 +67,8 @@ resource "azapi_resource" "workspace_1_gateway_connection" {
 }
 
 resource "azapi_resource" "workspace_1_application_insights" {
-  type = "Microsoft.ApiManagement/service/workspaces/loggers@2023-09-01-preview"
-  name = format("apim-%s-applicationinsights", var.workspace.name)
+  type      = "Microsoft.ApiManagement/service/workspaces/loggers@2023-09-01-preview"
+  name      = format("apim-%s-applicationinsights", var.workspace.name)
   parent_id = azapi_resource.workspace_1.id
   body = jsonencode({
     properties = {
