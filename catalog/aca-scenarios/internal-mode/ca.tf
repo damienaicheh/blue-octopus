@@ -3,9 +3,10 @@ resource "azurerm_container_app" "hello_world" {
   resource_group_name          = local.resource_group_name
   container_app_environment_id = azurerm_container_app_environment.this.id
   tags                         = local.tags
+  workload_profile_name        = "Consumption"
 
   identity {
-    type         = "SystemAssigned"
+    type = "SystemAssigned"
   }
 
   revision_mode = "Single"
