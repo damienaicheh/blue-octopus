@@ -15,6 +15,12 @@ locals {
     try(azurerm_resource_group.this[0].location, null)
   )
 
+  hello_world_probe_name                 = "hello-world-health"
+  hello_world_http_listener_name         = "httpl-ca-hello-world"
+  hello_world_backend_address_pool_name  = "bap-ca-hello-world"
+  hello_world_backend_http_settings_name = "bhttpstg-ca-hello-world"
+  hello_world_request_routing_rule_name  = "ca-hello-world-routing-rule"
+
   tags = merge(
     var.tags,
     tomap(
