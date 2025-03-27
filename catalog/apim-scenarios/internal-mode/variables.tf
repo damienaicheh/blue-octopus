@@ -77,7 +77,7 @@ variable "vm_default_password" {
 variable "apim_sku_name" {
   description = "The API Management SKU name"
   type        = string
-  default     = "Developer_1"
+  default     = "Developer_1" # Premium_1
 }
 
 variable "resource_group_name" {
