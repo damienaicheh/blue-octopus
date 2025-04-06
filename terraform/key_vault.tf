@@ -8,6 +8,7 @@ resource "azurerm_key_vault" "this" {
   purge_protection_enabled    = false
 
   sku_name = "standard"
+  tags     = local.tags
 
   access_policy {
     tenant_id = data.azurerm_client_config.current.tenant_id
@@ -35,7 +36,7 @@ resource "azurerm_key_vault" "this" {
 
   access_policy {
     tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = azurerm_dev_center.this.identity[0].principal_id
+    object_id = azapi_resource.dev_center.output.identity.principalId
 
     secret_permissions = [
       "Get",

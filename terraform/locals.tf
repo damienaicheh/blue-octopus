@@ -3,6 +3,11 @@ locals {
   resource_suffix_kebabcase = join("-", local.resource_lowercase_array)
   resource_suffix_lowercase = join("", local.resource_lowercase_array)
 
+  germany_west_central = "Germany West Central"
+
+  # Bug in the subscription Id paths
+  reformat_dev_center_id = replace(azapi_resource.dev_center.id, "devcenters", "devCenters")
+
   env_types = distinct(flatten([for k, v in var.projects :
     [for key, env in v.env_types :
       env

@@ -2,19 +2,28 @@
 resource "azurerm_role_assignment" "dev_center_subscription_contributor" {
   scope                = data.azurerm_subscription.primary.id
   role_definition_name = "Contributor"
-  principal_id         = azurerm_dev_center.this.identity[0].principal_id
+  principal_id         = azapi_resource.dev_center.output.identity.principalId
+  depends_on = [
+    azapi_resource.dev_center
+  ]
 }
 
 resource "azurerm_role_assignment" "dev_center_subscription_user_access_administrator" {
   scope                = data.azurerm_subscription.primary.id
   role_definition_name = "User Access Administrator"
-  principal_id         = azurerm_dev_center.this.identity[0].principal_id
+  principal_id         = azapi_resource.dev_center.output.identity.principalId
+  depends_on = [
+    azapi_resource.dev_center
+  ]
 }
 
 resource "azurerm_role_assignment" "dev_center_key_vault_secret_user" {
   scope                = azurerm_key_vault.this.id
   role_definition_name = "Key Vault Secrets User"
-  principal_id         = azurerm_dev_center.this.identity[0].principal_id
+  principal_id         = azapi_resource.dev_center.output.identity.principalId
+  depends_on = [
+    azapi_resource.dev_center
+  ]
 }
 
 resource "azurerm_role_assignment" "dev_center_dev_box_user" {

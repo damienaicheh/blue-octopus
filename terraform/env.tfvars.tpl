@@ -4,8 +4,8 @@ projects = {
     maximum_dev_boxes_per_user = 10
     env_types                  = ["dev", "stg", "prd"]
   },
-  "showcase" = {
-    name                       = "showcase"
+  "research" = {
+    name                       = "research"
     maximum_dev_boxes_per_user = 2
     env_types                  = ["dev", "stg"]
   },

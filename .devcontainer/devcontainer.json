@@ -17,7 +17,9 @@
                 // Azure
                 "ms-vscode.vscode-node-azure-pack",
                 // Terraform
-                "hashicorp.terraform"
+                "hashicorp.terraform",
+                // Copilot
+                "GitHub.copilot-chat"
             ]
         }
     },
