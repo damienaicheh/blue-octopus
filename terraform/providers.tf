@@ -25,5 +25,5 @@ provider "azurerm" {
 }
 
 provider "azapi" {
-  # Configuration options
+  enable_preflight = true
 }
