@@ -28,28 +28,40 @@ resource "azurerm_role_assignment" "dev_center_key_vault_secret_user" {
 
 resource "azurerm_role_assignment" "dev_center_dev_box_user" {
   for_each             = var.projects
-  scope                = azurerm_dev_center_project.projects[each.key].id
+  scope                = azapi_resource.projects[each.key].id
   role_definition_name = "DevCenter Dev Box User"
   principal_id         = data.azurerm_client_config.current.object_id
+  depends_on = [
+    azapi_resource.projects
+  ]
 }
 
 resource "azurerm_role_assignment" "deployment_environments_reader" {
   for_each             = var.projects
-  scope                = azurerm_dev_center_project.projects[each.key].id
+  scope                = azapi_resource.projects[each.key].id
   role_definition_name = "Deployment Environments Reader"
   principal_id         = data.azurerm_client_config.current.object_id
+  depends_on = [
+    azapi_resource.projects
+  ]
 }
 
 resource "azurerm_role_assignment" "deployment_environments_user" {
   for_each             = var.projects
-  scope                = azurerm_dev_center_project.projects[each.key].id
+  scope                = azapi_resource.projects[each.key].id
   role_definition_name = "Deployment Environments User"
   principal_id         = data.azurerm_client_config.current.object_id
+  depends_on = [
+    azapi_resource.projects
+  ]
 }
 
 resource "azurerm_role_assignment" "dev_center_project_admin" {
   for_each             = var.projects
-  scope                = azurerm_dev_center_project.projects[each.key].id
+  scope                = azapi_resource.projects[each.key].id
   role_definition_name = "DevCenter Project Admin"
   principal_id         = data.azurerm_client_config.current.object_id
+  depends_on = [
+    azapi_resource.projects
+  ]
 }
