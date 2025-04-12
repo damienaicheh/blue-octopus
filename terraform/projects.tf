@@ -1,31 +1,26 @@
 resource "azapi_resource" "projects" {
-  for_each      = var.projects
-  parent_id     = azapi_resource.dev_center.id
-  type          = "Microsoft.DevCenter/projects@2025-02-01"
-  name          = each.value.name
-  location      = azurerm_resource_group.this.location
-  tags          = local.tags
-  ignore_casing = true
+  for_each  = var.projects
+  parent_id = azurerm_resource_group.this.id
+  type      = "Microsoft.DevCenter/projects@2025-02-01"
+  name      = each.value.name
+  location  = azurerm_resource_group.this.location
+  tags      = local.tags
   body = {
-    properties = {
-      # catalogSettings = {
-      #   catalogItemSyncTypes = compact([
-      #     each.value.enable_environment_definition ? "EnvironmentDefinition" : "",
-      #     each.value.enable_image_definition ? "ImageDefinition" : ""
-      #   ])
-      # }
-      # description        = each.value.description
-      devCenterId = azapi_resource.dev_center.id
-      displayName = each.value.name
-      # maxDevBoxesPerUser = each.value.maximum_dev_boxes_per_user
+    identity = {
+      type = "SystemAssigned"
     }
-    # identity = {
-    #   type = "SystemAssigned"
-    #   # userAssignedIdentities = {
-    #   #   {customized property} = {
-    #   #   }
-    #   # }
-    # }
+    properties = {
+      catalogSettings = {
+        catalogItemSyncTypes = compact([
+          each.value.enable_environment_definition ? "EnvironmentDefinition" : "",
+          each.value.enable_image_definition ? "ImageDefinition" : ""
+        ])
+      }
+      description        = each.value.description
+      devCenterId        = azapi_resource.dev_center.id
+      displayName        = each.value.name
+      maxDevBoxesPerUser = each.value.maximum_dev_boxes_per_user
+    }
   }
 }
 
