@@ -75,3 +75,13 @@ resource "azurerm_role_assignment" "projects_key_vault_secret_user" {
     azapi_resource.dev_center
   ]
 }
+
+resource "azurerm_role_assignment" "user_key_vault_administrator" {
+  for_each             = var.projects
+  scope                = azurerm_key_vault.this.id
+  role_definition_name = "Key Vault Administrator"
+  principal_id         = data.azurerm_client_config.current.object_id
+  depends_on = [
+    azapi_resource.dev_center
+  ]
+}
