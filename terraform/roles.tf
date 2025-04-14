@@ -65,3 +65,13 @@ resource "azurerm_role_assignment" "dev_center_project_admin" {
     azapi_resource.projects
   ]
 }
+
+resource "azurerm_role_assignment" "projects_key_vault_secret_user" {
+  for_each             = var.projects
+  scope                = azurerm_key_vault.this.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = azapi_resource.projects[each.key].output.identity.principalId
+  depends_on = [
+    azapi_resource.dev_center
+  ]
+}
