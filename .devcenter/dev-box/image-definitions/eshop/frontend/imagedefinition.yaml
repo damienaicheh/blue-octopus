@@ -1,9 +1,30 @@
 $schema: "1.0"
 name: "frontend-eng"
-image: microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m365-gen2
+image: microsoftwindowsdesktop_windows-ent-cpc_win11-24H2-ent-cpc
 description: "This definition is for the eShop frontend engineering environment"
 
 tasks:
+    ### -------------------------------------
+    # Creates a new Dev Drive
+    ### -------------------------------------
+  - resource: Disk
+    id: DevDrive1
+    directives:
+      module: StorageDsc
+      allowPrerelease: true
+    settings:
+      DiskId: '0'
+      DiskIdType: 'Number'
+      DriveLetter: 'Z'
+      FSLabel: 'Dev Drive 1'
+      DevDrive: true
+      AllowDestructive: true
+      FSFormat: 'ReFS'
+      Size: '50Gb'
+
+    ### -------------------------------------
+    # Install tools
+    ### -------------------------------------
   - name: ~/winget
     description: Install Git
     parameters:
@@ -54,20 +75,20 @@ tasks:
     parameters:
       package: Mozilla.Firefox 
 
-  - name: ~/winget
-    description: Postman
-    parameters:
-      package: Postman.Postman 
+  # - name: ~/winget
+  #   description: Postman
+  #   parameters:
+  #     package: Postman.Postman 
 
-  - name: ~/winget
-    description: Bruno
-    parameters:
-      package: Bruno.Bruno 
+  # - name: ~/winget
+  #   description: Bruno
+  #   parameters:
+  #     package: Bruno.Bruno 
 
-  - name: ~/winget
-    description: OpenSSL
-    parameters:
-      package:  ShiningLight.OpenSSL.Dev
+  # - name: ~/winget
+  #   description: OpenSSL
+  #   parameters:
+  #     package:  ShiningLight.OpenSSL.Dev
             
   - name: ~/winget
     description: Install Visual Studio Code
