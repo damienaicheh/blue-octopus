@@ -1,0 +1,77 @@
+$schema: "1.0"
+name: "full-stack"
+image: microsoftvisualstudio_windowsplustools_base-win11-gen2
+description: "This definition is for the eShop full-stack environment"
+
+tasks:
+    ### -------------------------------------
+    # Install tools
+    ### -------------------------------------
+  - name: winget
+    parameters:
+      downloadUrl: 'https://raw.githubusercontent.com/damienaicheh/blue-octopus/refs/heads/main/.devcenter/dev-box/dsc-configurations/common-config.dsc.yaml'
+
+  - name: ~/winget
+    description: Install Node JS
+    parameters:
+      package: OpenJS.NodeJS.LTS
+
+  - name: ~/winget
+    description: Install Yarn
+    parameters:
+      package: Yarn.Yarn
+
+  - name: ~/winget
+    description: JetBrains IntelliJ IDEA Community
+    parameters:
+      package: JetBrains.IntelliJIDEA.Community 
+  
+  - name: ~/winget
+    description: Notepad++
+    parameters:
+      package: Notepad++.Notepad++
+
+  - name: ~/winget
+    description: Java JDK 17
+    parameters:
+      package: Oracle.JDK.17 
+
+  - name: ~/winget
+    description: Java JDK 21
+    parameters:
+      package: Oracle.JDK.21
+
+  - name: ~/winget
+    description: MongoDB Compass 
+    parameters:
+      package: MongoDB.Compass.Full
+
+  - name: ~/winget
+    description: Google Chrome 
+    parameters:
+      package: Google.Chrome
+
+  - name: ~/winget
+    description: Mozilla Firefox
+    parameters:
+      package: Mozilla.Firefox 
+
+  # - name: ~/winget
+  #   description: Postman
+  #   parameters:
+  #     package: Postman.Postman 
+
+  # - name: ~/winget
+  #   description: Bruno
+  #   parameters:
+  #     package: Bruno.Bruno 
+
+  # - name: ~/winget
+  #   description: OpenSSL
+  #   parameters:
+  #     package:  ShiningLight.OpenSSL.Dev
+            
+  - name: ~/winget
+    description: Install Visual Studio Code
+    parameters:
+      package:  Microsoft.VisualStudioCode
