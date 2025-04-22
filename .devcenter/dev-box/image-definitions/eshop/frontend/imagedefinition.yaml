@@ -15,7 +15,7 @@ tasks:
   - name: ~/winget
     description: Install Node JS
     parameters:
-      package: OpenJS.NodeJS
+      package: OpenJS.NodeJS.LTS
 
   - name: ~/winget
     description: Install Yarn
