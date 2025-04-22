@@ -7,7 +7,7 @@ tasks:
     ### -------------------------------------
     # Install tools
     ### -------------------------------------
-  - name: winget
+  - name: ~/winget
     parameters:
       downloadUrl: 'https://raw.githubusercontent.com/damienaicheh/blue-octopus/refs/heads/main/.devcenter/dev-box/dsc-configurations/common-config.dsc.yaml'
 
@@ -56,6 +56,11 @@ tasks:
     parameters:
       package: Mozilla.Firefox 
 
+  - name: ~/winget
+    description: Install Visual Studio Code
+    parameters:
+      package:  Microsoft.VisualStudioCode
+
   # - name: ~/winget
   #   description: Postman
   #   parameters:
@@ -71,7 +76,3 @@ tasks:
   #   parameters:
   #     package:  ShiningLight.OpenSSL.Dev
             
-  - name: ~/winget
-    description: Install Visual Studio Code
-    parameters:
-      package:  Microsoft.VisualStudioCode
