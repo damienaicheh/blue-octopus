@@ -61,19 +61,19 @@ tasks:
     parameters:
       package:  Microsoft.VisualStudioCode
 
-userTasks:
-  # - name: ~/winget
-  #   description: Postman
-  #   parameters:
-  #     package: Postman.Postman 
+# userTasks:
+#   # - name: ~/winget
+#   #   description: Postman
+#   #   parameters:
+#   #     package: Postman.Postman 
 
-  - name: ~/winget
-    description: Bruno
-    parameters:
-      package: Bruno.Bruno 
+#   - name: ~/winget
+#     description: Bruno
+#     parameters:
+#       package: Bruno.Bruno 
 
-  - name: ~/winget
-    description: OpenSSL
-    parameters:
-      package:  ShiningLight.OpenSSL.Dev
+#   - name: ~/winget
+#     description: OpenSSL
+#     parameters:
+#       package:  ShiningLight.OpenSSL.Dev
             
