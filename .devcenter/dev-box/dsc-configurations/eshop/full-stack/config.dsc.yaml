@@ -149,17 +149,3 @@ properties:
       settings:
         name: GitLab.gitlab-workflow
         exist: true
-
-    - resource: PSDscResources/Script
-      id: vscodeextensions
-      dependsOn:
-        - vscode
-      directives:
-        description: Install Extensions for VS Code
-      settings:
-        SetScript: |
-          $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User") 
-          mkdir -Path $env:USERPROFILE\Desktop\HelloWorld
-          
-        GetScript: return $false
-        TestScript: return $false
