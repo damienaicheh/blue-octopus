@@ -1,0 +1,100 @@
+# yaml-language-server: $schema=https://aka.ms/configuration-dsc-schema/0.2
+properties:
+  configurationVersion: 0.2.0
+  ########################################
+  ### RESOURCES: System Configuration
+  ########################################
+  resources:
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: git
+      directives:
+        allowPrerelease: false
+      settings:
+        id: Git.Git
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Node JS
+        allowPrerelease: false
+      settings:
+        id: OpenJS.NodeJS.LTS
+        version: 20.18.1
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Yarn
+        allowPrerelease: false
+      settings:
+        id: Yarn.Yarn
+        version: 1.22.22
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: JetBrains IntelliJ IDEA Community
+        allowPrerelease: false
+      settings:
+        id: JetBrains.IntelliJIDEA.Community 
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Notepad++
+        allowPrerelease: false
+      settings:
+        id: Notepad++.Notepad++
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Java JDK 17
+        allowPrerelease: false
+      settings:
+        id: Oracle.JDK.17
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Java JDK 21
+        allowPrerelease: false
+      settings:
+        id: Oracle.JDK.21
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: MongoDB Compass
+        allowPrerelease: false
+      settings:
+        id: MongoDB.Compass.Full
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Google Chrome
+        allowPrerelease: false
+      settings:
+        id: Google.Chrome
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Mozilla Firefox
+        allowPrerelease: false
+      settings:
+        id: Mozilla.Firefox
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Visual Studio Code
+        allowPrerelease: false
+      settings:
+        id: Microsoft.VisualStudioCode
+
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: OpenSSL
+        allowPrerelease: false
+      settings:
+        id: ShiningLight.OpenSSL.Dev
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        allowPrerelease: false
+      settings:
+        id: Bruno.Bruno
+
