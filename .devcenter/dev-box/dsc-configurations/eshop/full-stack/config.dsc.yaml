@@ -112,6 +112,7 @@ properties:
       id: RedisInsight
       directives:
         description: Install RedisInsight
+        allowPrerelease: false
       settings:
         id: XP8K1GHCB0F1R2
         source: msstore
@@ -120,32 +121,32 @@ properties:
     ### RESOURCES: Visual Studio Code Extensions
     ##########################################
 
-    - resource: Microsoft.VSCode.Dsc/VSCodeExtension
-      id: github.copilot
-      dependsOn: vscode
-      directives:
-        description: Install GitHub Copilot
-        allowPrerelease: true
-      settings:
-        name: github.copilot
-        exist: true
+    # - resource: Microsoft.VSCode.Dsc/VSCodeExtension
+    #   id: github.copilot
+    #   dependsOn: vscode
+    #   directives:
+    #     description: Install GitHub Copilot
+    #     allowPrerelease: true
+    #   settings:
+    #     name: github.copilot
+    #     exist: true
 
-    - resource: Microsoft.VSCode.Dsc/VSCodeExtension
-      id: github.copilot-chat 
-      dependsOn: vscode
-      directives:
-        description: Install GitHub Copilot Chat
-        allowPrerelease: true
-      settings:
-        name: github.copilot-chat
-        exist: true
+    # - resource: Microsoft.VSCode.Dsc/VSCodeExtension
+    #   id: github.copilot-chat 
+    #   dependsOn: vscode
+    #   directives:
+    #     description: Install GitHub Copilot Chat
+    #     allowPrerelease: true
+    #   settings:
+    #     name: github.copilot-chat
+    #     exist: true
 
-    - resource: Microsoft.VSCode.Dsc/VSCodeExtension
-      id: GitLab.gitlab-workflow
-      dependsOn: vscode
-      directives:
-        description: Install GitLab Workflow
-        allowPrerelease: true
-      settings:
-        name: GitLab.gitlab-workflow
-        exist: true
+    # - resource: Microsoft.VSCode.Dsc/VSCodeExtension
+    #   id: GitLab.gitlab-workflow
+    #   dependsOn: vscode
+    #   directives:
+    #     description: Install GitLab Workflow
+    #     allowPrerelease: true
+    #   settings:
+    #     name: GitLab.gitlab-workflow
+    #     exist: true
