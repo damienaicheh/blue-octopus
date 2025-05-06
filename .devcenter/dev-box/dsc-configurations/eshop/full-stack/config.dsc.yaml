@@ -2,12 +2,13 @@
 properties:
   configurationVersion: 0.2.0
   ########################################
-  ### RESOURCES: System Configuration
+  ### RESOURCES: Installation of Windows Packages
   ########################################
   resources:
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: git
       directives:
+        description: Install Git
         allowPrerelease: false
       settings:
         id: Git.Git
@@ -78,12 +79,13 @@ properties:
         id: Mozilla.Firefox
 
     - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: vscode
       directives:
         description: Install Visual Studio Code
         allowPrerelease: false
       settings:
         id: Microsoft.VisualStudioCode
-
+        ensure: Present
 
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       directives:
@@ -94,7 +96,70 @@ properties:
 
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       directives:
+        description: Install Bruno
         allowPrerelease: false
       settings:
         id: Bruno.Bruno
 
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install KeyStore Explorer
+        allowPrerelease: false
+      settings:
+        id: KaiKramer.KeyStoreExplorer
+    
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: RedisInsight
+      directives:
+        description: Install RedisInsight
+      settings:
+        id: XP8K1GHCB0F1R2
+        source: msstore
+
+    ##########################################
+    ### RESOURCES: Visual Studio Code Extensions
+    ##########################################
+
+    - resource: Microsoft.VSCode.Dsc/VSCodeExtension
+      id: github.copilot
+      dependsOn: vscode
+      directives:
+        description: Install GitHub Copilot
+        allowPrerelease: true
+      settings:
+        name: github.copilot
+        exist: true
+
+    - resource: Microsoft.VSCode.Dsc/VSCodeExtension
+      id: github.copilot-chat 
+      dependsOn: vscode
+      directives:
+        description: Install GitHub Copilot Chat
+        allowPrerelease: true
+      settings:
+        name: github.copilot-chat
+        exist: true
+
+    - resource: Microsoft.VSCode.Dsc/VSCodeExtension
+      id: GitLab.gitlab-workflow
+      dependsOn: vscode
+      directives:
+        description: Install GitLab Workflow
+        allowPrerelease: true
+      settings:
+        name: GitLab.gitlab-workflow
+        exist: true
+
+    - resource: PSDscResources/Script
+      id: vscodeextensions
+      dependsOn:
+        - vscode
+      directives:
+        description: Install Extensions for VS Code
+      settings:
+        SetScript: |
+          $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User") 
+          mkdir -Path $env:USERPROFILE\Desktop\HelloWorld
+          
+        GetScript: return $false
+        TestScript: return $false
