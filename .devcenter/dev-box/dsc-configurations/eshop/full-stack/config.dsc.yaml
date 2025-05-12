@@ -117,36 +117,56 @@ properties:
         id: XP8K1GHCB0F1R2
         source: msstore
 
+    ## Workaround
+    # - resource: PSDscResources/Script
+    #   id: vscodeextensions
+    #   dependsOn:
+    #     - vscode
+    #   directives:
+    #     description: Install Python Extension for VS Code
+    #   settings:
+    #     SetScript: |
+    #       $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User") 
+    #       code --install-extension github.copilot
+    #       code --install-extension github.copilot-chat        
+    #       code --install-extension GitLab.gitlab-workflow
+          
+    #     GetScript: return $false
+    #     TestScript: return $false
+        
     ##########################################
     ### RESOURCES: Visual Studio Code Extensions
     ##########################################
 
-    # - resource: Microsoft.VSCode.Dsc/VSCodeExtension
-    #   id: github.copilot
-    #   dependsOn: vscode
-    #   directives:
-    #     description: Install GitHub Copilot
-    #     allowPrerelease: true
-    #   settings:
-    #     name: github.copilot
-    #     exist: true
+    - resource: Microsoft.VSCode.Dsc/VSCodeExtension
+      id: github.copilot
+      dependsOn: 
+       - vscode
+      directives:
+        description: Install GitHub Copilot
+        allowPrerelease: true
+      settings:
+        name: github.copilot
+        exist: true
 
-    # - resource: Microsoft.VSCode.Dsc/VSCodeExtension
-    #   id: github.copilot-chat 
-    #   dependsOn: vscode
-    #   directives:
-    #     description: Install GitHub Copilot Chat
-    #     allowPrerelease: true
-    #   settings:
-    #     name: github.copilot-chat
-    #     exist: true
+    - resource: Microsoft.VSCode.Dsc/VSCodeExtension
+      id: github.copilot-chat 
+      dependsOn: 
+        - vscode
+      directives:
+        description: Install GitHub Copilot Chat
+        allowPrerelease: true
+      settings:
+        name: github.copilot-chat
+        exist: true
 
-    # - resource: Microsoft.VSCode.Dsc/VSCodeExtension
-    #   id: GitLab.gitlab-workflow
-    #   dependsOn: vscode
-    #   directives:
-    #     description: Install GitLab Workflow
-    #     allowPrerelease: true
-    #   settings:
-    #     name: GitLab.gitlab-workflow
-    #     exist: true
+    - resource: Microsoft.VSCode.Dsc/VSCodeExtension
+      id: GitLab.gitlab-workflow
+      dependsOn: 
+        - vscode
+      directives:
+        description: Install GitLab Workflow
+        allowPrerelease: true
+      settings:
+        name: GitLab.gitlab-workflow
+        exist: true
