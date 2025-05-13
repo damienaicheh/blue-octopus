@@ -8,12 +8,9 @@ tasks:
     # Install tools
     ### -------------------------------------
   - name: ~/winget
-    id: git
-    directives:
-      allowPrerelease: false
-    settings:
-      id: Git.Git
-        
+    parameters:
+      downloadUrl: 'https://raw.githubusercontent.com/damienaicheh/blue-octopus/refs/heads/main/.devcenter/dev-box/dsc-configurations/common-config.dsc.yaml'
+
   - name: ~/winget
     description: Install Node JS
     parameters:
@@ -63,3 +60,20 @@ tasks:
     description: Install Visual Studio Code
     parameters:
       package:  Microsoft.VisualStudioCode
+
+# userTasks:
+#   # - name: ~/winget
+#   #   description: Postman
+#   #   parameters:
+#   #     package: Postman.Postman 
+
+#   - name: ~/winget
+#     description: Bruno
+#     parameters:
+#       package: Bruno.Bruno 
+
+#   - name: ~/winget
+#     description: OpenSSL
+#     parameters:
+#       package:  ShiningLight.OpenSSL.Dev
+            
