@@ -8,11 +8,9 @@ tasks:
     # Install tools
     ### -------------------------------------
   - name: ~/winget
-    id: git
-    directives:
-      allowPrerelease: false
-    settings:
-      id: Git.Git
+    description: Install Git
+    parameters:
+      package: Git.Git
         
   - name: ~/winget
     description: Install Node JS
