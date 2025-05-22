@@ -23,6 +23,13 @@ resource "azurerm_container_app" "self_hosted_gateway" {
     }
   }
 
+  secret {
+    name  = "self-hosted-gateway-token-secret"
+    identity = "System"
+    key_vault_secret_id = azurerm_key_vault_secret.self_hosted_gateway_token.id
+    value = format("https://%s.vault.azure.net/secrets/%s", azurerm_key_vault.this.name, azurerm_key_vault_secret.self_hosted_gateway_token.name)
+  }
+
   template {
     container {
       name   = "self-hosted-gateway"
@@ -36,8 +43,8 @@ resource "azurerm_container_app" "self_hosted_gateway" {
       }
 
       env {
-        name  = "config.service.auth"
-        value = ""
+        name        = "config.service.auth"
+        secret_name = "self-hosted-gateway-token-secret"
       }
 
       env {
