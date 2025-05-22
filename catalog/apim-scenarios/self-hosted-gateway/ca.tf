@@ -1,0 +1,52 @@
+resource "azurerm_container_app" "self_hosted_gateway" {
+  name                         = format("ca-shg-%s", local.resource_suffix_kebabcase)
+  resource_group_name          = local.resource_group_name
+  container_app_environment_id = azurerm_container_app_environment.this.id
+  tags                         = local.tags
+  workload_profile_name        = "Consumption"
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  revision_mode = "Single"
+
+  ingress {
+    allow_insecure_connections = false
+    external_enabled           = true
+    target_port                = 8080
+    transport                  = "auto"
+
+    traffic_weight {
+      latest_revision = true
+      percentage      = 100
+    }
+  }
+
+  template {
+    container {
+      name   = "self-hosted-gateway"
+      cpu    = "4.0"
+      memory = "8Gi"
+      image  = "mcr.microsoft.com/azure-api-management/gateway:2.5.0"
+
+      env {
+        name  = "config.service.endpoint"
+        value = format("%s.configuration.azure-api.net", azurerm_api_management.this.name)
+      }
+
+      env {
+        name  = "config.service.auth"
+        value = ""
+      }
+
+      env {
+        name  = "net.server.http.forwarded.proto.enabled"
+        value = "true"
+      }
+    }
+
+    min_replicas = 1
+    max_replicas = 3
+  }
+}

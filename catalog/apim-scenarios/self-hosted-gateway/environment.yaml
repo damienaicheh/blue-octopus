@@ -1,0 +1,15 @@
+name: APIMSelfHostedGateway
+summary: APIM Self Hosted Gateway
+description: Deploys an APIM Self Hosted Gateway in a VNet with a self-hosted gateway.
+runner: aichehda/deployment-environments-runners-terraform:1.9.6
+templatePath: provider.tf
+
+parameters:
+- id: apim_sku_name
+  name: "Apim SKU"
+  description: 'The APIM SKU compatible with VNet Internal mode.'
+  type: string
+  allowed:
+    - 'Developer_1'
+    - 'Premium_1'
+  default: 'Developer_1'
