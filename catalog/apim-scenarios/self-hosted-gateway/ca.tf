@@ -24,10 +24,10 @@ resource "azurerm_container_app" "self_hosted_gateway" {
   }
 
   secret {
-    name  = "self-hosted-gateway-token-secret"
-    identity = "System"
+    name                = "self-hosted-gateway-token-secret"
+    identity            = "System"
     key_vault_secret_id = azurerm_key_vault_secret.self_hosted_gateway_token.id
-    value = format("https://%s.vault.azure.net/secrets/%s", azurerm_key_vault.this.name, azurerm_key_vault_secret.self_hosted_gateway_token.name)
+    value               = format("https://%s.vault.azure.net/secrets/%s", azurerm_key_vault.this.name, azurerm_key_vault_secret.self_hosted_gateway_token.name)
   }
 
   template {
@@ -35,7 +35,7 @@ resource "azurerm_container_app" "self_hosted_gateway" {
       name   = "self-hosted-gateway"
       cpu    = "4.0"
       memory = "8Gi"
-      image  = "mcr.microsoft.com/azure-api-management/gateway:2.5.0"
+      image  = "mcr.microsoft.com/azure-api-management/gateway:2.9.0"
 
       env {
         name  = "config.service.endpoint"
@@ -50,6 +50,36 @@ resource "azurerm_container_app" "self_hosted_gateway" {
       env {
         name  = "net.server.http.forwarded.proto.enabled"
         value = "true"
+      }
+
+      # env {
+      #   name  = "telemetry.logs.local"
+      #   value = "json"
+      # }
+
+      env {
+        name  = "telemetry.logs.std.level"
+        value = "all"
+      }
+
+      env {
+        name  = "telemetry.logs.std"
+        value = "text"
+      }
+
+      env {
+        name  = "telemetry.logs.local.localsyslog.endpoint"
+        value = "/dev/log"
+      }
+
+      env {
+        name  = "telemetry.logs.local.localsyslog.facility"
+        value = "7"
+      }
+
+      env {
+        name  = "telemetry.logs.local"
+        value = "localsyslog"
       }
     }
 

@@ -15,6 +15,8 @@ locals {
     try(azurerm_resource_group.this[0].location, null)
   )
 
+  workspace_1_id = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_api_management.this.resource_group_name}/providers/Microsoft.ApiManagement/service/${azurerm_api_management.this.name}/workspaces/${var.workspace_1.name}"
+
   tags = merge(
     var.tags,
     tomap(

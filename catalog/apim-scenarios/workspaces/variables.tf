@@ -74,9 +74,9 @@ variable "bastion_subnet_address_suffix" {
   default     = ".2.64/26"
 }
 
-variable "apim_workspace_1_subnet_address_suffix" {
+variable "apim_dedicated_workspace_gateway_subnet_address_suffix" {
   type        = string
-  description = "Apim workspace 1 Subnet Address Suffix"
+  description = "Apim dedicated workspace gateway Subnet Address Suffix"
   default     = ".3.0/24"
 }
 
@@ -84,6 +84,12 @@ variable "vm_subnet_address_suffix" {
   type        = string
   description = "Virtual Machines Subnet Address Suffix"
   default     = ".4.0/26"
+}
+
+variable "apim_shared_workspace_gateway_subnet_address_suffix" {
+  type        = string
+  description = "Apim shared workspace gateway Subnet Address Suffix"
+  default     = ".5.0/24"
 }
 
 variable "vm_default_password" {
@@ -98,8 +104,8 @@ variable "apim_sku_name" {
   default     = "Premium_1"
 }
 
-variable "workspace" {
-  description = "The API Management workspace"
+variable "workspace_1" {
+  description = "The API Management workspace 1"
   type = object({
     name         = string
     display_name = string
@@ -109,6 +115,34 @@ variable "workspace" {
     name         = "workspace-1"
     display_name = "E-Commerce Team"
     description  = "This is the Workspace for the E-Commerce Team"
+  }
+}
+
+variable "workspace_2" {
+  description = "The API Management workspace 2"
+  type = object({
+    name         = string
+    display_name = string
+    description  = string
+  })
+  default = {
+    name         = "workspace-2"
+    display_name = "Research Team"
+    description  = "This is the Workspace for the Research Team"
+  }
+}
+
+variable "workspace_3" {
+  description = "The API Management workspace 3"
+  type = object({
+    name         = string
+    display_name = string
+    description  = string
+  })
+  default = {
+    name         = "workspace-3"
+    display_name = "Podcast Team"
+    description  = "This is the Workspace for the Podcast Team"
   }
 }
 
