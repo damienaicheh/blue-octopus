@@ -34,12 +34,12 @@ variable "tags" {
 
 variable "projects" {
   type = map(object({
-    name                       = string
-    description                = string
-    maximum_dev_boxes_per_user = number
+    name                          = string
+    description                   = string
+    maximum_dev_boxes_per_user    = number
     enable_environment_definition = bool
-    enable_image_definition        = bool
-    env_types                  = list(string)
+    enable_image_definition       = bool
+    env_types                     = list(string)
   }))
   description = "The projects to be added in the Dev Center"
 }

@@ -25,18 +25,18 @@
 
 resource "azapi_resource" "eshop_catalog_image_definitions" {
   parent_id = azapi_resource.projects["eshop"].id
-  type = "Microsoft.DevCenter/projects/catalogs@2025-02-01"
-  name = "image-definitions"
+  type      = "Microsoft.DevCenter/projects/catalogs@2025-02-01"
+  name      = "image-definitions"
   body = {
     properties = {
       gitHub = {
-        branch = "main"
-        path = ".devcenter/dev-box/image-definitions/eshop"
+        branch           = "main"
+        path             = ".devcenter/dev-box/image-definitions/eshop"
         secretIdentifier = "https://${azurerm_key_vault.this.name}.vault.azure.net/secrets/Pat"
-        uri = "https://github.com/damienaicheh/blue-octopus.git"
+        uri              = "https://github.com/damienaicheh/blue-octopus.git"
       }
       syncType = "Scheduled"
-      tags = local.tags
+      tags     = local.tags
     }
   }
 }

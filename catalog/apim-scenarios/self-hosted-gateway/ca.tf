@@ -52,38 +52,28 @@ resource "azurerm_container_app" "self_hosted_gateway" {
         value = "true"
       }
 
-      # env {
-      #   name  = "telemetry.logs.local"
-      #   value = "json"
-      # }
-
       env {
         name  = "telemetry.logs.std.level"
-        value = "all"
+        value = "info"
       }
 
       env {
         name  = "telemetry.logs.std"
-        value = "text"
-      }
-
-      env {
-        name  = "telemetry.logs.local.localsyslog.endpoint"
-        value = "/dev/log"
-      }
-
-      env {
-        name  = "telemetry.logs.local.localsyslog.facility"
-        value = "7"
+        value = "json"
       }
 
       env {
         name  = "telemetry.logs.local"
-        value = "localsyslog"
+        value = "auto"
       }
     }
 
+    http_scale_rule {
+      concurrent_requests = "10"
+      name                = "http-scaler"
+    }
+
     min_replicas = 1
-    max_replicas = 3
+    max_replicas = 10
   }
 }

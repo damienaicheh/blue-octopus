@@ -1,11 +1,11 @@
 resource "azurerm_api_management" "this" {
-  name                 = format("apim-%s", local.resource_suffix_kebabcase)
-  location             = local.resource_group_location
-  resource_group_name  = local.resource_group_name
-  publisher_name       = "Me"
-  publisher_email      = "admin@me.io"
-  sku_name             = var.apim_sku_name
-  tags                 = local.tags
+  name                = format("apim-%s", local.resource_suffix_kebabcase)
+  location            = local.resource_group_location
+  resource_group_name = local.resource_group_name
+  publisher_name      = "Me"
+  publisher_email     = "admin@me.io"
+  sku_name            = var.apim_sku_name
+  tags                = local.tags
 
   identity {
     type = "SystemAssigned"

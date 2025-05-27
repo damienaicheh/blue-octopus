@@ -20,12 +20,6 @@ resource "azurerm_api_management_api_policy" "request_content" {
 <policies>
     <inbound>
         <base />
-    </inbound>
-    <backend>
-        <base />
-    </backend>
-    <outbound>
-        <base />
         <set-header name="DeploymentRegion" exists-action="append">
             <value>@(context.Deployment.Region)</value>
         </set-header>
@@ -41,6 +35,12 @@ resource "azurerm_api_management_api_policy" "request_content" {
         <set-header name="ServiceName" exists-action="append">
             <value>@(context.Deployment.ServiceName)</value>
         </set-header>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
     </outbound>
     <on-error>
         <base />
