@@ -3,6 +3,7 @@ resource "azurerm_private_endpoint" "acr" {
   name                = format("pe-acr-%s", local.resource_suffix_kebabcase)
   resource_group_name = local.resource_group_name
   subnet_id           = azurerm_subnet.subnet_paas.id
+  tags                = local.tags
 
   private_dns_zone_group {
     name                 = "acr-default"
@@ -27,6 +28,7 @@ resource "azurerm_private_endpoint" "app_service" {
   location            = local.resource_group_location
   resource_group_name = local.resource_group_name
   subnet_id           = azurerm_subnet.subnet_paas.id
+  tags                = local.tags
 
   private_dns_zone_group {
     name                 = "app-service-default"

@@ -20,9 +20,11 @@ locals {
     var.tags,
     tomap(
       {
-        "Environment" = var.environment,
-        "ProjectName" = "aca/internal-mode",
-        "Domain"      = var.domain
+        "Environment"     = var.environment,
+        "ProjectName"     = "aca/devops-runners",
+        "Domain"          = var.domain,
+        "CostControl"     = "Ignore",
+        "SecurityControl" = "Ignore"
       }
     )
   )

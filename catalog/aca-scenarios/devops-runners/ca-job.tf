@@ -3,6 +3,8 @@ resource "azurerm_container_app_job" "gh_runner_job" {
   location                     = local.resource_group_location
   resource_group_name          = local.resource_group_name
   container_app_environment_id = azurerm_container_app_environment.this.id
+  workload_profile_name        = "Consumption"
+  tags                         = local.tags
 
   replica_timeout_in_seconds = 3600
   replica_retry_limit        = 1
@@ -41,13 +43,12 @@ resource "azurerm_container_app_job" "gh_runner_job" {
 
   secret {
     name                = "personal-access-token"
-    identity            = "System"
-    key_vault_secret_id = azurerm_key_vault_secret.github_pat.id
-    value               = format("https://%s.vault.azure.net/secrets/%s", azurerm_key_vault.this.name, azurerm_key_vault_secret.github_pat.name)
+    identity            = azurerm_user_assigned_identity.container_app_job_identity.id
+    key_vault_secret_id = azurerm_key_vault_secret.github_pat.versionless_id
   }
 
   registry {
-    server = "${azurerm_container_registry.this.name}.azurecr.io"
+    server   = "${azurerm_container_registry.this.name}.azurecr.io"
     identity = azurerm_user_assigned_identity.container_app_job_identity.id
   }
 
@@ -73,7 +74,7 @@ resource "azurerm_container_app_job" "gh_runner_job" {
       }
 
       env {
-        name        = "PERSONAL_ACCESS_TOKEN"
+        name        = "GITHUB_PAT"
         secret_name = "personal-access-token"
       }
 

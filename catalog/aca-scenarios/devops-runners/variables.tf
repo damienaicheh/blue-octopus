@@ -100,6 +100,6 @@ variable "gh_repo_owner" {
 
 variable "gh_repo_name" {
   type      = string
-  default   = "aca-devops"
+  default   = "app-service-devops"
   sensitive = true
 }

@@ -5,13 +5,14 @@ resource "azurerm_linux_web_app" "this" {
   service_plan_id               = azurerm_service_plan.this.id
   public_network_access_enabled = false
   virtual_network_subnet_id     = azurerm_subnet.subnet_app_service.id
+  tags                          = local.tags
 
   identity {
     type = "SystemAssigned"
   }
 
   site_config {
-    
+
     application_stack {
       python_version = "3.9"
     }
