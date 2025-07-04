@@ -14,7 +14,7 @@ resource "azapi_resource" "apim" {
     }
     sku = {
       capacity = 1
-      name     = "StandardV2"
+      name     = "BasicV2"
     }
     identity = {
       type = "SystemAssigned"

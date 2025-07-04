@@ -9,7 +9,7 @@ resource "azapi_resource" "log_analytics_workspace" {
       features = {
         searchVersion = 1
       }
-      retentionInDays = 30
+      retentionInDays = 90
       sku = {
         name = "PerGB2018"
       }

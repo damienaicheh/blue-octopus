@@ -20,35 +20,26 @@ locals {
   diagnostic_settings_body_bytes     = 8192
   diagnostic_settings_headers_to_log = ["Content-type", "User-agent", "x-ms-region", "x-ratelimit-remaining-tokens", "x-ratelimit-remaining-requests"]
 
-  location_wus = "westus"
-  region_wus   = "wus"
-
-  location_swc = "swedencentral"
-  region_swc   = "swc"
-
-  location_uk = "uksouth"
-  region_uk   = "uk"
-
-  open_ai_resources = [
-    {
-      name     = format("oai-%s", replace(local.resource_suffix_kebabcase, var.region, local.region_wus))
-      location = local.location_wus
+  open_ai_resources = {
+    westus = {
+      name     = format("oai-%s", replace(local.resource_suffix_kebabcase, var.region, "wus"))
+      location = "westus"
       priority = 1
       weight   = 100
     },
-    {
-      name     = format("oai-%s", replace(local.resource_suffix_kebabcase, var.region, local.region_swc))
-      location = local.location_swc
+    swedencentral ={
+      name     = format("oai-%s", replace(local.resource_suffix_kebabcase, var.region, "swc"))
+      location = "swedencentral"
       priority = 2
       weight   = 50
     },
-    {
-      name     = format("oai-%s", replace(local.resource_suffix_kebabcase, var.region, local.region_uk))
-      location = local.location_uk
+    uksouth = {
+      name     = format("oai-%s", replace(local.resource_suffix_kebabcase, var.region, "uk"))
+      location = "uksouth"
       priority = 2
       weight   = 50
     }
-  ]
+  }
 
 
   tags = merge(

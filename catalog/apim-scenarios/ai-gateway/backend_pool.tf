@@ -8,8 +8,8 @@ resource "azapi_resource" "openai_backend_pool" {
       description = "Load balancer for multiple OpenAI endpoints"
       pool = {
         services = [
-          for instance in local.open_ai_resources : {
-            id       = "/backends/${azurerm_cognitive_account.open_ai[instance.name].name}"
+          for key, instance in local.open_ai_resources : {
+            id       = "/backends/${azurerm_cognitive_account.open_ai[key].name}"
             priority = instance.priority
             weight   = instance.weight
           }
