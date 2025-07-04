@@ -13,8 +13,8 @@ resource "azapi_resource" "ai_services" {
 
     properties = {
       allowProjectManagement = true
-      publicNetworkAccess = "Enabled"
-      customSubDomainName = format("ais-%s", local.resource_suffix_kebabcase)
+      publicNetworkAccess    = "Enabled"
+      customSubDomainName    = format("ais-%s", local.resource_suffix_kebabcase)
     }
     sku = {
       name = "S0"

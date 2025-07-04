@@ -4,7 +4,7 @@ resource "azapi_resource" "api_policy" {
   parent_id = azapi_resource.openai_api.id
   body = {
     properties = {
-      format = "xml"
+      format = "rawxml"
       value  = data.template_file.policy.rendered
     }
   }

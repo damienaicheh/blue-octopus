@@ -1,7 +1,7 @@
 resource "azurerm_cognitive_account" "open_ai" {
   for_each                      = local.open_ai_resources
   name                          = each.value.name
-  location                      = local.resource_group_location
+  location                      = each.value.location
   resource_group_name           = local.resource_group_name
   kind                          = "OpenAI"
   sku_name                      = "S0"
@@ -21,6 +21,6 @@ resource "azurerm_cognitive_deployment" "chat_model_deployment" {
 
   sku {
     name     = "GlobalStandard"
-    capacity = 20
+    capacity = 5
   }
 }

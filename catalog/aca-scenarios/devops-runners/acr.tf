@@ -27,11 +27,11 @@ data "http" "ip" {
 output "ip" {
   value = data.http.ip.response_body
 }
-      # TOKEN=$(az acr login --name $ACR_NAME --expose-token --output tsv --query accessToken)
-      # echo "$TOKEN" | docker login $ACR_NAME.azurecr.io -u 00000000-0000-0000-0000-000000000000 --password-stdin
-      # docker build -t $ACR_NAME.azurecr.io/gh-runner:latest2 -f Dockerfile.github .
-      # docker push $ACR_NAME.azurecr.io/gh-runner:latest2
-      # az acr repository list --name $ACR_NAME --output table
+# TOKEN=$(az acr login --name $ACR_NAME --expose-token --output tsv --query accessToken)
+# echo "$TOKEN" | docker login $ACR_NAME.azurecr.io -u 00000000-0000-0000-0000-000000000000 --password-stdin
+# docker build -t $ACR_NAME.azurecr.io/gh-runner:latest2 -f Dockerfile.github .
+# docker push $ACR_NAME.azurecr.io/gh-runner:latest2
+# az acr repository list --name $ACR_NAME --output table
 # resource "null_resource" "acr_docker_build_push" {
 #   provisioner "local-exec" {
 #     command     = <<EOT

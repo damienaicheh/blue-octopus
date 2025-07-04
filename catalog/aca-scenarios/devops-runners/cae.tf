@@ -7,7 +7,7 @@ resource "azurerm_container_app_environment" "this" {
   internal_load_balancer_enabled     = true
   infrastructure_resource_group_name = format("mng-%s", local.resource_group_name)
   tags                               = local.tags
-  
+
   workload_profile {
     name                  = "Consumption"
     workload_profile_type = "Consumption"

@@ -27,3 +27,20 @@ Then apply the changes:
 ```bash
 terraform apply plan.out
 ```
+
+## Runing the scripts
+
+```bash
+# Activate the virtual environment
+python -m venv .venv
+
+# For Linux and macOS
+source .venv/bin/activate 
+
+# For Windows
+.\.venv\Scripts\activate
+
+# Install the required packages
+pip install -r requirements.txt
+python main.py
+```

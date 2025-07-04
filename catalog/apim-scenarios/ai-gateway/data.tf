@@ -11,3 +11,7 @@ data "template_file" "policy" {
     backend-pool-id = local.backend_pool_name
   }
 }
+
+data "template_file" "workbook" {
+  template = file("${path.module}/assets/workbooks/workbook-template.json.tpl")
+}

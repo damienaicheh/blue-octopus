@@ -27,7 +27,7 @@ locals {
       priority = 1
       weight   = 100
     },
-    swedencentral ={
+    swedencentral = {
       name     = format("oai-%s", replace(local.resource_suffix_kebabcase, var.region, "swc"))
       location = "swedencentral"
       priority = 2
@@ -46,9 +46,11 @@ locals {
     var.tags,
     tomap(
       {
-        "Environment" = var.environment,
-        "ProjectName" = "apim/ai-gateway",
-        "Domain"      = var.domain
+        "Environment"     = var.environment,
+        "ProjectName"     = "apim/ai-gateway",
+        "Domain"          = var.domain,
+        "SecurityControl" = "Ignore"
+        "CostControl"     = "Ignore"
       }
     )
   )

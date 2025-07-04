@@ -9,7 +9,7 @@ resource "azapi_resource" "openai_backend_pool" {
       pool = {
         services = [
           for key, instance in local.open_ai_resources : {
-            id       = "/backends/${azurerm_cognitive_account.open_ai[key].name}"
+            id       = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${local.resource_group_name}/providers/Microsoft.ApiManagement/service/${azapi_resource.apim.name}/backends/${azurerm_cognitive_account.open_ai[key].name}"
             priority = instance.priority
             weight   = instance.weight
           }
