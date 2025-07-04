@@ -13,5 +13,5 @@ data "template_file" "policy" {
 }
 
 data "template_file" "workbook" {
-  template = file("${path.module}/assets/workbooks/workbook-template.json.tpl")
+  template = file("${path.module}/assets/workbooks/workbook-template.json")
 }
