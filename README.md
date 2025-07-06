@@ -9,6 +9,10 @@ This sample scripts are not supported under any Microsoft standard support progr
 ## Deploy
 
 ```bash
+az login --use-device-code
+```
+
+```bash
 cd terraform && terraform init
 ```
 
@@ -16,10 +20,8 @@ cd terraform && terraform init
 export ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
 ```
 
-Update the `env.tfvars.tpl` and rename it `env.tfvars`. Run the plan:
-
 ```bash
-terraform plan -out plan.out -var-file env.tfvars
+terraform plan -out plan.out
 ```
 
 Then apply the changes:

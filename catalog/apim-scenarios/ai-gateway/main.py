@@ -13,8 +13,8 @@ apim_resource_gateway_url = os.environ["APIM_RESOURCE_GATEWAY_URL"]
 openai_model_name = os.environ.get("OPENAI_MODEL_NAME", "gpt-4o")
 openai_api_version = os.environ.get("OPENAI_API_VERSION", "2024-02-01")
 apim_subscription1_key = os.environ["APIM_SUBSCRIPTION_1_KEY"]
-apim_subscription2_key = os.environ["APIM_SUBSCRIPTIO_2_KEY"]
-apim_subscription3_key = os.environ["APIM_SUBSCRIPTIO_3_KEY"]
+apim_subscription2_key = os.environ["APIM_SUBSCRIPTION_2_KEY"]
+apim_subscription3_key = os.environ["APIM_SUBSCRIPTION_3_KEY"]
 
 runs = 50
 sleep_time_ms = 100
