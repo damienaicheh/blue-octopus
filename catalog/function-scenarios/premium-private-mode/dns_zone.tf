@@ -22,3 +22,8 @@ resource "azurerm_private_dns_zone" "sto_table" {
   name                = "privatelink.table.core.windows.net"
   resource_group_name = local.resource_group_name
 }
+
+resource "azurerm_private_dns_zone" "key_vault" {
+  name                = "privatelink.vaultcore.azure.net"
+  resource_group_name = local.resource_group_name
+}
