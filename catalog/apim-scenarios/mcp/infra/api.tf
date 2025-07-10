@@ -1,7 +1,7 @@
 resource "azurerm_api_management_api" "pets" {
   name                  = "pets-api"
   resource_group_name   = local.resource_group_name
-  api_management_name   = azurerm_api_management.this.name
+  api_management_name   = azapi_resource.apim.name
   revision              = "1"
   display_name          = "Pets"
   path                  = "api-pets"
@@ -16,7 +16,7 @@ resource "azurerm_api_management_api" "pets" {
 resource "azurerm_api_management_api" "weather_mcp" {
   name                  = "weather-mcp-api"
   resource_group_name   = local.resource_group_name
-  api_management_name   = azurerm_api_management.this.name
+  api_management_name   = azapi_resource.apim.name
   revision              = "1"
   display_name          = "Weather MCP"
   path                  = "api-weather-mcp"

@@ -3,6 +3,10 @@ locals {
   resource_suffix_kebabcase = join("-", local.resource_suffix)
   resource_suffix_lowercase = join("", local.resource_suffix)
 
+  resource_group_id = coalesce(
+    try(data.azurerm_resource_group.this[0].id, null),
+    try(azurerm_resource_group.this[0].id, null)
+  )
   resource_group_name = coalesce(
     try(data.azurerm_resource_group.this[0].name, null),
     try(azurerm_resource_group.this[0].name, null)
@@ -26,9 +30,9 @@ locals {
   )
 
   open_ai_resources = {
-    swedencentral = {
-      name     = format("oai-%s", replace(local.resource_suffix_kebabcase, var.region, "swc"))
-      location = "swedencentral"
+    eastus2 = {
+      name     = format("oai-%s", replace(local.resource_suffix_kebabcase, var.region, "ea2"))
+      location = "eastus2"
     }
   }
 }

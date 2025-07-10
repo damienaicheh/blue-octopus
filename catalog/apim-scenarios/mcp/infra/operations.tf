@@ -8,6 +8,14 @@ resource "azurerm_api_management_api_operation" "weather_mcp_messages" {
   url_template        = "/messages/"
   description         = "Post messages."
 
+  request {
+    header {
+      name     = "Content-Type"
+      required = true
+      type     = "string"
+    }
+  }
+
   response {
     status_code = 200
   }
@@ -22,6 +30,14 @@ resource "azurerm_api_management_api_operation" "weather_mcp_sse" {
   method              = "GET"
   url_template        = "/sse"
   description         = "Get sse."
+
+  request {
+    header {
+      name     = "Content-Type"
+      required = true
+      type     = "string"
+    }
+  }
 
   response {
     status_code = 200

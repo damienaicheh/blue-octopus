@@ -10,7 +10,7 @@ WEATHER_CONTAINERAPP_RESOURCE_NAME=$(terraform -chdir=../infra output -raw conta
 echo "Resource Group: $RESOURCE_GROUP_NAME, Registry: $CONTAINER_REGISTRY_NAME, App: $WEATHER_CONTAINERAPP_RESOURCE_NAME"
 WEATHER_MCP_SERVER_IMAGE="weather-mcp-server"
 WEATHER_MCP_SERVER_SRC="../src/weather-mcp-server"
-BUILD=3
+BUILD=8
 
 az acr build --image $WEATHER_MCP_SERVER_IMAGE:v0.$BUILD --resource-group $RESOURCE_GROUP_NAME --registry $CONTAINER_REGISTRY_NAME --file $WEATHER_MCP_SERVER_SRC/Dockerfile $WEATHER_MCP_SERVER_SRC/. --no-logs
 
