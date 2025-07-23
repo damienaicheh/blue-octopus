@@ -20,11 +20,11 @@ resource "azurerm_linux_function_app" "this" {
   }
 
   app_settings = {
-    FUNCTIONS_WORKER_RUNTIME               = "dotnet-isolated"
-    WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED = "1"
-    AzureWebJobsStorage__accountName       = azurerm_storage_account.this.name
-    WEBSITE_CONTENTSHARE                   = format("func-%s", local.resource_suffix_kebabcase)
-    WEBSITE_VNET_ROUTE_ALL                 = true
+    FUNCTIONS_WORKER_RUNTIME                 = "dotnet-isolated"
+    WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED   = "1"
+    AzureWebJobsStorage__accountName         = azurerm_storage_account.this.name
+    WEBSITE_CONTENTSHARE                     = format("func-%s", local.resource_suffix_kebabcase)
+    WEBSITE_VNET_ROUTE_ALL                   = true
     WEBSITE_CONTENTAZUREFILECONNECTIONSTRING = azurerm_storage_account.this.primary_connection_string
   }
 
