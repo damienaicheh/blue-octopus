@@ -7,8 +7,7 @@ resource "azurerm_linux_function_app" "this" {
   https_only                    = true
   public_network_access_enabled = false
 
-  storage_account_name = azurerm_storage_account.this.name
-  #   storage_account_access_key = azurerm_storage_account.this.primary_access_key
+  storage_account_name          = azurerm_storage_account.host.name
   storage_uses_managed_identity = true
   service_plan_id               = azurerm_service_plan.this.id
   virtual_network_subnet_id     = azurerm_subnet.subnet_func_plan.id
@@ -16,22 +15,28 @@ resource "azurerm_linux_function_app" "this" {
   tags = local.tags
 
   identity {
-    type = "SystemAssigned"
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.function_identity.id]
   }
 
   app_settings = {
-    FUNCTIONS_WORKER_RUNTIME                 = "dotnet-isolated"
-    WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED   = "1"
-    AzureWebJobsStorage__accountName         = azurerm_storage_account.this.name
-    WEBSITE_CONTENTSHARE                     = format("func-%s", local.resource_suffix_kebabcase)
-    WEBSITE_VNET_ROUTE_ALL                   = true
-    WEBSITE_CONTENTAZUREFILECONNECTIONSTRING = azurerm_storage_account.this.primary_connection_string
+    FUNCTIONS_WORKER_RUNTIME                = "dotnet-isolated"
+    FUNCTIONS_EXTENSION_VERSION             = "~4"
+    APPLICATIONINSIGHTS_CONNECTION_STRING   = azurerm_application_insights.this.connection_string
+    AzureWebJobsStorage__clientId           = azurerm_user_assigned_identity.function_identity.client_id
+    AzureWebJobsStorage__credential         = "managedidentity"
+    AzureWebJobsStorage__blobServiceUri     = format("https://%s.blob.core.windows.net/", azurerm_storage_account.host.name)
+    AzureWebJobsStorage__queueServiceUri    = format("https://%s.queue.core.windows.net/", azurerm_storage_account.host.name)
+    AzureWebJobsStorage__tableServiceUri    = format("https://%s.table.core.windows.net/", azurerm_storage_account.host.name)
+    STORAGE_QUEUE_NAME                      = azurerm_storage_queue.hello_queue.name
+    StorageQueueConnection__clientId        = azurerm_user_assigned_identity.function_identity.client_id
+    StorageQueueConnection__credential      = "managedidentity"
+    StorageQueueConnection__queueServiceUri = format("https://%s.queue.core.windows.net/", azurerm_storage_account.storage.name)
   }
 
   site_config {
     application_insights_connection_string = azurerm_application_insights.this.connection_string
     ftps_state                             = "FtpsOnly"
-    vnet_route_all_enabled                 = true
     application_stack {
       dotnet_version              = "8.0"
       use_dotnet_isolated_runtime = true
@@ -49,20 +54,4 @@ resource "azurerm_linux_function_app" "this" {
       support_credentials = true
     }
   }
-
-  #   lifecycle {
-  #     ignore_changes = [
-  #       app_settings["WEBSITE_CONTENTOVERVNET"],
-  #     ]
-  #   }
 }
-
-# resource "null_resource" "activate_content_over_vnet" {
-#   provisioner "local-exec" {
-#     command = format("az functionapp config appsettings set --name %s --resource-group %s --settings \"WEBSITE_CONTENTOVERVNET=1\"", azurerm_linux_function_app.this.name, var.resource_group_name)
-#   }
-#   depends_on = [
-#     azurerm_linux_function_app.this,
-#     azurerm_private_endpoint.func,
-#   ]
-# }

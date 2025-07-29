@@ -16,9 +16,9 @@ locals {
     var.tags,
     tomap(
       {
-        "Environment"     = var.environment,
-        "ProjectName"     = "function-scenarios/premium-private-mode",
-        "Domain"          = var.domain,
+        "Environment"     = var.environment
+        "ProjectName"     = "training-azure-func-durable-private"
+        "Domain"          = var.domain
         "SecurityControl" = "Ignore"
         "CostControl"     = "Ignore"
       }

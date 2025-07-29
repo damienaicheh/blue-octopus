@@ -1,7 +1,7 @@
 variable "domain" {
   description = "Azure deployment domain"
   type        = string
-  default     = "app"
+  default     = "prv"
 }
 
 variable "workload" {
