@@ -1,7 +1,7 @@
 resource "azapi_resource" "api_policy" {
   type      = "Microsoft.ApiManagement/service/apis/policies@2024-06-01-preview"
   name      = "policy"
-  parent_id = azapi_resource.openai_api.id
+  parent_id = azurerm_api_management_api.openai_api.id
   body = {
     properties = {
       format = "rawxml"
