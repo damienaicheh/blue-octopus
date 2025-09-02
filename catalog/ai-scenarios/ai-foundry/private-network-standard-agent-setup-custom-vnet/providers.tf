@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "=4.42.0"
+      version = "=4.38.1"
     }
 
     random = {
@@ -12,12 +12,7 @@ terraform {
 
     azapi = {
       source  = "Azure/azapi"
-      version = "2.6.1"
-    }
-
-    time = {
-      source  = "hashicorp/time"
-      version = "0.13.1"
+      version = "2.5.0"
     }
   }
 
@@ -26,13 +21,14 @@ terraform {
 }
 
 provider "azurerm" {
-  features {}
+  features {
+    cognitive_account {
+      purge_soft_delete_on_destroy = true
+    }
+  }
+  storage_use_azuread = true
 }
 
 provider "azapi" {
-  # Configuration options
-}
-
-provider "time" {
   # Configuration options
 }

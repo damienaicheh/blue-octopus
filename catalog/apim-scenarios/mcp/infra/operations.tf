@@ -1,8 +1,8 @@
 resource "azurerm_api_management_api_operation" "weather_mcp_messages" {
   operation_id        = "post-messages"
-  api_name            = azurerm_api_management_api.weather_mcp.name
-  api_management_name = azurerm_api_management_api.weather_mcp.api_management_name
-  resource_group_name = azurerm_api_management_api.weather_mcp.resource_group_name
+  api_name            = azurerm_api_management_api.weather_mcp_dev.name
+  api_management_name = azurerm_api_management_api.weather_mcp_dev.api_management_name
+  resource_group_name = azurerm_api_management_api.weather_mcp_dev.resource_group_name
   display_name        = "messages"
   method              = "POST"
   url_template        = "/messages/"
@@ -21,11 +21,11 @@ resource "azurerm_api_management_api_operation" "weather_mcp_messages" {
   }
 }
 
-resource "azurerm_api_management_api_operation" "weather_mcp_sse" {
+resource "azurerm_api_management_api_operation" "weather_mcp_dev_sse" {
   operation_id        = "get-sse"
-  api_name            = azurerm_api_management_api.weather_mcp.name
-  api_management_name = azurerm_api_management_api.weather_mcp.api_management_name
-  resource_group_name = azurerm_api_management_api.weather_mcp.resource_group_name
+  api_name            = azurerm_api_management_api.weather_mcp_dev.name
+  api_management_name = azurerm_api_management_api.weather_mcp_dev.api_management_name
+  resource_group_name = azurerm_api_management_api.weather_mcp_dev.resource_group_name
   display_name        = "sse"
   method              = "GET"
   url_template        = "/sse"
