@@ -23,13 +23,13 @@ variable "environment" {
 variable "location" {
   description = "Azure deployment location"
   type        = string
-  default     = "uksouth"
+  default     = "eastus2"
 }
 
 variable "region" {
   description = "Azure deployment region"
   type        = string
-  default     = "uk"
+  default     = "eus2"
 }
 
 variable "tags" {

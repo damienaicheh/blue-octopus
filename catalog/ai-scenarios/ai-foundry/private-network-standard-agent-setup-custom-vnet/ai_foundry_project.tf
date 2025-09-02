@@ -24,7 +24,7 @@ resource "azapi_resource" "ai_foundry_project" {
     "properties.internalId"
   ]
 
-    depends_on = [
+  depends_on = [
     azapi_resource.ai_foundry,
     azurerm_private_endpoint.sto_blob,
     azurerm_private_endpoint.cosmos_db,
