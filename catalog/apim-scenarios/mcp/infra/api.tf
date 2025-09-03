@@ -54,33 +54,3 @@ resource "azurerm_api_management_api" "weather_mcp_dev" {
   subscription_required = false
   service_url           = format("https://%s", azurerm_container_app.weather_mcp.latest_revision_fqdn)
 }
-
-# resource "azapi_resource" "pets_api_mcp" {
-#   type      = "Microsoft.ApiManagement/service/apis@2024-06-01-preview"
-#   name      = format("%s/pets-mcp-api", azapi_resource.apim.name)
-#   parent_id = azapi_resource.apim.id
-#   body = {
-#     properties = {
-#       displayName          = "Pets MCP"
-#       apiRevision          = "1"
-#       subscriptionRequired = false
-#       path                 = "api-pets-mcp"
-#       protocols = ["https"]
-#       authenticationSettings = {
-#         openidAuthenticationSettings = []
-#         oAuth2AuthenticationSettings = []
-#       }
-#       subscriptionKeyParameterNames = {
-#         header = "Ocp-Apim-Subscription-Key"
-#         query  = "subscription-key"
-#       }
-#       type      = "mcp"
-#       isCurrent = true
-#     }
-#   }
-
-#   depends_on = [
-#     azapi_resource.apim
-#   ]
-# }
-

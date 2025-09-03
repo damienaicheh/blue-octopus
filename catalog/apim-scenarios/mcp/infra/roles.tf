@@ -15,3 +15,9 @@ resource "azurerm_role_assignment" "api_center_apim_role_prod_env" {
   role_definition_name = "API Management Service Reader Role"
   principal_id         = azapi_resource.api_center.identity[0].principal_id
 }
+
+resource "azurerm_role_assignment" "user_api_center_data_reader" {
+  scope                = azapi_resource.api_center.id
+  role_definition_name = "Azure API Center Data Reader"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
