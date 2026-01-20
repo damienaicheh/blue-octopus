@@ -17,6 +17,25 @@ resource "azurerm_private_endpoint" "sto_blob" {
   }
 }
 
+resource "azurerm_private_endpoint" "sto_file" {
+  location            = local.resource_group_location
+  name                = format("pe-sto-file-%s", local.resource_suffix_kebabcase)
+  resource_group_name = local.resource_group_name
+  subnet_id           = azurerm_subnet.subnet_paas.id
+
+  private_dns_zone_group {
+    name                 = "file-default"
+    private_dns_zone_ids = [azurerm_private_dns_zone.privatelink_file_core_windows_net.id]
+  }
+
+  private_service_connection {
+    is_manual_connection           = false
+    name                           = format("psc-sto-file-%s", local.resource_suffix_kebabcase)
+    private_connection_resource_id = azurerm_storage_account.this.id
+    subresource_names              = ["file"]
+  }
+}
+
 resource "azurerm_private_endpoint" "cosmos_db" {
 
   name                = format("pe-cosmos-db-%s", local.resource_suffix_kebabcase)

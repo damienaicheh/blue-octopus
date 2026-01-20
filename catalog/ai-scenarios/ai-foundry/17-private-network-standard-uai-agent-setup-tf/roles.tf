@@ -95,3 +95,31 @@ resource "azurerm_role_assignment" "storage_blob_data_owner_uai" {
     azapi_resource.ms_foundry_project_capability_host
   ]
 }
+
+# =============================================================================
+# User deployment role assignments end here
+# =============================================================================
+
+resource "azurerm_role_assignment" "ms_foundry_azure_ai_user_to_user" {
+  scope                = azapi_resource.ms_foundry.id
+  role_definition_name = "Azure AI User"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+
+resource "azurerm_role_assignment" "ms_foundry_azure_ai_project_manager_to_user" {
+  scope                = azapi_resource.ms_foundry.id
+  role_definition_name = "Azure AI Project Manager"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+
+resource "azurerm_role_assignment" "ms_foundry_project_azure_ai_user_to_user" {
+  scope                = azapi_resource.ms_foundry_project.id
+  role_definition_name = "Azure AI User"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+
+resource "azurerm_role_assignment" "ms_foundry_project_azure_ai_project_manager_to_user" {
+  scope                = azapi_resource.ms_foundry_project.id
+  role_definition_name = "Azure AI Project Manager"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
