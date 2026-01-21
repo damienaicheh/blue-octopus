@@ -1,13 +1,13 @@
 variable "domain" {
   description = "Azure deployment domain"
   type        = string
-  default     = "prv"
+  default     = "agt"
 }
 
 variable "workload" {
   description = "Azure deployment workload"
   type        = string
-  default     = "agt"
+  default     = "ai"
 }
 
 variable "environment" {
@@ -23,13 +23,13 @@ variable "environment" {
 variable "location" {
   description = "Azure deployment location"
   type        = string
-  default     = "westus3"
+  default     = "eastus2"
 }
 
 variable "region" {
   description = "Azure deployment region"
   type        = string
-  default     = "wus3"
+  default     = "eus2"
 }
 
 variable "tags" {
@@ -66,4 +66,34 @@ variable "paas_subnet_address_suffix" {
   type        = string
   description = "PaaS Subnet Address Suffix"
   default     = ".1.0/24"
+}
+
+variable "model_name" {
+  description = "The name of the model you want to deploy"
+  type        = string
+  default     = "gpt-4o"
+}
+
+variable "model_format" {
+  description = "The provider of your model"
+  type        = string
+  default     = "OpenAI"
+}
+
+variable "model_version" {
+  description = "The version of your model"
+  type        = string
+  default     = "2024-11-20"
+}
+
+variable "model_sku_name" {
+  description = "The SKU of your model deployment"
+  type        = string
+  default     = "GlobalStandard"
+}
+
+variable "model_capacity" {
+  description = "The tokens per minute (TPM) of your model deployment"
+  type        = number
+  default     = 1
 }

@@ -16,15 +16,17 @@ locals {
     try(azurerm_resource_group.this[0].location, null)
   )
 
-  project_id_guid = "${substr(azapi_resource.ai_foundry_project.output.properties.internalId, 0, 8)}-${substr(azapi_resource.ai_foundry_project.output.properties.internalId, 8, 4)}-${substr(azapi_resource.ai_foundry_project.output.properties.internalId, 12, 4)}-${substr(azapi_resource.ai_foundry_project.output.properties.internalId, 16, 4)}-${substr(azapi_resource.ai_foundry_project.output.properties.internalId, 20, 12)}"
+  project_id_guid = "${substr(azapi_resource.ms_foundry_project.output.properties.internalId, 0, 8)}-${substr(azapi_resource.ms_foundry_project.output.properties.internalId, 8, 4)}-${substr(azapi_resource.ms_foundry_project.output.properties.internalId, 12, 4)}-${substr(azapi_resource.ms_foundry_project.output.properties.internalId, 16, 4)}-${substr(azapi_resource.ms_foundry_project.output.properties.internalId, 20, 12)}"
 
   tags = merge(
     var.tags,
     tomap(
       {
         "Environment" = var.environment,
-        "ProjectName" = "ai-scenarios/ai-foundry/private-network-standard-agent-setup-custom-vnet",
-        "Domain"      = var.domain
+        "ProjectName" = "ai-scenarios/ai-foundry/17-private-network-standard-uai-agent-setup-tf",
+        "Domain"      = var.domain,
+        "SecurityControl" = "Ignore",
+        "CostControl"     = "Ignore"
       }
     )
   )

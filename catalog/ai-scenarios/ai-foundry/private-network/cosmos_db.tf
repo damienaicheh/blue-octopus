@@ -6,6 +6,8 @@ resource "azurerm_cosmosdb_account" "this" {
   kind                = "GlobalDocumentDB"
   tags                = local.tags
 
+  free_tier_enabled = false
+
   # Set security-related settings
   local_authentication_disabled = true
   public_network_access_enabled = false
@@ -14,11 +16,6 @@ resource "azurerm_cosmosdb_account" "this" {
   automatic_failover_enabled       = false
   multiple_write_locations_enabled = false
 
-
-  capabilities {
-    name = "EnableServerless"
-  }
-
   consistency_policy {
     consistency_level = "Session"
   }
@@ -26,13 +23,14 @@ resource "azurerm_cosmosdb_account" "this" {
   geo_location {
     location          = local.resource_group_location
     failover_priority = 0
+    zone_redundant    = false
   }
 }
 
 resource "azapi_resource" "conn_cosmos_db" {
   type                      = "Microsoft.CognitiveServices/accounts/projects/connections@2025-06-01"
   name                      = azurerm_cosmosdb_account.this.name
-  parent_id                 = azapi_resource.ai_foundry_project.id
+  parent_id                 = azapi_resource.ms_foundry_project.id
   schema_validation_enabled = false
 
   body = {
@@ -50,6 +48,6 @@ resource "azapi_resource" "conn_cosmos_db" {
   }
 
   depends_on = [
-    azapi_resource.ai_foundry_project
+    azapi_resource.ms_foundry_project
   ]
 }

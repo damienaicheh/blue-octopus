@@ -1,4 +1,4 @@
-resource "azapi_resource" "ai_foundry" {
+resource "azapi_resource" "ms_foundry" {
   type                      = "Microsoft.CognitiveServices/accounts@2025-06-01"
   name                      = format("aif-%s", local.resource_suffix_kebabcase)
   parent_id                 = local.resource_group_id
@@ -11,7 +11,10 @@ resource "azapi_resource" "ai_foundry" {
       name = "S0"
     }
     identity = {
-      type = "SystemAssigned"
+      type = "UserAssigned"
+      userAssignedIdentities = {
+        (azurerm_user_assigned_identity.this.id) = {}
+      }
     }
 
     properties = {
@@ -41,12 +44,15 @@ resource "azapi_resource" "ai_foundry" {
       ]
     }
   }
+
+  depends_on = [
+    azurerm_user_assigned_identity.this
+  ]
 }
 
-
-resource "azurerm_cognitive_deployment" "aifoundry_deployment_gpt_4o" {
+resource "azurerm_cognitive_deployment" "aifoundry_deployment_model" {
   name                 = "gpt-4o"
-  cognitive_account_id = azapi_resource.ai_foundry.id
+  cognitive_account_id = azapi_resource.ms_foundry.id
 
   sku {
     name     = "GlobalStandard"
@@ -60,22 +66,6 @@ resource "azurerm_cognitive_deployment" "aifoundry_deployment_gpt_4o" {
   }
 
   depends_on = [
-    azapi_resource.ai_foundry
-  ]
-}
-
-resource "azapi_resource" "ai_foundry_capability_host" {
-  type                      = "Microsoft.CognitiveServices/accounts/projects/capabilityHosts@2025-04-01-preview"
-  name                      = format("aif-cap-host-%s", local.resource_suffix_kebabcase)
-  parent_id                 = azapi_resource.ai_foundry_project.id
-  schema_validation_enabled = false
-
-  body = {
-    properties = {}
-  }
-  depends_on = [
-    azapi_resource.conn_ai_search,
-    azapi_resource.conn_cosmos_db,
-    azapi_resource.conn_storage,
+    azapi_resource.ms_foundry
   ]
 }

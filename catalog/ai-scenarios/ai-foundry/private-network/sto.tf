@@ -1,5 +1,5 @@
 resource "azurerm_storage_account" "this" {
-  name                     = format("stfdy%s", local.resource_suffix_lowercase)
+  name                     = format("st%s", local.resource_suffix_lowercase)
   resource_group_name      = local.resource_group_name
   location                 = local.resource_group_location
   account_tier             = "Standard"
@@ -20,20 +20,17 @@ resource "azurerm_storage_account" "this" {
     bypass = [
       "AzureServices"
     ]
-    # ip_rules = [
-    #   "86.218.159.104"
-    # ]
   }
 }
 
 resource "azapi_resource" "conn_storage" {
   type                      = "Microsoft.CognitiveServices/accounts/projects/connections@2025-06-01"
   name                      = azurerm_storage_account.this.name
-  parent_id                 = azapi_resource.ai_foundry_project.id
+  parent_id                 = azapi_resource.ms_foundry_project.id
   schema_validation_enabled = false
 
   depends_on = [
-    azapi_resource.ai_foundry_project
+    azapi_resource.ms_foundry_project
   ]
 
   body = {
