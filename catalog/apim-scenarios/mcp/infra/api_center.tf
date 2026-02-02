@@ -1,14 +1,13 @@
 resource "azapi_resource" "api_center" {
   type      = "Microsoft.ApiCenter/services@2024-06-01-preview"
-  name      = format("apic-%s", local.resource_suffix_kebabcase)
+  name      = format("apict-%s", local.resource_suffix_kebabcase)
   parent_id = local.resource_group_id
   identity {
     type = "SystemAssigned"
   }
-  location = "francecentral"
+  location = "eastus"
   tags     = local.tags
   body = {
-    properties = {}
     sku = {
       name = "Standard"
     }
@@ -126,10 +125,10 @@ resource "azapi_resource" "apim_prod_env" {
 }
 
 # Can't run 2 APIM sync at the same time
-resource "time_sleep" "wait_30_seconds" {
+resource "time_sleep" "wait_2_minutes" {
   depends_on = [azapi_resource.integration_apim_dev]
 
-  create_duration = "30s"
+  create_duration = "2m"
 }
 
 resource "azapi_resource" "integration_apim_prod" {
@@ -152,6 +151,6 @@ resource "azapi_resource" "integration_apim_prod" {
     azapi_resource.apim_prod_env,
     azurerm_role_assignment.api_center_apim_role_prod_env,
     azurerm_api_management_api.pets_prod,
-    time_sleep.wait_30_seconds
+    time_sleep.wait_2_minutes
   ]
 }
