@@ -23,7 +23,7 @@ locals {
     tomap(
       {
         "Environment" = var.environment,
-        "ProjectName" = "ai-scenarios/ai-foundry/17-private-network-standard-uai-agent-setup-tf",
+        "ProjectName" = "ai-scenarios/ms-foundry/private-network",
         "Domain"      = var.domain,
         "SecurityControl" = "Ignore",
         "CostControl"     = "Ignore"
