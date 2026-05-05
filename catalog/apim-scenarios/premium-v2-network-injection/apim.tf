@@ -30,7 +30,7 @@ resource "azurerm_api_management" "this" {
   ]
 }
 
-resource "azapi_update_resource" "apim_public_network_access" {
+resource "azapi_update_resource" "apim_disable_network_access" {
   type        = "Microsoft.ApiManagement/service@2024-05-01"
   resource_id = azurerm_api_management.this.id
 
@@ -43,4 +43,9 @@ resource "azapi_update_resource" "apim_public_network_access" {
   depends_on = [
     azurerm_private_endpoint.apim_gateway,
   ]
+}
+
+moved {
+  from = azapi_update_resource.apim_public_network_access
+  to   = azapi_update_resource.apim_disable_network_access
 }

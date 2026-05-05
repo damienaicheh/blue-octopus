@@ -18,13 +18,22 @@ locals {
 
   project_id_guid = "${substr(azapi_resource.ms_foundry_project.output.properties.internalId, 0, 8)}-${substr(azapi_resource.ms_foundry_project.output.properties.internalId, 8, 4)}-${substr(azapi_resource.ms_foundry_project.output.properties.internalId, 12, 4)}-${substr(azapi_resource.ms_foundry_project.output.properties.internalId, 16, 4)}-${substr(azapi_resource.ms_foundry_project.output.properties.internalId, 20, 12)}"
 
+  apim_foundry_api_operations = {
+    for method in toset(["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT", "TRACE"]) :
+    lower(method) => {
+      display_name = method
+      method       = method
+      operation_id = format("%s-default", lower(method))
+    }
+  }
+
   tags = merge(
     var.tags,
     tomap(
       {
-        "Environment" = var.environment,
-        "ProjectName" = "ai-scenarios/ms-foundry/private-network",
-        "Domain"      = var.domain,
+        "Environment"     = var.environment,
+        "ProjectName"     = "ai-scenarios/ms-foundry/private-network",
+        "Domain"          = var.domain,
         "SecurityControl" = "Ignore",
         "CostControl"     = "Ignore"
       }

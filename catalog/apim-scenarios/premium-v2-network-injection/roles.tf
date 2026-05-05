@@ -123,3 +123,13 @@ resource "azurerm_role_assignment" "ms_foundry_project_azure_ai_project_manager_
   role_definition_name = "Azure AI Project Manager"
   principal_id         = data.azurerm_client_config.current.object_id
 }
+
+# =============================================================================
+# Role assignment for APIM to access the Foundry instance
+# ============================================================================
+
+resource "azurerm_role_assignment" "apim_ms_foundry_openai_user" {
+  scope                = azapi_resource.ms_foundry.id
+  role_definition_name = "Cognitive Services OpenAI User"
+  principal_id         = azurerm_api_management.this.identity[0].principal_id
+}

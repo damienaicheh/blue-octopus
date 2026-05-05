@@ -107,6 +107,10 @@ resource "azurerm_private_endpoint" "ms_foundry" {
     ]
     is_manual_connection = false
   }
+
+  depends_on = [
+    azurerm_cognitive_deployment.msfoundry_chat_deployment_model,
+  ]
 }
 
 resource "azurerm_private_endpoint" "apim_gateway" {
