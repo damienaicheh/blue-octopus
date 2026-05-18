@@ -12,6 +12,18 @@ data "azurerm_resource_group" "this" {
 #   }
 # }
 
+data "template_file" "inference_api" {
+  template = file("${path.module}/assets/apis/inference-api.json")
+}
+
+data "template_file" "inference_api_global_policy" {
+  template = file("${path.module}/assets/policies/inference-api-global-policy.xml.tpl")
+  vars = {
+    foundry_backend_name = azurerm_api_management_backend.ms_foundry_azure_ai.name
+  }
+}
+
+
 data "azapi_resource" "apim_service" {
   type        = "Microsoft.ApiManagement/service@2025-03-01-preview"
   resource_id = azurerm_api_management.this.id

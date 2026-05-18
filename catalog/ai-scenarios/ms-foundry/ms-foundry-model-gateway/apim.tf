@@ -89,3 +89,48 @@ resource "azurerm_monitor_diagnostic_setting" "apim" {
   #   category_group = "audit"
   # }
 }
+
+
+resource "azapi_resource" "conn_ai_gateway" {
+  type                      = "Microsoft.CognitiveServices/accounts/projects/connections@2025-06-01"
+  name                      = "ai-gateway"
+  parent_id                 = azapi_resource.ms_foundry_project.id
+  schema_validation_enabled = false
+
+  body = {
+    name = "ai-gateway"
+    properties = {
+      authType      = "ApiKey"
+      category      = "ApiManagement"
+      isSharedToAll = false
+      target        = format("%s/%s", trimsuffix(azurerm_api_management.this.gateway_url, "/"), azurerm_api_management_api.ms_foundry_azure_ai.path)
+      credentials = {
+        key = azurerm_api_management_subscription.ms_foundry_azure_ai.primary_key
+      }
+      metadata = {
+        ApiType             = "Azure"
+        inferenceAPIVersion = "2024-12-01-preview"
+        Location            = local.resource_group_location
+        deploymentInPath    = "true"
+        models = jsonencode([
+          {
+            name = azurerm_cognitive_deployment.msfoundry_chat_deployment_model.name
+            properties = {
+              model = {
+                name    = "gpt-5.4-mini"
+                version = "2026-03-17"
+                format  = "OpenAI"
+              }
+            }
+          }
+        ])
+      }
+    }
+  }
+
+  depends_on = [
+    azapi_resource.ms_foundry_project,
+    azurerm_api_management_subscription.ms_foundry_azure_ai,
+    azurerm_cognitive_deployment.msfoundry_chat_deployment_model,
+  ]
+}
