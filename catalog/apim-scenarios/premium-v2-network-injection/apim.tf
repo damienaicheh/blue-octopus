@@ -44,8 +44,3 @@ resource "azapi_update_resource" "apim_disable_network_access" {
     azurerm_private_endpoint.apim_gateway,
   ]
 }
-
-moved {
-  from = azapi_update_resource.apim_public_network_access
-  to   = azapi_update_resource.apim_disable_network_access
-}

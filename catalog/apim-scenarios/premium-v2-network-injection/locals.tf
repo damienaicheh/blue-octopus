@@ -27,6 +27,11 @@ locals {
     }
   }
 
+  apim_private_ip_address = try(
+    data.azapi_resource.apim_service.output.properties.privateIPAddresses[0],
+    cidrhost(azurerm_subnet.subnet_apim.address_prefixes[0], 4)
+  )
+
   tags = merge(
     var.tags,
     tomap(

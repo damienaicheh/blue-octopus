@@ -53,7 +53,7 @@ resource "azapi_resource" "conn_ai_search" {
         ApiType    = "Azure"
         ApiVersion = "2025-05-01-preview"
         ResourceId = azapi_resource.ai_search.id
-        location   = var.location
+        location   = local.resource_group_location
       }
     }
   }
