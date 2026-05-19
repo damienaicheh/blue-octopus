@@ -1,5 +1,5 @@
 # =============================================================================
-# Azure Bastion + Windows VM for private network access
+# Azure Bastion + Linux VM with graphical desktop for private network access
 # =============================================================================
 
 # -----------------------------------------------------------------------------
@@ -48,7 +48,7 @@ resource "azurerm_bastion_host" "this" {
 }
 
 # -----------------------------------------------------------------------------
-# Windows VM
+# Linux VM
 # -----------------------------------------------------------------------------
 
 resource "azurerm_network_interface" "vm" {
@@ -64,7 +64,7 @@ resource "azurerm_network_interface" "vm" {
   }
 }
 
-resource "azurerm_windows_virtual_machine" "this" {
+resource "azurerm_linux_virtual_machine" "this" {
   name                = format("vm-%s", local.resource_suffix_kebabcase)
   computer_name       = format("vm-%s", random_id.resource_group_name_suffix.hex)
   location            = local.resource_group_location
@@ -72,6 +72,7 @@ resource "azurerm_windows_virtual_machine" "this" {
   size                = "Standard_D2ads_v5"
   admin_username      = "azureuser"
   admin_password      = "P@ssw0rd1234!"
+  disable_password_authentication = false
   tags                = local.tags
 
   network_interface_ids = [
@@ -84,35 +85,32 @@ resource "azurerm_windows_virtual_machine" "this" {
   }
 
   source_image_reference {
-    publisher = "MicrosoftWindowsServer"
-    offer     = "WindowsServer"
-    sku       = "2025-Datacenter"
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-jammy"
+    sku       = "22_04-lts-gen2"
     version   = "latest"
   }
 
   identity {
     type = "SystemAssigned"
   }
+
+  secure_boot_enabled = true
+  vtpm_enabled        = true
+
+  patch_mode            = "AutomaticByPlatform"
+  patch_assessment_mode = "AutomaticByPlatform"
 }
 
-resource "azurerm_virtual_machine_extension" "vm_extension_windows" {
-  name                 = "vm-extension-windows"
-  virtual_machine_id   = azurerm_windows_virtual_machine.this.id
-  publisher            = "Microsoft.Compute"
-  type                 = "CustomScriptExtension"
-  type_handler_version = "1.10"
-
-  settings = jsonencode({
-    timestamp = 1
-  })
-
-  protected_settings = jsonencode({
-    commandToExecute = join(" ", [
-      "powershell.exe",
-      "-ExecutionPolicy Bypass",
-      "-Command",
-      "\"[IO.File]::WriteAllBytes('C:\\\\Windows\\\\Temp\\\\jumpbox-setup-cli-tools.ps1',[Convert]::FromBase64String('${filebase64("${path.module}/assets/scripts/jumpbox-setup-cli-tools.ps1")}'));",
-      "& 'C:\\\\Windows\\\\Temp\\\\jumpbox-setup-cli-tools.ps1'\"",
-    ])
-  })
+resource "azurerm_virtual_machine_extension" "vm_extension_linux" {
+  name                 = "vm-extension-linux"
+  virtual_machine_id   = azurerm_linux_virtual_machine.this.id
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.1"
+  settings             = <<SETTINGS
+    {
+      "script": "${filebase64("${path.module}/assets/scripts/jumpbox-setup-cli-tools.sh")}"
+    }
+SETTINGS
 }
