@@ -69,7 +69,7 @@ resource "azurerm_windows_virtual_machine" "this" {
   computer_name       = format("vm-%s", random_id.resource_group_name_suffix.hex)
   location            = local.resource_group_location
   resource_group_name = local.resource_group_name
-  size                = "Standard_D2s_v3"
+  size                = "Standard_D2ads_v5"
   admin_username      = "azureuser"
   admin_password      = "P@ssw0rd1234!"
   tags                = local.tags
@@ -84,13 +84,35 @@ resource "azurerm_windows_virtual_machine" "this" {
   }
 
   source_image_reference {
-    publisher = "MicrosoftWindowsDesktop"
-    offer     = "Windows-11"
-    sku       = "win11-24h2-pro"
+    publisher = "MicrosoftWindowsServer"
+    offer     = "WindowsServer"
+    sku       = "2025-Datacenter"
     version   = "latest"
   }
 
   identity {
     type = "SystemAssigned"
   }
+}
+
+resource "azurerm_virtual_machine_extension" "vm_extension_windows" {
+  name                 = "vm-extension-windows"
+  virtual_machine_id   = azurerm_windows_virtual_machine.this.id
+  publisher            = "Microsoft.Compute"
+  type                 = "CustomScriptExtension"
+  type_handler_version = "1.10"
+
+  settings = jsonencode({
+    timestamp = 1
+  })
+
+  protected_settings = jsonencode({
+    commandToExecute = join(" ", [
+      "powershell.exe",
+      "-ExecutionPolicy Bypass",
+      "-Command",
+      "\"[IO.File]::WriteAllBytes('C:\\\\Windows\\\\Temp\\\\jumpbox-setup-cli-tools.ps1',[Convert]::FromBase64String('${filebase64("${path.module}/assets/scripts/jumpbox-setup-cli-tools.ps1")}'));",
+      "& 'C:\\\\Windows\\\\Temp\\\\jumpbox-setup-cli-tools.ps1'\"",
+    ])
+  })
 }
