@@ -59,7 +59,7 @@
         </llm-emit-token-metric>
         <!-- Set the backend service to the Foundry model gateway -->
         <set-backend-service backend-id="${foundry_backend_name}" />
-
+        <set-header name="api-key" exists-action="delete" />
         <!-- Check if the request is a streaming request by looking for "stream" property in the JSON body -->
         <choose>
             <when condition="@(context.Request.Body.As<JObject>(true)["stream"] != null && context.Request.Body.As<JObject>(true)["stream"].Type != JTokenType.Null)">
