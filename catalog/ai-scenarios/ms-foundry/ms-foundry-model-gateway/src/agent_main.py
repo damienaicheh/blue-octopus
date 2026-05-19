@@ -2,19 +2,29 @@ import os
 
 from azure.ai.projects import AIProjectClient
 from azure.ai.projects.models import PromptAgentDefinition
-from azure.identity import DefaultAzureCredential
+from azure.identity import (
+    AzureCliCredential,
+    AzureDeveloperCliCredential,
+    ChainedTokenCredential,
+)
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
 
-apim_resource_gateway_url: str = os.environ["APIM_RESOURCE_GATEWAY_URL"]
 foundry_project_endpoint: str = os.environ["FOUNDRY_PROJECT_ENDPOINT"]
 foundry_model_name: str = os.getenv("FOUNDRY_MODEL_NAME", "gpt-5.4-mini")
+### Foundry connection name in the Terraform script
+foundry_model_gateway_connection_name: str = os.getenv(
+    "FOUNDRY_MODEL_GATEWAY_CONNECTION_NAME", "ai-gateway"
+)
 
 agent_id = None
 
-credential = DefaultAzureCredential()
+credential = ChainedTokenCredential(
+    AzureCliCredential(),
+    AzureDeveloperCliCredential(),
+)
 
 project_client = AIProjectClient(
     endpoint=foundry_project_endpoint,
@@ -23,7 +33,7 @@ project_client = AIProjectClient(
 
 ### Set the model deployment name environment variable
 ### The model name is now a path format of {model_gateway_connection}/{model_name} - only usable from SDK atm
-model = f"{apim_resource_gateway_url}/{foundry_model_name}"
+model = f"{foundry_model_gateway_connection_name}/{foundry_model_name}"
 
 joke_agent = project_client.agents.create_version(
     agent_name="my-test-agent",
