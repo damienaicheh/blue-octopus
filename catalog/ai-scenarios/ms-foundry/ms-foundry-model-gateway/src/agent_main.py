@@ -3,6 +3,10 @@ import os
 from azure.ai.projects import AIProjectClient
 from azure.ai.projects.models import PromptAgentDefinition
 from azure.identity import DefaultAzureCredential
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 apim_resource_gateway_url: str = os.environ["APIM_RESOURCE_GATEWAY_URL"]
 foundry_project_endpoint: str = os.environ["FOUNDRY_PROJECT_ENDPOINT"]
