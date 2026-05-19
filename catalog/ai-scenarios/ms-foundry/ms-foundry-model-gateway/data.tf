@@ -20,6 +20,7 @@ data "template_file" "inference_api_global_policy" {
   template = file("${path.module}/assets/policies/inference-api-global-policy.xml.tpl")
   vars = {
     foundry_backend_name = azurerm_api_management_backend.ms_foundry_azure_ai.name
+    tenant-id            = data.azurerm_client_config.current.tenant_id
   }
 }
 
