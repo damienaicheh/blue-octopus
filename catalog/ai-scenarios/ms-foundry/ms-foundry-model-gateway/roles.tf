@@ -124,6 +124,30 @@ resource "azurerm_role_assignment" "ms_foundry_project_foundry_project_manager_t
   principal_id         = data.azurerm_client_config.current.object_id
 }
 
+resource "azurerm_role_assignment" "ms_foundry_all_models_foundry_user_to_user" {
+  scope                = azapi_resource.ms_foundry_all_models.id
+  role_definition_name = "Foundry User"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+
+resource "azurerm_role_assignment" "ms_foundry_all_models_foundry_project_manager_to_user" {
+  scope                = azapi_resource.ms_foundry_all_models.id
+  role_definition_name = "Foundry Project Manager"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+
+resource "azurerm_role_assignment" "ms_foundry_project_all_models_project_foundry_user_to_user" {
+  scope                = azapi_resource.ms_foundry_project_all_models.id
+  role_definition_name = "Foundry User"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+
+resource "azurerm_role_assignment" "ms_foundry_project_all_models_project_foundry_project_manager_to_user" {
+  scope                = azapi_resource.ms_foundry_project_all_models.id
+  role_definition_name = "Foundry Project Manager"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+
 # =============================================================================
 # Role assignment for APIM to access the Foundry instance
 # ============================================================================
@@ -132,4 +156,21 @@ resource "azurerm_role_assignment" "apim_ms_foundry_openai_user" {
   scope                = azapi_resource.ms_foundry.id
   role_definition_name = "Cognitive Services OpenAI User"
   principal_id         = azurerm_api_management.this.identity[0].principal_id
+}
+
+# =============================================================================
+# Role assignment Foundry project instance to Foundry all models instance
+# ============================================================================
+
+resource "azurerm_role_assignment" "ms_foundry_all_models_foundry_user_to_foundry" {
+  scope                = azapi_resource.ms_foundry_all_models.id
+  role_definition_name = "Foundry User"
+  principal_id         = azurerm_user_assigned_identity.this.principal_id
+}
+
+
+resource "azurerm_role_assignment" "ms_foundry_project_all_models_project_foundry_user_to_foundry_project" {
+  scope                = azapi_resource.ms_foundry_project_all_models.id
+  role_definition_name = "Foundry User"
+  principal_id         = azurerm_user_assigned_identity.this.principal_id
 }
