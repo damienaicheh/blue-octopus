@@ -30,10 +30,6 @@ resource "azapi_resource" "ms_foundry_project" {
 
   depends_on = [
     azapi_resource.ms_foundry,
-    azurerm_private_endpoint.sto_blob,
-    azurerm_private_endpoint.cosmos_db,
-    azurerm_private_endpoint.ai_search,
-    azurerm_private_endpoint.ms_foundry
   ]
 }
 
@@ -59,6 +55,7 @@ resource "azapi_resource" "ms_foundry_project_capability_host" {
   }
 
   depends_on = [
+    azapi_resource.ms_foundry_account_capability_host,
     azapi_resource.conn_ai_search,
     azapi_resource.conn_cosmos_db,
     azapi_resource.conn_storage,

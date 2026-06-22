@@ -30,7 +30,7 @@ resource "azapi_resource" "ai_search" {
       }
 
       # Networking-related controls
-      publicNetworkAccess = "Disabled"
+      publicNetworkAccess = "Enabled"
       networkRuleSet = {
         bypass = "None"
       }

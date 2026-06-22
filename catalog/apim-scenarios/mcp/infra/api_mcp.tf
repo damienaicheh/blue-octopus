@@ -71,7 +71,7 @@ resource "azapi_resource" "colors_api_to_mcp" {
       subscriptionRequired = false
       path                 = "colors-api-mcp"
       protocols            = ["https"]
-      backendId = element(split("/", azapi_resource.colors_mcp_backend.id), -1)
+      backendId            = element(split("/", azapi_resource.colors_mcp_backend.id), -1)
       mcpProperties = {
         transportType = "streamable"
       }

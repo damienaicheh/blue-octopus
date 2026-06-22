@@ -23,13 +23,13 @@ variable "environment" {
 variable "location" {
   description = "Azure deployment location"
   type        = string
-  default     = "eastus2"
+  default     = "swedencentral"
 }
 
 variable "region" {
   description = "Azure deployment region"
   type        = string
-  default     = "eus2"
+  default     = "swc"
 }
 
 variable "tags" {
@@ -42,10 +42,4 @@ variable "resource_group_name" {
   type        = string
   description = "The name of the resource group"
   default     = ""
-}
-
-variable "open_ai_users" {
-  type        = list(string)
-  description = "The list of OpenAI users"
-  default     = []
 }

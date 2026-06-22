@@ -29,24 +29,31 @@ resource "azapi_resource" "ms_foundry" {
       customSubDomainName = format("aif-%s", local.resource_suffix_kebabcase)
 
       # Network-related controls
-      # Disable public access but allow Trusted Azure Services exception
-      publicNetworkAccess = "Disabled"
+      publicNetworkAccess = "Enabled"
       networkAcls = {
         defaultAction = "Allow"
       }
-
-      # Enable VNet injection for Standard Agents
-      networkInjections = [
-        {
-          scenario                   = "agent"
-          subnetArmId                = azurerm_subnet.subnet_host_agent.id
-          useMicrosoftManagedNetwork = false
-        }
-      ]
     }
   }
 
   depends_on = [
     azurerm_user_assigned_identity.this
+  ]
+}
+
+resource "azapi_resource" "ms_foundry_account_capability_host" {
+  type                      = "Microsoft.CognitiveServices/accounts/capabilityHosts@2025-04-01-preview"
+  name                      = format("acc-cap-host-%s", local.resource_suffix_kebabcase)
+  parent_id                 = azapi_resource.ms_foundry.id
+  schema_validation_enabled = false
+
+  body = {
+    properties = {
+      capabilityHostKind = "Agents"
+    }
+  }
+
+  depends_on = [
+    azapi_resource.ms_foundry
   ]
 }

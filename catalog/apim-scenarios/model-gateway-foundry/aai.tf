@@ -8,7 +8,7 @@ resource "azapi_resource" "application_insights" {
   body = {
     kind = "web"
     properties = {
-      Application_Type = "web"
+      Application_Type         = "web"
       WorkspaceResourceId      = azapi_resource.log_analytics_workspace.id
       CustomMetricsOptedInType = "WithDimensions"
     }

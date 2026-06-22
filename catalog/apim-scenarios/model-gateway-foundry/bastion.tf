@@ -65,15 +65,15 @@ resource "azurerm_network_interface" "vm" {
 }
 
 resource "azurerm_linux_virtual_machine" "this" {
-  name                = format("vm-%s", local.resource_suffix_kebabcase)
-  computer_name       = format("vm-%s", random_id.resource_group_name_suffix.hex)
-  location            = local.resource_group_location
-  resource_group_name = local.resource_group_name
-  size                = "Standard_D2ads_v5"
-  admin_username      = "azureuser"
-  admin_password      = "P@ssw0rd1234!"
+  name                            = format("vm-%s", local.resource_suffix_kebabcase)
+  computer_name                   = format("vm-%s", random_id.resource_group_name_suffix.hex)
+  location                        = local.resource_group_location
+  resource_group_name             = local.resource_group_name
+  size                            = "Standard_D2ads_v5"
+  admin_username                  = "azureuser"
+  admin_password                  = "P@ssw0rd1234!"
   disable_password_authentication = false
-  tags                = local.tags
+  tags                            = local.tags
 
   network_interface_ids = [
     azurerm_network_interface.vm.id

@@ -71,7 +71,7 @@ resource "azapi_resource" "colors_api_to_mcp" {
       subscriptionRequired = false
       path                 = "colors-api-mcp"
       protocols            = ["https"]
-      backendId = element(split("/", azapi_resource.colors_mcp_backend.id), -1)
+      backendId            = element(split("/", azapi_resource.colors_mcp_backend.id), -1)
       mcpProperties = {
         transportType = "streamable"
       }
@@ -144,8 +144,8 @@ resource "azapi_resource" "mcp_tool_get_colors_operation" {
 
 
 resource "azapi_resource" "mslearn_api_mcp_product_association" {
-  type = "Microsoft.ApiManagement/service/products/apiLinks@2025-03-01-preview"
-  name = "mslearn-api-mcp-product-association"
+  type      = "Microsoft.ApiManagement/service/products/apiLinks@2025-03-01-preview"
+  name      = "mslearn-api-mcp-product-association"
   parent_id = azurerm_api_management_product.free.id
   body = {
     properties = {

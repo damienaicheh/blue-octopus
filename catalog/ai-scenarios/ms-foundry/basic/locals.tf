@@ -16,13 +16,18 @@ locals {
     try(azurerm_resource_group.this[0].location, null)
   )
 
+  project_id_guid = "${substr(azapi_resource.ms_foundry_project.output.properties.internalId, 0, 8)}-${substr(azapi_resource.ms_foundry_project.output.properties.internalId, 8, 4)}-${substr(azapi_resource.ms_foundry_project.output.properties.internalId, 12, 4)}-${substr(azapi_resource.ms_foundry_project.output.properties.internalId, 16, 4)}-${substr(azapi_resource.ms_foundry_project.output.properties.internalId, 20, 12)}"
+
+
   tags = merge(
     var.tags,
     tomap(
       {
-        "Environment" = var.environment,
-        "ProjectName" = "ai-scenarios/ai-foundry/basic",
-        "Domain"      = var.domain
+        "Environment"     = var.environment,
+        "ProjectName"     = "ai-scenarios/ai-foundry/basic",
+        "Domain"          = var.domain,
+        "SecurityControl" = "Ignore",
+        "CostControl"     = "Ignore"
       }
     )
   )
@@ -34,10 +39,5 @@ locals {
         "TypeOfDeployment" = "azapi"
       }
     )
-  )
-
-  open_ai_access_users = concat(
-    [data.azurerm_client_config.current.object_id],
-    var.open_ai_users
   )
 }
