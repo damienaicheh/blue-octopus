@@ -21,3 +21,15 @@ resource "azapi_resource" "ms_learn_mcp_backend" {
     }
   }
 }
+
+resource "azapi_resource" "colors_mcp_backend" {
+  type      = "Microsoft.ApiManagement/service/backends@2024-06-01-preview"
+  name      = "colors-mcp-backend"
+  parent_id = azapi_resource.apim_dev.id
+  body = {
+    properties = {
+      url      = "https://colors-api.azurewebsites.net"
+      protocol = "http"
+    }
+  }
+}

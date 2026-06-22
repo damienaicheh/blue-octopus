@@ -61,7 +61,7 @@ resource "azapi_resource" "ms_learn_api_mcp" {
 }
 
 resource "azapi_resource" "colors_api_to_mcp" {
-  type      = "Microsoft.ApiManagement/service/apis@2024-06-01-preview"
+  type      = "Microsoft.ApiManagement/service/apis@2025-09-01-preview"
   name      = "colors-api-to-mcp"
   parent_id = azapi_resource.apim_dev.id
   body = {
@@ -71,17 +71,10 @@ resource "azapi_resource" "colors_api_to_mcp" {
       subscriptionRequired = false
       path                 = "colors-api-mcp"
       protocols            = ["https"]
-      mcpTools = [
-        {
-          operationId = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${local.resource_group_name}/providers/Microsoft.ApiManagement/service/${azapi_resource.apim_dev.name}/apis/${azurerm_api_management_api.colors_dev.name}/operations/GetColorById"
-        },
-        {
-          operationId = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${local.resource_group_name}/providers/Microsoft.ApiManagement/service/${azapi_resource.apim_dev.name}/apis/${azurerm_api_management_api.colors_dev.name}/operations/GetColorByName"
-        },
-        {
-          operationId = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${local.resource_group_name}/providers/Microsoft.ApiManagement/service/${azapi_resource.apim_dev.name}/apis/${azurerm_api_management_api.colors_dev.name}/operations/GetColors"
-        }
-      ]
+      backendId = element(split("/", azapi_resource.colors_mcp_backend.id), -1)
+      mcpProperties = {
+        transportType = "streamable"
+      }
       authenticationSettings = {
         openidAuthenticationSettings = []
         oAuth2AuthenticationSettings = []
@@ -97,8 +90,53 @@ resource "azapi_resource" "colors_api_to_mcp" {
 
   depends_on = [
     azapi_resource.apim_dev,
-    azapi_resource.github_mcp_backend
+    azapi_resource.colors_mcp_backend
   ]
+
+  schema_validation_enabled = false
+}
+
+resource "azapi_resource" "mcp_tool_get_color_by_id_operation" {
+  type      = "Microsoft.ApiManagement/service/apis/tools@2025-09-01-preview"
+  name      = "getColorById"
+  parent_id = azapi_resource.colors_api_to_mcp.id
+  body = {
+    properties = {
+      description = "Returns color specified by {colorId} (must be between 1 and 1000)."
+      displayName = "getColorById"
+      operationId = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${local.resource_group_name}/providers/Microsoft.ApiManagement/service/${azapi_resource.apim_dev.name}/apis/${azurerm_api_management_api.colors_dev.name}/operations/GetColorById"
+    }
+  }
+
+  schema_validation_enabled = false
+}
+
+resource "azapi_resource" "mcp_tool_get_color_by_name_operation" {
+  type      = "Microsoft.ApiManagement/service/apis/tools@2025-09-01-preview"
+  name      = "getColorByName"
+  parent_id = azapi_resource.colors_api_to_mcp.id
+  body = {
+    properties = {
+      description = "Returns color specified by {colorName}."
+      displayName = "getColorByName"
+      operationId = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${local.resource_group_name}/providers/Microsoft.ApiManagement/service/${azapi_resource.apim_dev.name}/apis/${azurerm_api_management_api.colors_dev.name}/operations/GetColorByName"
+    }
+  }
+
+  schema_validation_enabled = false
+}
+
+resource "azapi_resource" "mcp_tool_get_colors_operation" {
+  type      = "Microsoft.ApiManagement/service/apis/tools@2025-09-01-preview"
+  name      = "getColors"
+  parent_id = azapi_resource.colors_api_to_mcp.id
+  body = {
+    properties = {
+      description = "Returns all colors."
+      displayName = "getColors"
+      operationId = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${local.resource_group_name}/providers/Microsoft.ApiManagement/service/${azapi_resource.apim_dev.name}/apis/${azurerm_api_management_api.colors_dev.name}/operations/GetColors"
+    }
+  }
 
   schema_validation_enabled = false
 }
