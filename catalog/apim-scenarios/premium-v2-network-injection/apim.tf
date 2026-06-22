@@ -26,7 +26,7 @@ resource "azurerm_api_management" "this" {
 
   depends_on = [
     azurerm_private_dns_zone.privatelink_azure_api_net,
-    # azurerm_role_assignment.apim_subnet_network_contributor_current,
+    azurerm_network_security_group.apim
   ]
 }
 

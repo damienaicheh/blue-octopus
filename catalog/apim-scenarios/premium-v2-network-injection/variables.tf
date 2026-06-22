@@ -1,13 +1,13 @@
 variable "domain" {
   description = "Azure deployment domain"
   type        = string
-  default     = "apis"
+  default     = "nwk"
 }
 
 variable "workload" {
   description = "Azure deployment workload"
   type        = string
-  default     = "ai"
+  default     = "api"
 }
 
 variable "environment" {
@@ -54,12 +54,6 @@ variable "vnet_address_suffix" {
   type        = string
   description = "Vnet Address suffix"
   default     = ".0.0/16"
-}
-
-variable "hosts_agent_subnet_address_suffix" {
-  type        = string
-  description = "Hosts agent Subnet Address Suffix"
-  default     = ".0.0/24"
 }
 
 variable "paas_subnet_address_suffix" {
