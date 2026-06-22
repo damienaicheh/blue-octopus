@@ -140,3 +140,16 @@ resource "azapi_resource" "mcp_tool_get_colors_operation" {
 
   schema_validation_enabled = false
 }
+
+
+
+resource "azapi_resource" "mslearn_api_mcp_product_association" {
+  type = "Microsoft.ApiManagement/service/products/apiLinks@2025-03-01-preview"
+  name = "mslearn-api-mcp-product-association"
+  parent_id = azurerm_api_management_product.free.id
+  body = {
+    properties = {
+      apiId = azapi_resource.ms_learn_api_mcp.id
+    }
+  }
+}
