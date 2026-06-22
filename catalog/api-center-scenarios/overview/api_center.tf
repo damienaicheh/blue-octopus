@@ -99,13 +99,13 @@ resource "azapi_resource" "apim_prod_env" {
   }
 }
 
-resource "azapi_resource" "azure_skills_env" {
+resource "azapi_resource" "github_env" {
   type      = "Microsoft.ApiCenter/services/workspaces/environments@2024-06-01-preview"
-  name      = "azure-skills"
+  name      = "github-repository"
   parent_id = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${local.resource_group_name}/providers/Microsoft.ApiCenter/services/${azapi_resource.api_center.name}/workspaces/default"
   body = {
     properties = {
-      title = "Azure Skills"
+      title = "GitHub Repository"
       kind  = "production"
       server = {
         managementPortalUri = []

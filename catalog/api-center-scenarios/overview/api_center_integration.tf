@@ -24,7 +24,7 @@ resource "azapi_resource" "integration_apim_dev" {
 
 
 # Can't run 2 APIM sync at the same time
-resource "time_sleep" "wait_2_minutes" {
+resource "time_sleep" "wait_2_minutes_after_apim_dev" {
   depends_on = [azapi_resource.integration_apim_dev]
 
   create_duration = "2m"
@@ -50,12 +50,12 @@ resource "azapi_resource" "integration_apim_prod" {
     azapi_resource.apim_prod_env,
     azurerm_role_assignment.api_center_apim_role_prod_env,
     azurerm_api_management_api.pets_prod,
-    time_sleep.wait_2_minutes
+    time_sleep.wait_2_minutes_after_apim_dev
   ]
 }
 
 # Keep sync operations serialized to avoid concurrent source imports.
-resource "time_sleep" "wait_2_minutes_azure_skills" {
+resource "time_sleep" "wait_2_minutes_after_apim_prod" {
   depends_on = [azapi_resource.integration_apim_prod]
 
   create_duration = "2m"
@@ -78,7 +78,7 @@ resource "azapi_resource" "integration_azure_skills" {
           }
         ]
       }
-      targetEnvironmentId  = "/workspaces/default/environments/${azapi_resource.azure_skills_env.name}"
+      targetEnvironmentId  = "/workspaces/default/environments/${azapi_resource.github_env.name}"
       targetLifecycleStage = "design"
       importSpecification  = "ondemand"
     }
@@ -87,7 +87,46 @@ resource "azapi_resource" "integration_azure_skills" {
   schema_validation_enabled = false
 
   depends_on = [
-    azapi_resource.azure_skills_env,
-    time_sleep.wait_2_minutes_azure_skills
+    azapi_resource.github_env,
+    time_sleep.wait_2_minutes_after_apim_prod
+  ]
+}
+
+
+# Keep sync operations serialized to avoid concurrent source imports.
+resource "time_sleep" "wait_2_minutes_after_azure_skills" {
+  depends_on = [azapi_resource.integration_apim_prod]
+
+  create_duration = "2m"
+}
+
+resource "azapi_resource" "integration_microsoft_mcp" {
+  type      = "Microsoft.ApiCenter/services/workspaces/apiSources@2024-06-01-preview"
+  name      = "microsoft-mcp"
+  parent_id = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${local.resource_group_name}/providers/Microsoft.ApiCenter/services/${azapi_resource.api_center.name}/workspaces/default"
+  body = {
+    properties = {
+      apiSourceType = "Git"
+      gitSource = {
+        gitProvider   = "github"
+        repositoryUrl = "https://github.com/microsoft/mcp/tree/main/servers"
+        assetTypes = [
+          {
+            assetType      = "mcp-server"
+            filesToInclude = "**/server.json"
+          }
+        ]
+      }
+      targetEnvironmentId  = "/workspaces/default/environments/${azapi_resource.github_env.name}"
+      targetLifecycleStage = "design"
+      importSpecification  = "ondemand"
+    }
+  }
+
+  schema_validation_enabled = false
+
+  depends_on = [
+    azapi_resource.github_env,
+    time_sleep.wait_2_minutes_after_azure_skills
   ]
 }
