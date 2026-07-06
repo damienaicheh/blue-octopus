@@ -1,0 +1,11 @@
+# Base URL
+@authority=http://localhost:8088
+
+# Request to test the hosted agent
+POST {{authority}}/responses
+Content-Type: application/json
+
+{
+    "input":"Give me one practical tip for testing hosted agents.",
+    "stream":false
+}
