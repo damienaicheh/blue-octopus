@@ -68,6 +68,19 @@ resource "azurerm_cosmosdb_sql_role_assignment" "cosmosdb_db_sql_role_uai_entity
   ]
 }
 
+resource "azurerm_cosmosdb_sql_role_assignment" "cosmosdb_db_sql_role_uai_agent_definitions" {
+  name                = uuidv5("dns", "${azapi_resource.ms_foundry_project.name}${azurerm_user_assigned_identity.this.principal_id}agentdefinitions_dbsqlrole")
+  resource_group_name = local.resource_group_name
+  account_name        = azurerm_cosmosdb_account.this.name
+  scope               = "${azurerm_cosmosdb_account.this.id}/dbs/enterprise_memory"
+  role_definition_id  = "${azurerm_cosmosdb_account.this.id}/sqlRoleDefinitions/00000000-0000-0000-0000-000000000002"
+  principal_id        = azurerm_user_assigned_identity.this.principal_id
+
+  depends_on = [
+    azurerm_cosmosdb_sql_role_assignment.cosmosdb_db_sql_role_uai_entity_store_name
+  ]
+}
+
 # =============================================================================
 # Role assignment for Storage Blob Data Owner with condition
 # This must be assigned AFTER the capability host is created

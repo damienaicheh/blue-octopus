@@ -1,16 +1,16 @@
-resource "azurerm_cognitive_deployment" "msfoundry_mistral_deployment_model" {
-  name                 = "mistral-document-ai-2505"
+resource "azurerm_cognitive_deployment" "chat_completion_model" {
+  name                 = "gpt-5.4"
   cognitive_account_id = azapi_resource.ms_foundry.id
 
   sku {
-    name     = "DataZoneStandard"
-    capacity = 10
+    name     = "GlobalStandard"
+    capacity = 30
   }
 
   model {
-    format  = "Mistral AI"
-    name    = "mistral-document-ai-2505"
-    version = "1"
+    format  = "OpenAI"
+    name    = "gpt-5.4"
+    version = "2026-03-05"
   }
   version_upgrade_option = "OnceNewDefaultVersionAvailable"
   rai_policy_name        = "Microsoft.DefaultV2"
