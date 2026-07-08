@@ -1,11 +1,77 @@
 # Base URL
 @authority=http://localhost:8088
 
-# Request to test the hosted agent
+# Conversation id: keep it stable so the paused run can be resumed.
+@convId=demo-hitl-1
+
+# Approval id: copy the "id" of the mcp_approval_request output item returned
+# by Step 1 (same value as the paired function_call "call_id").
+@approvalId=253dc37b952ab858b4f655b9d42737e9
+
+###
+# Step 1 - Submit the task. The graph runs ideator -> writer, then pauses on
+# await_approval and returns an mcp_approval_request in the output.
 POST {{authority}}/responses
 Content-Type: application/json
 
 {
-    "input":"Give me one practical tip for testing hosted agents.",
-    "stream":false
+    "input": "Deploying containers on Azure",
+    "conversation": { "id": "{{convId}}" },
+    "stream": false
 }
+
+###
+# Step 2a - Approve: resume the run; it continues to the proofreader and
+# returns the final post.
+POST {{authority}}/responses
+Content-Type: application/json
+
+{
+    "conversation": { "id": "{{convId}}" },
+    "input": [
+        {
+            "type": "mcp_approval_response",
+            "approval_request_id": "{{approvalId}}",
+            "approve": true
+        }
+    ],
+    "stream": false
+}
+
+###
+# Step 2b - Revise: send feedback; the graph loops back to the writer, produces
+# a new draft, and pauses again with a fresh mcp_approval_request.
+POST {{authority}}/responses
+Content-Type: application/json
+
+{
+    "conversation": { "id": "{{convId}}" },
+    "input": [
+        {
+            "type": "function_call_output",
+            "call_id": "{{approvalId}}",
+            "output": "{\"resume\": {\"feedback\": \"Make it shorter and add a concrete call to action.\"}}"
+        }
+    ],
+    "stream": false
+}
+
+###
+# Step 2c - Reject: the turn ends with response.failed (code=interrupt_rejected).
+# The checkpoint is preserved so you can retry.
+POST {{authority}}/responses
+Content-Type: application/json
+
+{
+    "conversation": { "id": "{{convId}}" },
+    "input": [
+        {
+            "type": "mcp_approval_response",
+            "approval_request_id": "{{approvalId}}",
+            "approve": false,
+            "reason": "Off topic, refocus on Azure."
+        }
+    ],
+    "stream": false
+}
+

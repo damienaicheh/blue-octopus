@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import os
+from typing import Literal
 
 from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
@@ -13,7 +14,9 @@ from langchain_azure_ai.callbacks.tracers import AzureAIOpenTelemetryTracer
 from langchain_azure_ai.tools import AzureAIProjectToolbox
 from langchain_core.messages import HumanMessage
 from langgraph.checkpoint.memory import MemorySaver
-from langgraph.graph import START, MessagesState, StateGraph
+from langgraph.graph import END, START, StateGraph
+from langgraph.types import Command, interrupt
+from models.draft_state import DraftState
 
 load_dotenv()
 
@@ -22,6 +25,7 @@ WRITER = "writer"
 PROOFREADER = "proofreader"
 HANDOFF_TO_WRITER = "handoff_to_writer"
 HANDOFF_TO_PROOFREADER = "handoff_to_proofreader"
+AWAIT_APPROVAL = "await_approval"
 
 IDEATOR_INSTRUCTIONS = (
     "You are an editorial ideator specialized in the Microsoft technology "
@@ -54,7 +58,7 @@ PROOFREADER_INSTRUCTIONS = (
 )
 
 
-def handoff(state: MessagesState) -> dict:
+def handoff(state: DraftState) -> dict:
     """Turn the previous agent's answer into the next agent's input.
 
     Each ResponsesAgentNode only reads the last message and expects a
@@ -62,6 +66,36 @@ def handoff(state: MessagesState) -> dict:
     """
     last = state["messages"][-1]
     return {"messages": [HumanMessage(content=last.content)]}
+
+
+def await_approval(
+    state: DraftState,
+) -> Command[Literal["writer", "handoff_to_proofreader"]]:
+    # Pause after the writer so the client can review the draft. The host
+    # serializes this as an ``mcp_approval_request``. Three outcomes:
+    #  * approve -> continue to the proofreader,
+    #  * revise  -> resume payload carries ``{"feedback": "..."}``; loop back
+    #               to the writer with the feedback appended,
+    #  * reject  -> handled by the host (response.failed), never re-enters here.
+    draft = state["messages"][-1].content
+    resume = interrupt({"draft": draft})
+
+    if isinstance(resume, dict) and resume.get("feedback"):
+        new_history = state.get("revision_history", []) + [
+            {"draft": draft, "feedback": resume["feedback"]}
+        ]
+        revision_request = HumanMessage(
+            content=(
+                "Revise the following LinkedIn post based on the feedback.\n\n"
+                f"Post:\n{draft}\n\nFeedback: {resume['feedback']}"
+            )
+        )
+        return Command(
+            update={"revision_history": new_history, "messages": [revision_request]},
+            goto=WRITER,
+        )
+
+    return Command(update={"draft": draft}, goto=HANDOFF_TO_PROOFREADER)
 
 
 def main() -> None:
@@ -103,16 +137,22 @@ def main() -> None:
         instructions=PROOFREADER_INSTRUCTIONS,
     )
 
-    workflow = StateGraph(MessagesState).add_sequence(
-        [
-            (IDEATOR, ideator_node),
-            (HANDOFF_TO_WRITER, handoff),
-            (WRITER, writer_node),
-            (HANDOFF_TO_PROOFREADER, handoff),
-            (PROOFREADER, proofreader_node),
-        ]
-    )
+    workflow = StateGraph(DraftState)
+    workflow.add_node(IDEATOR, ideator_node)
+    workflow.add_node(HANDOFF_TO_WRITER, handoff)
+    workflow.add_node(WRITER, writer_node)
+    workflow.add_node(AWAIT_APPROVAL, await_approval)
+    workflow.add_node(HANDOFF_TO_PROOFREADER, handoff)
+    workflow.add_node(PROOFREADER, proofreader_node)
+
     workflow.add_edge(START, IDEATOR)
+    workflow.add_edge(IDEATOR, HANDOFF_TO_WRITER)
+    workflow.add_edge(HANDOFF_TO_WRITER, WRITER)
+    workflow.add_edge(WRITER, AWAIT_APPROVAL)
+    # await_approval routes dynamically: back to WRITER (revise) or forward to
+    # HANDOFF_TO_PROOFREADER (approve).
+    workflow.add_edge(HANDOFF_TO_PROOFREADER, PROOFREADER)
+    workflow.add_edge(PROOFREADER, END)
 
     # Sends OpenTelemetry spans for every LangGraph node to the Application
     # Insights resource connected to the Foundry project. We pass the connection
