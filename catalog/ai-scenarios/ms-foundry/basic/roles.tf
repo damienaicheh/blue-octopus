@@ -141,8 +141,16 @@ resource "azurerm_role_assignment" "ms_foundry_project_foundry_project_manager_t
 # Foundry role assignments end here
 # =============================================================================
 
+# Needed for Hosted Agent
 resource "azurerm_role_assignment" "acr_pull_to_ms_foundry_project" {
   scope                = azurerm_container_registry.this.id
   role_definition_name = "AcrPull"
+  principal_id         = azurerm_user_assigned_identity.this.principal_id
+}
+
+# Needed for Foundry Memory
+resource "azurerm_role_assignment" "foundry_user_to_user_assigned_identity_of_foundry" {
+  scope                = azapi_resource.ms_foundry_project.id
+  role_definition_name = "Foundry User"
   principal_id         = azurerm_user_assigned_identity.this.principal_id
 }

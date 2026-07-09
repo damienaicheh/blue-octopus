@@ -4,7 +4,7 @@
 # Usage: ./deploy.sh <acr-name> <foundry-project-endpoint>
 ACR_NAME="$1"
 FOUNDRY_PROJECT_ENDPOINT="$2"
-AGENT_NAME=langgraph-writer-agent
+AGENT_NAME=writer-workflow-lg
 
 if [ -z "$ACR_NAME" ] || [ -z "$FOUNDRY_PROJECT_ENDPOINT" ]; then
   echo "Usage: $0 <acr-name> <foundry-project-endpoint>" >&2

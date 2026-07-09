@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import asyncio
 import os
-from typing import Literal
 
 from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
@@ -18,9 +17,9 @@ from models.draft_state import DraftState
 
 load_dotenv()
 
-IDEATOR = "ideator"
-WRITER = "writer"
-PROOFREADER = "proofreader"
+IDEATOR = "agent-ideator-lc"
+WRITER = "agent-writer-lc"
+PROOFREADER = "agent-proofreader-lc"
 HANDOFF_TO_WRITER = "handoff_to_writer"
 HANDOFF_TO_PROOFREADER = "handoff_to_proofreader"
 AWAIT_APPROVAL = "await_approval"
@@ -68,7 +67,7 @@ def handoff(state: DraftState) -> dict:
 
 def await_approval(
     state: DraftState,
-) -> Command[Literal["writer", "handoff_to_proofreader"]]:
+) -> Command[str]:
     # Pause after the writer so the client can review the draft. The host
     # serializes this as an ``mcp_approval_request``. Three outcomes:
     #  * approve -> continue to the proofreader,

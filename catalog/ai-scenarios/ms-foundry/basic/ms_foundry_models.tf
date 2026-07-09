@@ -20,3 +20,26 @@ resource "azurerm_cognitive_deployment" "chat_completion_model" {
     azapi_resource.ms_foundry
   ]
 }
+
+resource "azurerm_cognitive_deployment" "text_embedding_model" {
+  name                 = "text-embedding-3-large"
+  cognitive_account_id = azapi_resource.ms_foundry.id
+
+  sku {
+    name     = "GlobalStandard"
+    capacity = 100
+  }
+
+  model {
+    format  = "OpenAI"
+    name    = "text-embedding-3-large"
+    version = "1"
+  }
+  version_upgrade_option = "OnceNewDefaultVersionAvailable"
+  rai_policy_name        = "Microsoft.DefaultV2"
+
+
+  depends_on = [
+    azapi_resource.ms_foundry
+  ]
+}
