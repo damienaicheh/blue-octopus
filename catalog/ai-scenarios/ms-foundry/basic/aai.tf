@@ -24,7 +24,7 @@ resource "azapi_resource" "conn_aai" {
       metadata = {
         ApiType    = "Azure"
         ResourceId = azurerm_application_insights.this.id
-        location   = var.location
+        location   = local.resource_group_location
       }
     }
   }

@@ -136,3 +136,13 @@ resource "azurerm_role_assignment" "ms_foundry_project_foundry_project_manager_t
   role_definition_name = "Foundry Project Manager"
   principal_id         = data.azurerm_client_config.current.object_id
 }
+
+# =============================================================================
+# Foundry role assignments end here
+# =============================================================================
+
+resource "azurerm_role_assignment" "acr_pull_to_ms_foundry_project" {
+  scope                = azurerm_container_registry.this.id
+  role_definition_name = "AcrPull"
+  principal_id         = azurerm_user_assigned_identity.this.principal_id
+}

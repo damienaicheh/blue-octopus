@@ -1,5 +1,3 @@
-# Copyright (c) Microsoft. All rights reserved.
-
 from __future__ import annotations
 
 import asyncio
@@ -154,17 +152,26 @@ def main() -> None:
     workflow.add_edge(HANDOFF_TO_PROOFREADER, PROOFREADER)
     workflow.add_edge(PROOFREADER, END)
 
-    # Sends OpenTelemetry spans for every LangGraph node to the Application
-    # Insights resource connected to the Foundry project. We pass the connection
-    # string explicitly (from APPLICATION_INSIGHTS_CONNECTION_STRING) to avoid
-    # the project telemetry auto-resolution returning a malformed value.
-    tracer = AzureAIOpenTelemetryTracer(
-        project_endpoint=project_endpoint,
-        credential=DefaultAzureCredential(),
-        connection_string=os.environ["APPLICATION_INSIGHTS_CONNECTION_STRING"],
-        name="langgraph-hosted-agent-sample",
-        trace_all_langgraph_nodes=True,
-    )
+    # Emit OpenTelemetry spans for every LangGraph node. On the hosted platform,
+    # Azure Monitor is already configured and APPLICATIONINSIGHTS_CONNECTION_STRING
+    # is a reserved (often empty) variable we must not reconfigure -- doing so
+    # crashes the exporter's parser. So we only configure Azure Monitor ourselves
+    # for local runs, using our own APPLICATION_INSIGHTS_CONNECTION_STRING.
+    tracer_kwargs = {
+        "project_endpoint": project_endpoint,
+        "credential": DefaultAzureCredential(),
+        "name": "langgraph-hosted-agent-sample",
+        "trace_all_langgraph_nodes": True,
+    }
+    if "APPLICATIONINSIGHTS_CONNECTION_STRING" in os.environ:
+        # Hosted platform: telemetry is already wired, do not reconfigure it.
+        tracer_kwargs["auto_configure_azure_monitor"] = False
+    else:
+        # Local run: configure Azure Monitor with our own connection string.
+        tracer_kwargs["connection_string"] = os.environ[
+            "APPLICATION_INSIGHTS_CONNECTION_STRING"
+        ]
+    tracer = AzureAIOpenTelemetryTracer(**tracer_kwargs)
 
     graph = workflow.compile(checkpointer=MemorySaver()).with_config(
         {"callbacks": [tracer]}
