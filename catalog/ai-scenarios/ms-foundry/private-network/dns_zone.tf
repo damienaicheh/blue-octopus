@@ -39,3 +39,9 @@ resource "azurerm_private_dns_zone" "privatelink_file_core_windows_net" {
   resource_group_name = local.resource_group_name
   tags                = local.tags
 }
+
+resource "azurerm_private_dns_zone" "privatelink_azurecr_io" {
+  name                = "privatelink.azurecr.io"
+  resource_group_name = local.resource_group_name
+  tags                = local.tags
+}

@@ -108,3 +108,27 @@ resource "azurerm_private_endpoint" "ms_foundry" {
     is_manual_connection = false
   }
 }
+
+resource "azurerm_private_endpoint" "acr" {
+  location            = local.resource_group_location
+  name                = format("pe-acr-%s", local.resource_suffix_kebabcase)
+  resource_group_name = local.resource_group_name
+  subnet_id           = azurerm_subnet.subnet_paas.id
+  tags                = local.tags
+
+  private_dns_zone_group {
+    name                 = "acr-default"
+    private_dns_zone_ids = [azurerm_private_dns_zone.privatelink_azurecr_io.id]
+  }
+
+  private_service_connection {
+    is_manual_connection           = false
+    name                           = format("pe-acr-%s", local.resource_suffix_kebabcase)
+    private_connection_resource_id = azurerm_container_registry.this.id
+    subresource_names              = ["registry"]
+  }
+
+  depends_on = [
+    azurerm_container_registry.this,
+  ]
+}

@@ -68,6 +68,19 @@ resource "azurerm_cosmosdb_sql_role_assignment" "cosmosdb_db_sql_role_uai_entity
   ]
 }
 
+resource "azurerm_cosmosdb_sql_role_assignment" "cosmosdb_db_sql_role_uai_agent_definitions" {
+  name                = uuidv5("dns", "${azapi_resource.ms_foundry_project.name}${azurerm_user_assigned_identity.this.principal_id}agentdefinitions_dbsqlrole")
+  resource_group_name = local.resource_group_name
+  account_name        = azurerm_cosmosdb_account.this.name
+  scope               = "${azurerm_cosmosdb_account.this.id}/dbs/enterprise_memory"
+  role_definition_id  = "${azurerm_cosmosdb_account.this.id}/sqlRoleDefinitions/00000000-0000-0000-0000-000000000002"
+  principal_id        = azurerm_user_assigned_identity.this.principal_id
+
+  depends_on = [
+    azurerm_cosmosdb_sql_role_assignment.cosmosdb_db_sql_role_uai_entity_store_name
+  ]
+}
+
 # =============================================================================
 # Role assignment for Storage Blob Data Owner with condition
 # This must be assigned AFTER the capability host is created
@@ -122,4 +135,22 @@ resource "azurerm_role_assignment" "ms_foundry_project_foundry_project_manager_t
   scope                = azapi_resource.ms_foundry_project.id
   role_definition_name = "Foundry Project Manager"
   principal_id         = data.azurerm_client_config.current.object_id
+}
+
+# =============================================================================
+# Foundry role assignments end here
+# =============================================================================
+
+# Needed for Hosted Agent
+resource "azurerm_role_assignment" "acr_pull_to_ms_foundry_project" {
+  scope                = azurerm_container_registry.this.id
+  role_definition_name = "AcrPull"
+  principal_id         = azurerm_user_assigned_identity.this.principal_id
+}
+
+# Needed for Foundry Memory
+resource "azurerm_role_assignment" "foundry_user_to_user_assigned_identity_of_foundry" {
+  scope                = azapi_resource.ms_foundry_project.id
+  role_definition_name = "Foundry User"
+  principal_id         = azurerm_user_assigned_identity.this.principal_id
 }
