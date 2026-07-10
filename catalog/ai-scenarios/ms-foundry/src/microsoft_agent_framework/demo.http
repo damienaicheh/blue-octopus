@@ -1,0 +1,12 @@
+# Base URL
+@authority=http://localhost:8088
+
+###
+# Step 1 - Submit the task. The graph runs ideator -> writer, then pauses on
+# await_approval and returns an mcp_approval_request in the output.
+POST {{authority}}/responses
+Content-Type: application/json
+
+{
+    "input": "Deploying containers on Azure"
+}

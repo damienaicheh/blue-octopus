@@ -1,0 +1,18 @@
+[project]
+name = "microsoft-agent-framework"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "azure-ai-projects==2.3.0",
+    "dotenv==0.9.9",
+    "agent-framework-core==1.11.0",
+    "agent-framework-devui==1.0.0b260709",
+    "agent-framework-foundry==1.10.1",
+    "agent-framework-orchestrations==1.0.0",
+    "agent-framework-foundry-hosting==1.0.0a260709",
+]
+
+[tool.uv]
+prerelease = "allow"
