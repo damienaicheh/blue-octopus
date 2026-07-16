@@ -1,0 +1,14 @@
+[project]
+name = "starter-scripts"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "azure-ai-projects==2.3.0",
+    "azure-identity>=1.26.0b2",
+    "dotenv==0.9.9",
+]
+
+[tool.uv]
+prerelease = "allow"
