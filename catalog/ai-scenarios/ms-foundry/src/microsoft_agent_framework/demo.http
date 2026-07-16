@@ -1,12 +1,61 @@
 # Base URL
 @authority=http://localhost:8088
 
+# Conversation id: keep it stable so the paused run can be resumed.
+@convId=demo-hitl-maf-1
+
+# Approval id: copy the "call_id" of the function_call output item named
+# "request_info" returned by Step 1 (the Coordinator's request_info surfaced
+# over the Responses protocol as a function_call).
+@approvalId=SET_THIS_TO_THE_CALL_ID_RETURNED_BY_STEP_1
+
+
 ###
-# Step 1 - Submit the task. The graph runs ideator -> writer, then pauses on
-# await_approval and returns an mcp_approval_request in the output.
+# Step 1 - Submit the topic. The workflow runs ideator -> writer, then the
+# Coordinator pauses and returns a function_call (name: request_info) asking a
+# human to review the drafted post. Copy its "call_id" into @approvalId above.
 POST {{authority}}/responses
 Content-Type: application/json
 
 {
-    "input": "Deploying containers on Azure"
+    "input": "Deploying containers on Azure",
+    "conversation": { "id": "{{convId}}" },
+    "stream": false
+}
+
+###
+# Step 2a - Approve: resume the run; the approved draft is forwarded to the
+# proofreader, which returns the final post.
+POST {{authority}}/responses
+Content-Type: application/json
+
+{
+    "conversation": { "id": "{{convId}}" },
+    "input": [
+        {
+            "type": "function_call_output",
+            "call_id": "{{approvalId}}",
+            "output": "approve"
+        }
+    ],
+    "stream": false
+}
+
+###
+# Step 2b - Revise: send a short guidance note instead of approving. The
+# Coordinator appends it and loops back to the writer, which produces a new
+# draft and pauses again with a fresh mcp_approval_request.
+POST {{authority}}/responses
+Content-Type: application/json
+
+{
+    "conversation": { "id": "{{convId}}" },
+    "input": [
+        {
+            "type": "function_call_output",
+            "call_id": "{{approvalId}}",
+            "output": "Make it shorter and add a concrete call to action."
+        }
+    ],
+    "stream": false
 }

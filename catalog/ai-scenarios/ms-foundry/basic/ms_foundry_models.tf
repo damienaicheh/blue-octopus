@@ -4,7 +4,7 @@ resource "azurerm_cognitive_deployment" "chat_completion_model" {
 
   sku {
     name     = "GlobalStandard"
-    capacity = 30
+    capacity = 100
   }
 
   model {

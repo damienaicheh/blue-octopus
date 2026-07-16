@@ -973,6 +973,7 @@ dependencies = [
     { name = "agent-framework-orchestrations" },
     { name = "azure-ai-projects" },
     { name = "dotenv" },
+    { name = "httpx" },
 ]
 
 [package.metadata]
@@ -984,6 +985,7 @@ requires-dist = [
     { name = "agent-framework-orchestrations", specifier = "==1.0.0" },
     { name = "azure-ai-projects", specifier = "==2.3.0" },
     { name = "dotenv", specifier = "==0.9.9" },
+    { name = "httpx", specifier = "==0.28.1" },
 ]
 
 [[package]]

@@ -51,3 +51,4 @@ __azurite_db_blob_**
 *.venv
 
 *__pycache__
+**/.checkpoints/**
