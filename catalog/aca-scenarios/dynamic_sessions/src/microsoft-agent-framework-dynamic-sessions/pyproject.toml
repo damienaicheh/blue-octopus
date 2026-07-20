@@ -1,0 +1,19 @@
+[project]
+name = "microsoft-agent-framework-dynamic-sessions"
+version = "0.1.0"
+description = "Azure Container Apps Dynamic Sessions tools for Microsoft Agent Framework"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "agent-framework-core==1.11.0",
+    "azure-core==1.41.0",
+    "azure-identity==1.25.3",
+    "requests==2.34.2",
+]
+
+[build-system]
+requires = ["hatchling==1.27.0"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+prerelease = "allow"

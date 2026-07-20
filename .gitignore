@@ -52,3 +52,7 @@ __azurite_db_blob_**
 
 *__pycache__
 **/.checkpoints/**
+
+**/bin/**
+**/out/**
+**/output/**

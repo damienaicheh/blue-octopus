@@ -1,0 +1,21 @@
+[project]
+name = "agent-sample"
+version = "0.1.0"
+description = "Microsoft Agent Framework sample using Azure Dynamic Sessions tool"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "azure-ai-projects==2.3.0",
+    "azure-identity==1.25.3",
+    "dotenv==0.9.9",
+    "microsoft-agent-framework-dynamic-sessions",
+    "agent-framework-core==1.11.0",
+    "agent-framework-devui==1.0.0b260709",
+    "agent-framework-foundry==1.10.1",
+]
+
+[tool.uv]
+prerelease = "allow"
+
+[tool.uv.sources]
+microsoft-agent-framework-dynamic-sessions = { path = "../microsoft-agent-framework-dynamic-sessions", editable = true }
