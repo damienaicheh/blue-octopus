@@ -1,0 +1,23 @@
+resource "azurerm_storage_account" "this" {
+  name                     = format("st%s", local.resource_suffix_lowercase)
+  resource_group_name      = local.resource_group_name
+  location                 = local.resource_group_location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+  tags                     = local.tags
+
+  ## Identity configuration
+  shared_access_key_enabled = false
+
+  ## Network access configuration
+  min_tls_version = "TLS1_2"
+
+  allow_nested_items_to_be_public = false
+
+  network_rules {
+    default_action = "Allow"
+    bypass = [
+      "AzureServices"
+    ]
+  }
+}
