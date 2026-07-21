@@ -40,6 +40,11 @@ INSTRUCTIONS = (
     "generates it and SAVES it as a file under `/mnt/data` (e.g. "
     "`plt.savefig('/mnt/data/chart.png')`). Confirm the saved file path in your "
     "answer.\n"
+    "- After you save ANY file under `/mnt/data`, you MUST immediately call the "
+    "`download_file` tool with that exact file name to copy it to the local "
+    "output folder. This is REQUIRED for every generated file — the task is NOT "
+    "complete until the file has been downloaded. Report the `local_path` "
+    "returned by the tool in your final answer.\n"
     "- If a piece of code fails, fix it and run it again until it succeeds. Only "
     "report a real result you obtained from executing code.\n"
     "\n"
@@ -48,6 +53,9 @@ INSTRUCTIONS = (
     "visible in stdout.\n"
     "- After running the tool, give a short, clear answer based on the actual "
     "output, and mention the saved file path when you created one."
+    "- If an image file is generated, download it using the `download_file` tool to "
+    "save it into the local output folder and view it, and mention the returned "
+    "local path in your answer."
 )
 
 # The stock ticker to chart. Change this to analyze a different company (AAPL,
@@ -118,7 +126,8 @@ async def main() -> None:
     )
 
     python_dynamic_sessions_python_tool = DynamicSessionsPythonTool(
-        pool_management_endpoint=python_pool_management_endpoint
+        pool_management_endpoint=python_pool_management_endpoint,
+        output_directory=os.path.join(os.path.dirname(__file__), "output"),
     )
 
     agent = Agent(
@@ -130,31 +139,15 @@ async def main() -> None:
         name=code_agent_executor.name,
         tools=[
             fetch_stock_closes,
-            python_dynamic_sessions_python_tool.tool,
+            python_dynamic_sessions_python_tool.python_repl,
+            python_dynamic_sessions_python_tool.list_files,
+            python_dynamic_sessions_python_tool.download_file,
         ],
     )
 
-    try:
-        print(f"User: {SAMPLE_PROMPT}\n")
-        response = await agent.run(SAMPLE_PROMPT)
-        print(f"Agent: {response.text}")
-
-        # Download any files the agent generated in the remote sandbox (/mnt/data)
-        # to a local "output" folder before the session is deleted.
-        output_dir = os.path.join(os.path.dirname(__file__), "output")
-        os.makedirs(output_dir, exist_ok=True)
-        remote_files = python_dynamic_sessions_python_tool.client.list_files()
-        if not remote_files:
-            print("\nNo files were generated in the remote session.")
-        for remote_file in remote_files:
-            local_path = os.path.join(output_dir, remote_file.filename)
-            python_dynamic_sessions_python_tool.client.download_file(
-                remote_file_path=remote_file.filename,
-                local_file_path=local_path,
-            )
-            print(f"Downloaded {remote_file.filename} -> {local_path}")
-    finally:
-        python_dynamic_sessions_python_tool.close()
+    print(f"User: {SAMPLE_PROMPT}\n")
+    response = await agent.run(SAMPLE_PROMPT)
+    print(f"Agent: {response.text}")
 
 
 if __name__ == "__main__":
