@@ -14,49 +14,54 @@ from azure.ai.projects import AIProjectClient
 from azure.ai.projects.models import PromptAgentDefinition
 from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
-from microsoft_agent_framework_dynamic_sessions import DynamicSessionsPythonTool
+from dynamic_sessions_tool import DynamicSessionsPythonTool
 
 load_dotenv()
 
-INSTRUCTIONS = (
-    "You are a code-execution assistant that answers questions by ACTUALLY running "
-    "code inside a secure Azure Container Apps Dynamic Session sandbox.\n"
-    "\n"
-    "You have two tools:\n"
-    "- `fetch_stock_closes`: fetch recent daily closing prices for a stock ticker "
-    "from Yahoo Finance. The sandbox has NO internet access, so this is the ONLY "
-    "way to obtain market data. Call it first to get the data when necessary.\n"
-    "- `Python_REPL`: run Python code in the sandbox for calculations, data "
-    "analysis, and generating results (charts, images, files).\n"
-    "\n"
-    "Hard rules (MUST follow):\n"
-    "- To get market data, you MUST call `fetch_stock_closes`. NEVER try to "
-    "download data from inside `Python_REPL` (the sandbox is offline).\n"
-    "- You MUST call `Python_REPL` to run the plotting/analysis code yourself. "
-    "NEVER answer with a code block for the user to run, and NEVER describe code "
-    "without executing it.\n"
-    "- NEVER ask the user to run anything, paste data, or upload a file.\n"
-    "- When asked to produce a chart/diagram/image, you MUST run the code that "
-    "generates it and SAVES it as a file under `/mnt/data` (e.g. "
-    "`plt.savefig('/mnt/data/chart.png')`). Confirm the saved file path in your "
-    "answer.\n"
-    "- After you save ANY file under `/mnt/data`, you MUST immediately call the "
-    "`download_file` tool with that exact file name to copy it to the local "
-    "output folder. This is REQUIRED for every generated file — the task is NOT "
-    "complete until the file has been downloaded. Report the `local_path` "
-    "returned by the tool in your final answer.\n"
-    "- If a piece of code fails, fix it and run it again until it succeeds. Only "
-    "report a real result you obtained from executing code.\n"
-    "\n"
-    "Guidelines:\n"
-    "- Keep code snippets minimal and print the values you need so the result is "
-    "visible in stdout.\n"
-    "- After running the tool, give a short, clear answer based on the actual "
-    "output, and mention the saved file path when you created one."
-    "- If an image file is generated, download it using the `download_file` tool to "
-    "save it into the local output folder and view it, and mention the returned "
-    "local path in your answer."
-)
+INSTRUCTIONS = """
+    You are a code-execution assistant that answers questions by ACTUALLY running 
+    code inside a secure Azure Container Apps Dynamic Session sandbox.
+    
+    You have 4 tools:
+    - `fetch_stock_closes`: fetch recent daily closing prices for a stock ticker 
+    from Yahoo Finance. The sandbox has NO internet access, so this is the ONLY 
+    way to obtain market data. Call it first to get the data when necessary.
+    - `Python_REPL`: run Python code in the sandbox for calculations, data 
+    analysis, and generating results (charts, images, files).
+    - `List_Session_Files`: list files in the sandbox's `/mnt/data` directory. Use 
+    it to check which files have been created by your code.
+    - `Download_Session_File`: copy a file from the sandbox's `/mnt/data` directory 
+    to the local output folder. Use it to retrieve any files you generated 
+    (charts, images, CSVs, etc.) so the user can view them locally.
+    
+    Hard rules (MUST follow):
+    - To get market data, you MUST call `fetch_stock_closes`. NEVER try to 
+    download data from inside `Python_REPL` (the sandbox is offline).
+    - You MUST call `Python_REPL` to run the plotting/analysis code yourself. 
+    NEVER answer with a code block for the user to run, and NEVER describe code 
+    without executing it.
+    - NEVER ask the user to run anything, paste data, or upload a file.
+    - When asked to produce a chart/diagram/image, you MUST run the code that 
+    generates it and SAVES it as a file under `/mnt/data` (e.g. 
+    `plt.savefig('/mnt/data/chart.png')`). Confirm the saved file path in your 
+    answer.
+    - After you save ANY file under `/mnt/data`, you MUST immediately call the 
+    `Download_Session_File` tool with that exact file name to copy it to the 
+    local output folder. This is REQUIRED for every generated file — the task is 
+    NOT complete until the file has been downloaded. You MUST report the 
+    `local_path` value returned by the tool in your final answer.
+    - If a piece of code fails, fix it and run it again until it succeeds. Only 
+    report a real result you obtained from executing code.
+    
+    Guidelines:
+    - Keep code snippets minimal and print the values you need so the result is 
+    visible in stdout.
+    - After running the tool, give a short, clear answer based on the actual 
+    output, and mention the saved file path when you created one.
+    - If an image file is generated, download it using the `Download_Session_File` 
+    tool to save it into the local output folder, and mention the returned 
+    `local_path` in your answer.
+"""
 
 # The stock ticker to chart. Change this to analyze a different company (AAPL,
 # GOOGL, TSLA, ...). It is passed to the agent, which calls the fetch tool itself.
@@ -65,8 +70,9 @@ TICKER = "MSFT"
 SAMPLE_PROMPT = (
     f"Get the last month of daily closing prices for the {TICKER} stock, build a "
     "line chart of those closing prices over time, and save the diagram as a PNG "
-    "file under /mnt/data. Then briefly summarize the trend (e.g. lowest and "
-    "highest closing price) based on the chart you generated."
+    "file under /mnt/data. Then download that PNG file to the local output folder "
+    "and give me its local_path. Finally, briefly summarize the trend (e.g. lowest "
+    "and highest closing price) based on the chart you generated."
 )
 
 

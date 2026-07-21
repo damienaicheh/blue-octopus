@@ -1,5 +1,5 @@
 [project]
-name = "microsoft-agent-framework-dynamic-sessions"
+name = "dynamic-sessions-tool"
 version = "0.1.0"
 description = "Azure Container Apps Dynamic Sessions tools for Microsoft Agent Framework"
 readme = "README.md"
