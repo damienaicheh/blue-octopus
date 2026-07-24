@@ -142,6 +142,12 @@ resource "azurerm_role_assignment" "ms_foundry_project_foundry_project_manager_t
 # =============================================================================
 
 # Needed for Hosted Agent
+resource "azurerm_role_assignment" "container_registry_repository_reader_to_ms_foundry_project" {
+  scope                = azurerm_container_registry.this.id
+  role_definition_name = "Container Registry Repository Reader"
+  principal_id         = azurerm_user_assigned_identity.this.principal_id
+}
+
 resource "azurerm_role_assignment" "acr_pull_to_ms_foundry_project" {
   scope                = azurerm_container_registry.this.id
   role_definition_name = "AcrPull"

@@ -8,7 +8,7 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 
 export AGENT_NAME="writer-workflow-maf"
 export SOURCE_DIR="$HERE/../microsoft-agent-framework"
-export AGENT_VERSION="v5"
+export AGENT_VERSION="v1"
 export IMAGE_TAG="${AGENT_NAME}:${AGENT_VERSION}"
 
 exec "$HERE/deploy_hosted_agent.sh" "$@"
