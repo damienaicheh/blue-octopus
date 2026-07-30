@@ -7,7 +7,7 @@
 # Approval id: copy the "call_id" of the function_call output item named
 # "request_info" returned by Step 1 (the Coordinator's request_info surfaced
 # over the Responses protocol as a function_call).
-@approvalId=SET_THIS_TO_THE_CALL_ID_RETURNED_BY_STEP_1
+@approvalCallId=SET_THIS_TO_THE_CALL_ID_RETURNED_BY_STEP_1
 
 
 ###
@@ -34,7 +34,7 @@ Content-Type: application/json
     "input": [
         {
             "type": "function_call_output",
-            "call_id": "{{approvalId}}",
+            "call_id": "{{approvalCallId}}",
             "output": "approve"
         }
     ],
@@ -53,7 +53,7 @@ Content-Type: application/json
     "input": [
         {
             "type": "function_call_output",
-            "call_id": "{{approvalId}}",
+            "call_id": "{{approvalCallId}}",
             "output": "Make it shorter and add a concrete call to action."
         }
     ],
