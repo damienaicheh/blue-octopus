@@ -51,10 +51,18 @@ echo "##### Successfully built and pushed the image to ACR: $IMAGE #####"
 
 # --- Resolve the Foundry account ARM scope (role assignment target) ---
 # The account name is embedded in the project endpoint; the account ARM id is
-# derived from it. Telemetry is handled by the platform, so no App Insights
-# connection string is passed here.
+# derived from it.
 ACCOUNT_NAME=$(echo "$FOUNDRY_PROJECT_ENDPOINT" | sed -E 's#^https://([^.]+)\..*#\1#')
 ACCOUNT_SCOPE=$(az cognitiveservices account list --query "[?name=='$ACCOUNT_NAME'].id | [0]" -o tsv)
+
+# --- Resolve the App Insights connection string ---
+# The platform reserves APPLICATIONINSIGHTS_CONNECTION_STRING but injects only a
+# bare instrumentation key, which the exporter rejects (cross-origin redirect).
+# Pass the full connection string (with IngestionEndpoint) so the agent can
+# export telemetry directly to the regional endpoint.
+RG_NAME=$(echo "$ACCOUNT_SCOPE" | sed -E 's#.*/resourceGroups/([^/]+)/.*#\1#')
+APPI_NAME=$(az resource list -g "$RG_NAME" --resource-type "microsoft.insights/components" --query "[0].name" -o tsv)
+APP_INSIGHTS_CONNECTION_STRING=$(az resource show -g "$RG_NAME" -n "$APPI_NAME" --resource-type "microsoft.insights/components" --query "properties.ConnectionString" -o tsv)
 
 # --- Create the agent (first deploy) or add a new version (subsequent deploys) ---
 TOKEN=$(az account get-access-token --resource https://ai.azure.com --query accessToken -o tsv)
@@ -69,7 +77,8 @@ DEFINITION=$(cat <<EOF
   "protocol_versions": [ {"protocol": "responses", "version": "2.0.0"} ],
   "environment_variables": {
     "MODEL_DEPLOYMENT_NAME": "$MODEL_DEPLOYMENT_NAME",
-    "TOOLBOX_NAME": "$TOOLBOX_NAME"
+    "TOOLBOX_NAME": "$TOOLBOX_NAME",
+    "APPLICATION_INSIGHTS_CONNECTION_STRING": "$APP_INSIGHTS_CONNECTION_STRING"
   }
 }
 EOF

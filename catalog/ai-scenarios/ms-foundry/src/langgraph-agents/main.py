@@ -151,26 +151,25 @@ def main() -> None:
     workflow.add_edge(HANDOFF_TO_PROOFREADER, PROOFREADER)
     workflow.add_edge(PROOFREADER, END)
 
-    # Emit OpenTelemetry spans for every LangGraph node. On the hosted platform,
-    # Azure Monitor is already configured and APPLICATIONINSIGHTS_CONNECTION_STRING
-    # is a reserved (often empty) variable we must not reconfigure -- doing so
-    # crashes the exporter's parser. So we only configure Azure Monitor ourselves
-    # for local runs, using our own APPLICATION_INSIGHTS_CONNECTION_STRING.
-    tracer_kwargs = {
-        "project_endpoint": project_endpoint,
-        "credential": DefaultAzureCredential(),
-        "name": "langgraph-hosted-agent-sample",
-        "trace_all_langgraph_nodes": True,
-    }
-    if "APPLICATIONINSIGHTS_CONNECTION_STRING" in os.environ:
-        # Hosted platform: telemetry is already wired, do not reconfigure it.
-        tracer_kwargs["auto_configure_azure_monitor"] = False
-    else:
-        # Local run: configure Azure Monitor with our own connection string.
-        tracer_kwargs["connection_string"] = os.environ[
-            "APPLICATION_INSIGHTS_CONNECTION_STRING"
-        ]
-    tracer = AzureAIOpenTelemetryTracer(**tracer_kwargs)
+    # The hosted runtime reserves APPLICATIONINSIGHTS_CONNECTION_STRING and injects
+    # it as a bare instrumentation key (no IngestionEndpoint), which the exporter
+    # rejects with a cross-origin redirect. The deploy script provides the full
+    # connection string via APPLICATION_INSIGHTS_CONNECTION_STRING; promote it so
+    # the host exporter targets the regional endpoint directly.
+    full_conn = os.environ.get("APPLICATION_INSIGHTS_CONNECTION_STRING", "").strip()
+    if full_conn:
+        os.environ["APPLICATIONINSIGHTS_CONNECTION_STRING"] = full_conn
+
+    # Emit OpenTelemetry spans for every LangGraph node. The host configures Azure
+    # Monitor from APPLICATIONINSIGHTS_CONNECTION_STRING; the tracer must not
+    # self-configure -- it would fail on the reserved bare instrumentation key.
+    tracer = AzureAIOpenTelemetryTracer(
+        project_endpoint=project_endpoint,
+        credential=DefaultAzureCredential(),
+        name="langgraph-hosted-agent-sample",
+        trace_all_langgraph_nodes=True,
+        auto_configure_azure_monitor=False,
+    )
 
     graph = workflow.compile(checkpointer=MemorySaver()).with_config(
         {"callbacks": [tracer]}
