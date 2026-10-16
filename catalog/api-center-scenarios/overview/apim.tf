@@ -21,7 +21,7 @@ resource "azurerm_api_management" "apim_prod" {
   publisher_name      = "Me"
   publisher_email     = "admin@me.io"
 
-  sku_name = "Developer_1"
+  sku_name = "StandardV2_1"
 
   identity {
     type = "SystemAssigned"
