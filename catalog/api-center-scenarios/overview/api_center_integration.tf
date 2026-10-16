@@ -1,12 +1,12 @@
 resource "azapi_resource" "integration_apim_dev" {
   type      = "Microsoft.ApiCenter/services/workspaces/apiSources@2024-06-01-preview"
-  name      = azapi_resource.apim_dev.name
+  name      = azurerm_api_management.apim_dev.name
   parent_id = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${local.resource_group_name}/providers/Microsoft.ApiCenter/services/${azapi_resource.api_center.name}/workspaces/default"
   body = {
     properties = {
       azureApiManagementSource = {
         msiResourceId = "${data.azurerm_client_config.current.tenant_id}/${azapi_resource.api_center.identity[0].principal_id}/systemAssigned"
-        resourceId    = azapi_resource.apim_dev.id
+        resourceId    = azurerm_api_management.apim_dev.id
       }
       targetEnvironmentId  = "/workspaces/default/environments/${azapi_resource.apim_dev_env.name}"
       targetLifecycleStage = "development"
@@ -14,8 +14,14 @@ resource "azapi_resource" "integration_apim_dev" {
     }
   }
 
+  # Source creation can return before the workspace import lock is released.
+  retry = {
+    error_message_regex = ["An API import operation is in progress for this workspace"]
+    interval_seconds    = 15
+  }
+
   depends_on = [
-    azapi_resource.apim_dev,
+    azurerm_api_management.apim_dev,
     azurerm_role_assignment.api_center_apim_role_dev_env,
     azurerm_api_management_api.colors_dev,
     azurerm_api_management_api.pets_dev,
@@ -32,18 +38,23 @@ resource "time_sleep" "wait_2_minutes_after_apim_dev" {
 
 resource "azapi_resource" "integration_apim_prod" {
   type      = "Microsoft.ApiCenter/services/workspaces/apiSources@2024-06-01-preview"
-  name      = azapi_resource.apim_prod.name
+  name      = azurerm_api_management.apim_prod.name
   parent_id = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${local.resource_group_name}/providers/Microsoft.ApiCenter/services/${azapi_resource.api_center.name}/workspaces/default"
   body = {
     properties = {
       azureApiManagementSource = {
         msiResourceId = "${data.azurerm_client_config.current.tenant_id}/${azapi_resource.api_center.identity[0].principal_id}/systemAssigned"
-        resourceId    = azapi_resource.apim_prod.id
+        resourceId    = azurerm_api_management.apim_prod.id
       }
       targetEnvironmentId  = "/workspaces/default/environments/${azapi_resource.apim_prod_env.name}"
       targetLifecycleStage = "production"
       importSpecification  = "always"
     }
+  }
+
+  retry = {
+    error_message_regex = ["An API import operation is in progress for this workspace"]
+    interval_seconds    = 15
   }
 
   depends_on = [
@@ -86,6 +97,11 @@ resource "azapi_resource" "integration_azure_skills" {
 
   schema_validation_enabled = false
 
+  retry = {
+    error_message_regex = ["An API import operation is in progress for this workspace"]
+    interval_seconds    = 15
+  }
+
   depends_on = [
     azapi_resource.github_env,
     time_sleep.wait_2_minutes_after_apim_prod
@@ -95,7 +111,7 @@ resource "azapi_resource" "integration_azure_skills" {
 
 # Keep sync operations serialized to avoid concurrent source imports.
 resource "time_sleep" "wait_2_minutes_after_azure_skills" {
-  depends_on = [azapi_resource.integration_apim_prod]
+  depends_on = [azapi_resource.integration_azure_skills]
 
   create_duration = "2m"
 }
@@ -113,7 +129,11 @@ resource "azapi_resource" "integration_microsoft_mcp" {
         assetTypes = [
           {
             assetType      = "mcp-server"
-            filesToInclude = "**/server.json"
+            filesToInclude = "Azure.Mcp.Server/server.json"
+          },
+          {
+            assetType      = "mcp-server"
+            filesToInclude = "Fabric.Mcp.Server/server.json"
           }
         ]
       }
@@ -124,6 +144,11 @@ resource "azapi_resource" "integration_microsoft_mcp" {
   }
 
   schema_validation_enabled = false
+
+  retry = {
+    error_message_regex = ["An API import operation is in progress for this workspace"]
+    interval_seconds    = 15
+  }
 
   depends_on = [
     azapi_resource.github_env,

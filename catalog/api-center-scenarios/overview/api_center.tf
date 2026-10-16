@@ -1,6 +1,6 @@
 resource "azapi_resource" "api_center" {
   type      = "Microsoft.ApiCenter/services@2024-06-01-preview"
-  name      = format("apict-%s", local.resource_suffix_kebabcase)
+  name      = format("apic-%s", local.resource_suffix_kebabcase)
   parent_id = local.resource_group_id
   identity {
     type = "SystemAssigned"
@@ -63,11 +63,11 @@ resource "azapi_resource" "public_facing" {
 
 resource "azapi_resource" "apim_dev_env" {
   type      = "Microsoft.ApiCenter/services/workspaces/environments@2024-06-01-preview"
-  name      = azapi_resource.apim_dev.name
+  name      = azurerm_api_management.apim_dev.name
   parent_id = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${local.resource_group_name}/providers/Microsoft.ApiCenter/services/${azapi_resource.api_center.name}/workspaces/default"
   body = {
     properties = {
-      title = azapi_resource.apim_dev.name
+      title = azurerm_api_management.apim_dev.name
       kind  = "development"
       server = {
         managementPortalUri = []
@@ -82,11 +82,11 @@ resource "azapi_resource" "apim_dev_env" {
 
 resource "azapi_resource" "apim_prod_env" {
   type      = "Microsoft.ApiCenter/services/workspaces/environments@2024-06-01-preview"
-  name      = azapi_resource.apim_prod.name
+  name      = azurerm_api_management.apim_prod.name
   parent_id = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${local.resource_group_name}/providers/Microsoft.ApiCenter/services/${azapi_resource.api_center.name}/workspaces/default"
   body = {
     properties = {
-      title = azapi_resource.apim_prod.name
+      title = azurerm_api_management.apim_prod.name
       kind  = "production"
       server = {
         managementPortalUri = []

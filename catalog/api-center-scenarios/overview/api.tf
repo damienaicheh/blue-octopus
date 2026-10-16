@@ -1,7 +1,7 @@
 resource "azurerm_api_management_api" "pets_dev" {
   name                  = "pets-api"
   resource_group_name   = local.resource_group_name
-  api_management_name   = azapi_resource.apim_dev.name
+  api_management_name   = azurerm_api_management.apim_dev.name
   revision              = "1"
   display_name          = "Pets"
   path                  = "api-pets"
@@ -16,7 +16,7 @@ resource "azurerm_api_management_api" "pets_dev" {
 resource "azurerm_api_management_api" "pets_prod" {
   name                  = "pets-api"
   resource_group_name   = local.resource_group_name
-  api_management_name   = azapi_resource.apim_prod.name
+  api_management_name   = azurerm_api_management.apim_prod.name
   revision              = "1"
   display_name          = "Pets"
   path                  = "api-pets"
@@ -31,7 +31,7 @@ resource "azurerm_api_management_api" "pets_prod" {
 resource "azurerm_api_management_api" "colors_dev" {
   name                  = "colors-api"
   resource_group_name   = local.resource_group_name
-  api_management_name   = azapi_resource.apim_dev.name
+  api_management_name   = azurerm_api_management.apim_dev.name
   revision              = "1"
   display_name          = "Colors"
   path                  = "api-colors"
