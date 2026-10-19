@@ -25,11 +25,10 @@ resource "azapi_resource" "eshop_team_billing_api" {
       displayName          = "Billing"
       apiRevision          = "1"
       path                 = "billing"
-      serviceUrl           = "https://colors-api.azurewebsites.net"
       protocols            = ["https"]
       subscriptionRequired = false
-      format               = "openapi+json-link"
-      value                = "https://colors-api.azurewebsites.net/swagger/v1/swagger.json"
+      format               = "openapi"
+      value                = file("${path.module}/assets/apis/billing.yaml")
     }
   }
 }

@@ -8,21 +8,14 @@ resource "azurerm_api_management_api_policy" "color_dev_request_content" {
 <policies>
     <inbound>
         <base />
-        <set-header name="DeploymentRegion" exists-action="append">
-            <value>@(context.Deployment.Region)</value>
-        </set-header>
-        <set-header name="GatewayInstanceId" exists-action="append">
-            <value>@(context.Deployment.Gateway.InstanceId)</value>
-        </set-header>
-        <set-header name="GatewayIsManaged" exists-action="append">
-            <value>@(context.Deployment.Gateway.IsManaged.ToString())</value>
-        </set-header>
-        <set-header name="ServiceId" exists-action="append">
-            <value>@(context.Deployment.ServiceId)</value>
-        </set-header>
-        <set-header name="ServiceName" exists-action="append">
-            <value>@(context.Deployment.ServiceName)</value>
-        </set-header>
+        <trace source="DeploymentContext" severity="information">
+            <message>API Management deployment context</message>
+            <metadata name="DeploymentRegion" value="@(context.Deployment.Region)" />
+            <metadata name="GatewayInstanceId" value="@(context.Deployment.Gateway.InstanceId)" />
+            <metadata name="GatewayIsManaged" value="@(context.Deployment.Gateway.IsManaged.ToString())" />
+            <metadata name="ServiceId" value="@(context.Deployment.ServiceId)" />
+            <metadata name="ServiceName" value="@(context.Deployment.ServiceName)" />
+        </trace>
     </inbound>
     <backend>
         <base />
@@ -46,21 +39,14 @@ resource "azurerm_api_management_api_policy" "color_prod_colors_request_content"
 <policies>
     <inbound>
         <base />
-        <set-header name="DeploymentRegion" exists-action="append">
-            <value>@(context.Deployment.Region)</value>
-        </set-header>
-        <set-header name="GatewayInstanceId" exists-action="append">
-            <value>@(context.Deployment.Gateway.InstanceId)</value>
-        </set-header>
-        <set-header name="GatewayIsManaged" exists-action="append">
-            <value>@(context.Deployment.Gateway.IsManaged.ToString())</value>
-        </set-header>
-        <set-header name="ServiceId" exists-action="append">
-            <value>@(context.Deployment.ServiceId)</value>
-        </set-header>
-        <set-header name="ServiceName" exists-action="append">
-            <value>@(context.Deployment.ServiceName)</value>
-        </set-header>
+        <trace source="DeploymentContext" severity="information">
+            <message>API Management deployment context</message>
+            <metadata name="DeploymentRegion" value="@(context.Deployment.Region)" />
+            <metadata name="GatewayInstanceId" value="@(context.Deployment.Gateway.InstanceId)" />
+            <metadata name="GatewayIsManaged" value="@(context.Deployment.Gateway.IsManaged.ToString())" />
+            <metadata name="ServiceId" value="@(context.Deployment.ServiceId)" />
+            <metadata name="ServiceName" value="@(context.Deployment.ServiceName)" />
+        </trace>
     </inbound>
     <backend>
         <base />
