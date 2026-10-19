@@ -63,7 +63,7 @@ resource "azapi_resource" "ms_learn_api_mcp" {
 resource "azapi_resource" "colors_api_to_mcp" {
   type      = "Microsoft.ApiManagement/service/apis@2025-09-01-preview"
   name      = "colors-api-to-mcp"
-  parent_id = azurerm_api_management.apim_dev.id
+  parent_id = azurerm_api_management.apim_prod.id
   body = {
     properties = {
       displayName          = "Colors API to MCP"
@@ -71,10 +71,9 @@ resource "azapi_resource" "colors_api_to_mcp" {
       subscriptionRequired = false
       path                 = "colors-api-mcp"
       protocols            = ["https"]
-      backendId            = element(split("/", azapi_resource.colors_mcp_backend.id), -1)
-      mcpProperties = {
-        transportType = "streamable"
-      }
+      # REST-backed MCP tools reference operations, not an external MCP backend.
+      backendId     = null
+      mcpProperties = null
       authenticationSettings = {
         openidAuthenticationSettings = []
         oAuth2AuthenticationSettings = []
@@ -89,8 +88,8 @@ resource "azapi_resource" "colors_api_to_mcp" {
   }
 
   depends_on = [
-    azurerm_api_management.apim_dev,
-    azapi_resource.colors_mcp_backend
+    azurerm_api_management.apim_prod,
+    azurerm_api_management_api.colors_prod
   ]
 
   schema_validation_enabled = false
@@ -104,7 +103,7 @@ resource "azapi_resource" "mcp_tool_get_color_by_id_operation" {
     properties = {
       description = "Returns color specified by {colorId} (must be between 1 and 1000)."
       displayName = "getColorById"
-      operationId = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${local.resource_group_name}/providers/Microsoft.ApiManagement/service/${azurerm_api_management.apim_dev.name}/apis/${azurerm_api_management_api.colors_dev.name}/operations/GetColorById"
+      operationId = "${azurerm_api_management.apim_prod.id}/apis/${azurerm_api_management_api.colors_prod.name}/operations/GetColorById"
     }
   }
 
@@ -119,7 +118,7 @@ resource "azapi_resource" "mcp_tool_get_color_by_name_operation" {
     properties = {
       description = "Returns color specified by {colorName}."
       displayName = "getColorByName"
-      operationId = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${local.resource_group_name}/providers/Microsoft.ApiManagement/service/${azurerm_api_management.apim_dev.name}/apis/${azurerm_api_management_api.colors_dev.name}/operations/GetColorByName"
+      operationId = "${azurerm_api_management.apim_prod.id}/apis/${azurerm_api_management_api.colors_prod.name}/operations/GetColorByName"
     }
   }
 
@@ -134,7 +133,7 @@ resource "azapi_resource" "mcp_tool_get_colors_operation" {
     properties = {
       description = "Returns all colors."
       displayName = "getColors"
-      operationId = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${local.resource_group_name}/providers/Microsoft.ApiManagement/service/${azurerm_api_management.apim_dev.name}/apis/${azurerm_api_management_api.colors_dev.name}/operations/GetColors"
+      operationId = "${azurerm_api_management.apim_prod.id}/apis/${azurerm_api_management_api.colors_prod.name}/operations/GetColors"
     }
   }
 

@@ -32,6 +32,18 @@ variable "region" {
   default     = "eus2"
 }
 
+variable "location_2" {
+  description = "Azure deployment location"
+  type        = string
+  default     = "francecentral"
+}
+
+variable "region_2" {
+  description = "Azure deployment region 2"
+  type        = string
+  default     = "frc"
+}
+
 variable "tags" {
   type        = map(any)
   description = "The custom tags for all resources"

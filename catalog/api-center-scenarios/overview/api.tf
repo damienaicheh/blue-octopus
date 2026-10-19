@@ -35,6 +35,23 @@ resource "azurerm_api_management_api" "colors_dev" {
   revision              = "1"
   display_name          = "Colors"
   path                  = "api-colors"
+  service_url           = "https://colors-api.azurewebsites.net"
+  protocols             = ["https"]
+  subscription_required = false
+  import {
+    content_format = "openapi+json-link"
+    content_value  = "https://colors-api.azurewebsites.net/swagger/v1/swagger.json"
+  }
+}
+
+resource "azurerm_api_management_api" "colors_prod" {
+  name                  = "colors-api"
+  resource_group_name   = local.resource_group_name
+  api_management_name   = azurerm_api_management.apim_prod.name
+  revision              = "1"
+  display_name          = "Colors"
+  path                  = "api-colors"
+  service_url           = "https://colors-api.azurewebsites.net"
   protocols             = ["https"]
   subscription_required = false
   import {
