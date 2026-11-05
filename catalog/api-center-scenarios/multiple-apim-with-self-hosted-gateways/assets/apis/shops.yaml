@@ -1,0 +1,289 @@
+openapi: 3.0.3
+info:
+  title: Shops API
+  description: Manage the shops, their product catalog and their stock for the Eshop platform.
+  version: 1.0.0
+tags:
+  - name: shops
+    description: Shops of the platform
+  - name: products
+    description: Products sold by a shop
+  - name: stock
+    description: Stock levels of a shop
+paths:
+  /shops:
+    get:
+      tags: [shops]
+      summary: List shops
+      operationId: listShops
+      parameters:
+        - name: city
+          in: query
+          description: Filter shops by city
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: List of shops
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Shop'
+    post:
+      tags: [shops]
+      summary: Create a shop
+      operationId: createShop
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewShop'
+      responses:
+        '201':
+          description: Shop created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shop'
+        '400':
+          description: Invalid shop
+  /shops/{shopId}:
+    parameters:
+      - $ref: '#/components/parameters/ShopId'
+    get:
+      tags: [shops]
+      summary: Get a shop
+      operationId: getShop
+      responses:
+        '200':
+          description: The shop
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shop'
+        '404':
+          description: Shop not found
+    put:
+      tags: [shops]
+      summary: Update a shop
+      operationId: updateShop
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewShop'
+      responses:
+        '200':
+          description: Shop updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shop'
+        '404':
+          description: Shop not found
+    delete:
+      tags: [shops]
+      summary: Delete a shop
+      operationId: deleteShop
+      responses:
+        '204':
+          description: Shop deleted
+        '404':
+          description: Shop not found
+  /shops/{shopId}/products:
+    parameters:
+      - $ref: '#/components/parameters/ShopId'
+    get:
+      tags: [products]
+      summary: List the products of a shop
+      operationId: listShopProducts
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+    post:
+      tags: [products]
+      summary: Add a product to a shop
+      operationId: addShopProduct
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewProduct'
+      responses:
+        '201':
+          description: Product created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+  /shops/{shopId}/products/{productId}:
+    parameters:
+      - $ref: '#/components/parameters/ShopId'
+      - $ref: '#/components/parameters/ProductId'
+    get:
+      tags: [products]
+      summary: Get a product
+      operationId: getShopProduct
+      responses:
+        '200':
+          description: The product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+    delete:
+      tags: [products]
+      summary: Remove a product from a shop
+      operationId: deleteShopProduct
+      responses:
+        '204':
+          description: Product removed
+        '404':
+          description: Product not found
+  /shops/{shopId}/stock:
+    parameters:
+      - $ref: '#/components/parameters/ShopId'
+    get:
+      tags: [stock]
+      summary: Get the stock levels of a shop
+      operationId: getShopStock
+      responses:
+        '200':
+          description: Stock levels
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StockItem'
+  /shops/{shopId}/stock/{productId}:
+    parameters:
+      - $ref: '#/components/parameters/ShopId'
+      - $ref: '#/components/parameters/ProductId'
+    put:
+      tags: [stock]
+      summary: Set the stock level of a product
+      operationId: updateShopStock
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [quantity]
+              properties:
+                quantity:
+                  type: integer
+                  minimum: 0
+                  example: 42
+      responses:
+        '200':
+          description: Stock updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockItem'
+        '404':
+          description: Product not found
+components:
+  parameters:
+    ShopId:
+      name: shopId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ProductId:
+      name: productId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    NewShop:
+      type: object
+      required: [name, city]
+      properties:
+        name:
+          type: string
+          example: Blue Octopus Store
+        city:
+          type: string
+          example: Paris
+        openingHours:
+          type: string
+          example: Mon-Sat 09:00-19:00
+    Shop:
+      allOf:
+        - $ref: '#/components/schemas/NewShop'
+        - type: object
+          required: [id]
+          properties:
+            id:
+              type: string
+              format: uuid
+    NewProduct:
+      type: object
+      required: [name, price]
+      properties:
+        name:
+          type: string
+          example: Octopus plush
+        category:
+          type: string
+          example: toys
+        price:
+          type: number
+          format: double
+          example: 19.9
+        currency:
+          type: string
+          example: EUR
+    Product:
+      allOf:
+        - $ref: '#/components/schemas/NewProduct'
+        - type: object
+          required: [id]
+          properties:
+            id:
+              type: string
+              format: uuid
+    StockItem:
+      type: object
+      properties:
+        productId:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+          example: 42
+        updatedAt:
+          type: string
+          format: date-time

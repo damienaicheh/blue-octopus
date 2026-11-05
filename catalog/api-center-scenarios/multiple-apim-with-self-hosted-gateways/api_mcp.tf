@@ -1,0 +1,154 @@
+resource "azapi_resource" "github_api_mcp" {
+  type      = "Microsoft.ApiManagement/service/apis@2025-09-01-preview"
+  name      = "github"
+  parent_id = azurerm_api_management.apim_dev.id
+  body = {
+    properties = {
+      displayName          = "GitHub MCP"
+      apiRevision          = "1"
+      subscriptionRequired = false
+      path                 = "api-github"
+      protocols            = ["https"]
+      backendId            = element(split("/", azapi_resource.github_mcp_backend.id), -1) # Get the last item to retrieve the name
+      mcpProperties = {
+        transportType = "streamable"
+      }
+      authenticationSettings = {
+        openidAuthenticationSettings = []
+        oAuth2AuthenticationSettings = []
+      }
+      subscriptionKeyParameterNames = {
+        header = "Ocp-Apim-Subscription-Key"
+        query  = "subscription-key"
+      }
+      type      = "mcp"
+      isCurrent = true
+    }
+  }
+
+  schema_validation_enabled = false
+}
+
+resource "azapi_resource" "ms_learn_api_mcp" {
+  type      = "Microsoft.ApiManagement/service/apis@2025-09-01-preview"
+  name      = "mslearn"
+  parent_id = azurerm_api_management.apim_dev.id
+  body = {
+    properties = {
+      displayName          = "Ms Learn MCP"
+      apiRevision          = "1"
+      subscriptionRequired = false
+      path                 = "api-mslearn"
+      protocols            = ["https"]
+      backendId            = element(split("/", azapi_resource.ms_learn_mcp_backend.id), -1) # Get the last item to retrieve the name
+      mcpProperties = {
+        transportType = "streamable"
+      }
+      authenticationSettings = {
+        openidAuthenticationSettings = []
+        oAuth2AuthenticationSettings = []
+      }
+      subscriptionKeyParameterNames = {
+        header = "Ocp-Apim-Subscription-Key"
+        query  = "subscription-key"
+      }
+      type      = "mcp"
+      isCurrent = true
+    }
+  }
+
+  schema_validation_enabled = false
+}
+
+resource "azapi_resource" "colors_api_to_mcp" {
+  type      = "Microsoft.ApiManagement/service/apis@2025-09-01-preview"
+  name      = "colors-api-to-mcp"
+  parent_id = azurerm_api_management.apim_prod.id
+  body = {
+    properties = {
+      displayName          = "Colors API to MCP"
+      apiRevision          = "1"
+      subscriptionRequired = false
+      path                 = "colors-api-mcp"
+      protocols            = ["https"]
+      # REST-backed MCP tools reference operations, not an external MCP backend.
+      backendId     = null
+      mcpProperties = null
+      authenticationSettings = {
+        openidAuthenticationSettings = []
+        oAuth2AuthenticationSettings = []
+      }
+      subscriptionKeyParameterNames = {
+        header = "Ocp-Apim-Subscription-Key"
+        query  = "subscription-key"
+      }
+      type      = "mcp"
+      isCurrent = true
+    }
+  }
+
+  depends_on = [
+    azurerm_api_management.apim_prod,
+    azurerm_api_management_api.colors_prod
+  ]
+
+  schema_validation_enabled = false
+}
+
+resource "azapi_resource" "mcp_tool_get_color_by_id_operation" {
+  type      = "Microsoft.ApiManagement/service/apis/tools@2025-09-01-preview"
+  name      = "getColorById"
+  parent_id = azapi_resource.colors_api_to_mcp.id
+  body = {
+    properties = {
+      description = "Returns color specified by {colorId} (must be between 1 and 1000)."
+      displayName = "getColorById"
+      operationId = "${azurerm_api_management.apim_prod.id}/apis/${azurerm_api_management_api.colors_prod.name}/operations/GetColorById"
+    }
+  }
+
+  schema_validation_enabled = false
+}
+
+resource "azapi_resource" "mcp_tool_get_color_by_name_operation" {
+  type      = "Microsoft.ApiManagement/service/apis/tools@2025-09-01-preview"
+  name      = "getColorByName"
+  parent_id = azapi_resource.colors_api_to_mcp.id
+  body = {
+    properties = {
+      description = "Returns color specified by {colorName}."
+      displayName = "getColorByName"
+      operationId = "${azurerm_api_management.apim_prod.id}/apis/${azurerm_api_management_api.colors_prod.name}/operations/GetColorByName"
+    }
+  }
+
+  schema_validation_enabled = false
+}
+
+resource "azapi_resource" "mcp_tool_get_colors_operation" {
+  type      = "Microsoft.ApiManagement/service/apis/tools@2025-09-01-preview"
+  name      = "getColors"
+  parent_id = azapi_resource.colors_api_to_mcp.id
+  body = {
+    properties = {
+      description = "Returns all colors."
+      displayName = "getColors"
+      operationId = "${azurerm_api_management.apim_prod.id}/apis/${azurerm_api_management_api.colors_prod.name}/operations/GetColors"
+    }
+  }
+
+  schema_validation_enabled = false
+}
+
+
+
+resource "azapi_resource" "mslearn_api_mcp_product_association" {
+  type      = "Microsoft.ApiManagement/service/products/apiLinks@2025-03-01-preview"
+  name      = "mslearn-api-mcp-product-association"
+  parent_id = azurerm_api_management_product.free.id
+  body = {
+    properties = {
+      apiId = azapi_resource.ms_learn_api_mcp.id
+    }
+  }
+}

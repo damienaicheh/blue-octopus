@@ -1,0 +1,308 @@
+openapi: 3.0.3
+info:
+  title: Billing API
+  description: Manage the invoices, payments and refunds of the Eshop platform.
+  version: 1.0.0
+tags:
+  - name: invoices
+    description: Customer invoices
+  - name: payments
+    description: Payments of an invoice
+  - name: refunds
+    description: Refunds of a payment
+paths:
+  /invoices:
+    get:
+      tags: [invoices]
+      summary: List invoices
+      operationId: listInvoices
+      parameters:
+        - name: customerId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: status
+          in: query
+          schema:
+            $ref: '#/components/schemas/InvoiceStatus'
+      responses:
+        '200':
+          description: List of invoices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Invoice'
+    post:
+      tags: [invoices]
+      summary: Create an invoice
+      operationId: createInvoice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewInvoice'
+      responses:
+        '201':
+          description: Invoice created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '400':
+          description: Invalid invoice
+  /invoices/{invoiceId}:
+    parameters:
+      - $ref: '#/components/parameters/InvoiceId'
+    get:
+      tags: [invoices]
+      summary: Get an invoice
+      operationId: getInvoice
+      responses:
+        '200':
+          description: The invoice
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '404':
+          description: Invoice not found
+    delete:
+      tags: [invoices]
+      summary: Cancel a draft invoice
+      operationId: cancelInvoice
+      responses:
+        '204':
+          description: Invoice cancelled
+        '404':
+          description: Invoice not found
+        '409':
+          description: Only draft invoices can be cancelled
+  /invoices/{invoiceId}/pdf:
+    parameters:
+      - $ref: '#/components/parameters/InvoiceId'
+    get:
+      tags: [invoices]
+      summary: Download the invoice as PDF
+      operationId: getInvoicePdf
+      responses:
+        '200':
+          description: The invoice PDF
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Invoice not found
+  /invoices/{invoiceId}/payments:
+    parameters:
+      - $ref: '#/components/parameters/InvoiceId'
+    get:
+      tags: [payments]
+      summary: List the payments of an invoice
+      operationId: listInvoicePayments
+      responses:
+        '200':
+          description: List of payments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Payment'
+    post:
+      tags: [payments]
+      summary: Pay an invoice
+      operationId: payInvoice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPayment'
+      responses:
+        '201':
+          description: Payment accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '402':
+          description: Payment declined
+  /payments/{paymentId}:
+    parameters:
+      - $ref: '#/components/parameters/PaymentId'
+    get:
+      tags: [payments]
+      summary: Get a payment
+      operationId: getPayment
+      responses:
+        '200':
+          description: The payment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '404':
+          description: Payment not found
+  /payments/{paymentId}/refunds:
+    parameters:
+      - $ref: '#/components/parameters/PaymentId'
+    get:
+      tags: [refunds]
+      summary: List the refunds of a payment
+      operationId: listPaymentRefunds
+      responses:
+        '200':
+          description: List of refunds
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Refund'
+    post:
+      tags: [refunds]
+      summary: Refund a payment
+      operationId: refundPayment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [amount]
+              properties:
+                amount:
+                  type: number
+                  format: double
+                  example: 10.0
+                reason:
+                  type: string
+                  example: Damaged product
+      responses:
+        '201':
+          description: Refund created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Refund'
+        '409':
+          description: Refund exceeds the paid amount
+components:
+  parameters:
+    InvoiceId:
+      name: invoiceId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    PaymentId:
+      name: paymentId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    InvoiceStatus:
+      type: string
+      enum: [draft, issued, paid, overdue, cancelled]
+    InvoiceLine:
+      type: object
+      required: [description, quantity, unitPrice]
+      properties:
+        description:
+          type: string
+          example: Octopus plush
+        quantity:
+          type: integer
+          minimum: 1
+          example: 2
+        unitPrice:
+          type: number
+          format: double
+          example: 19.9
+    NewInvoice:
+      type: object
+      required: [customerId, lines]
+      properties:
+        customerId:
+          type: string
+          format: uuid
+        currency:
+          type: string
+          example: EUR
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceLine'
+    Invoice:
+      allOf:
+        - $ref: '#/components/schemas/NewInvoice'
+        - type: object
+          required: [id, status]
+          properties:
+            id:
+              type: string
+              format: uuid
+            status:
+              $ref: '#/components/schemas/InvoiceStatus'
+            total:
+              type: number
+              format: double
+              example: 39.8
+            issuedAt:
+              type: string
+              format: date-time
+            dueDate:
+              type: string
+              format: date
+    NewPayment:
+      type: object
+      required: [amount, method]
+      properties:
+        amount:
+          type: number
+          format: double
+          example: 39.8
+        method:
+          type: string
+          enum: [card, sepa, paypal]
+    Payment:
+      allOf:
+        - $ref: '#/components/schemas/NewPayment'
+        - type: object
+          required: [id]
+          properties:
+            id:
+              type: string
+              format: uuid
+            invoiceId:
+              type: string
+              format: uuid
+            paidAt:
+              type: string
+              format: date-time
+    Refund:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        paymentId:
+          type: string
+          format: uuid
+        amount:
+          type: number
+          format: double
+        reason:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
