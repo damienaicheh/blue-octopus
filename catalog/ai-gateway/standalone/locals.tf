@@ -37,4 +37,18 @@ locals {
       }
     )
   )
+
+  monitoring_publisher_role_id = "3913510d-42f4-4e42-8a64-420c390055eb"
+  monitoring_role_hash         = sha256("${data.azapi_resource.monitoring_ingestion.output.dcr_id}|${azapi_resource.ai_gateway.identity[0].principal_id}|${local.monitoring_publisher_role_id}")
+
+  # Preserve the old script's assignment name so existing assignments can be imported.
+  monitoring_role_assignment_name = format(
+    "%s-%s-5%s-%x%s-%s",
+    substr(local.monitoring_role_hash, 0, 8),
+    substr(local.monitoring_role_hash, 8, 4),
+    substr(local.monitoring_role_hash, 13, 3),
+    8 + parseint(substr(local.monitoring_role_hash, 16, 1), 16) % 4,
+    substr(local.monitoring_role_hash, 17, 3),
+    substr(local.monitoring_role_hash, 20, 12)
+  )
 }

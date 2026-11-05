@@ -43,3 +43,12 @@ resource "azurerm_role_assignment" "monitoring_metrics_publisher_to_user_assigne
   role_definition_name = "Monitoring Metrics Publisher"
   principal_id         = azurerm_user_assigned_identity.this.principal_id
 }
+
+resource "azurerm_role_assignment" "ai_gateway_monitoring_publisher" {
+  name                             = local.monitoring_role_assignment_name
+  scope                            = data.azapi_resource.monitoring_ingestion.output.dcr_id
+  role_definition_id               = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/providers/Microsoft.Authorization/roleDefinitions/${local.monitoring_publisher_role_id}"
+  principal_id                     = azapi_resource.ai_gateway.identity[0].principal_id
+  principal_type                   = "ServicePrincipal"
+  skip_service_principal_aad_check = true
+}

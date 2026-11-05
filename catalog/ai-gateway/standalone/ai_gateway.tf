@@ -57,3 +57,35 @@ resource "azapi_resource" "ai_gateway_foundry_provider" {
     azapi_resource.ai_gateway_foundry_user
   ]
 }
+
+resource "azapi_resource" "ai_gateway_telemetry_exporter" {
+  type                      = "Microsoft.ApiManagement/aigateways/workspaces/telemetryExporters@2025-09-01-preview"
+  name                      = "applicationInsights"
+  parent_id                 = "${azapi_resource.ai_gateway.id}/workspaces/default"
+  schema_validation_enabled = false
+
+  # The preview API may omit tracesEndpoint and credentials from GET responses.
+  ignore_missing_property = true
+
+  body = {
+    properties = {
+      kind           = "OpenTelemetry"
+      payloadCapture = false
+      applicationInsights = {
+        resourceId = azapi_resource.application_insights.id
+      }
+      openTelemetry = {
+        metricsEndpoint = data.azapi_resource.monitoring_ingestion.output.metrics_endpoint
+        logsEndpoint    = data.azapi_resource.monitoring_ingestion.output.logs_endpoint
+        tracesEndpoint  = data.azapi_resource.monitoring_ingestion.output.traces_endpoint
+        credentials = {
+          managedIdentity = {
+            resource = "https://monitor.azure.com"
+          }
+        }
+      }
+    }
+  }
+
+  depends_on = [azurerm_role_assignment.ai_gateway_monitoring_publisher]
+}
