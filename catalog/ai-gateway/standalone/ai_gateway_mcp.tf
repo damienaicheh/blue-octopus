@@ -9,7 +9,6 @@ resource "azapi_resource" "ai_gateway_microsoft_learn_mcp" {
       displayName = "Microsoft Learn"
       description = "Search Microsoft documentation and code samples."
       type        = "mcp"
-      failureMode = "failClosed"
       policies = [
         {
           type           = "requestRateLimit"

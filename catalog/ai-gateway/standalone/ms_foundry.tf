@@ -46,20 +46,3 @@ resource "azapi_resource" "ms_foundry" {
     "properties.endpoint"
   ]
 }
-
-resource "azapi_resource" "ms_foundry_account_capability_host" {
-  type                      = "Microsoft.CognitiveServices/accounts/capabilityHosts@2026-07-01"
-  name                      = format("acc-cap-host-%s", local.resource_suffix_kebabcase)
-  parent_id                 = azapi_resource.ms_foundry.id
-  schema_validation_enabled = false
-
-  body = {
-    properties = {
-      capabilityHostKind = "Agents"
-    }
-  }
-
-  depends_on = [
-    azapi_resource.ms_foundry
-  ]
-}
