@@ -15,5 +15,4 @@ resource "azapi_resource" "application_insights" {
       AzureMonitorWorkspaceIngestionMode = "Enabled"
     }
   }
-
 }

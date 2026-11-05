@@ -8,9 +8,6 @@ resource "azapi_resource" "ai_gateway" {
   location = local.resource_group_location
   tags     = local.tags_azapi
   body = {
-    sku = {
-      name = "Standard"
-    }
     properties = {}
   }
   schema_validation_enabled = false

@@ -37,7 +37,6 @@ locals {
       }
     )
   )
-
   monitoring_publisher_role_id = "3913510d-42f4-4e42-8a64-420c390055eb"
   monitoring_role_hash         = sha256("${data.azapi_resource.monitoring_ingestion.output.dcr_id}|${azapi_resource.ai_gateway.identity[0].principal_id}|${local.monitoring_publisher_role_id}")
 

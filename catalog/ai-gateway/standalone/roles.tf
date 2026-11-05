@@ -52,3 +52,18 @@ resource "azurerm_role_assignment" "ai_gateway_monitoring_publisher" {
   principal_type                   = "ServicePrincipal"
   skip_service_principal_aad_check = true
 }
+
+resource "azurerm_role_assignment" "ai_gateway_user_to_foundry_identity" {
+  scope                            = azapi_resource.ai_gateway.id
+  role_definition_name             = "AI Gateway User"
+  principal_id                     = azurerm_user_assigned_identity.this.principal_id
+}
+
+# resource "azurerm_role_assignment" "ai_gateway_user_to_foundry_identity" {
+#   name                             = uuidv5("url", "${azapi_resource.ai_gateway.id}|${azurerm_user_assigned_identity.this.principal_id}|caad7a21-134e-43f4-a550-c5ffc17e051c")
+#   scope                            = azapi_resource.ai_gateway.id
+#   role_definition_id               = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/providers/Microsoft.Authorization/roleDefinitions/caad7a21-134e-43f4-a550-c5ffc17e051c"
+#   principal_id                     = azurerm_user_assigned_identity.this.principal_id
+#   principal_type                   = "ServicePrincipal"
+#   skip_service_principal_aad_check = true
+# }
