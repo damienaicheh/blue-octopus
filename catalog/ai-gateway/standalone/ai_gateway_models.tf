@@ -114,3 +114,29 @@ resource "azapi_resource" "ai_gateway_model_alias_mini" {
     }
   }
 }
+
+
+resource "azapi_resource" "ai_gateway_model_alias_gpt_latest" {
+  type                      = "Microsoft.ApiManagement/aigateways/workspaces/aliases@2025-09-01-preview"
+  name                      = "gpt-latest"
+  parent_id                 = "${azapi_resource.ai_gateway.id}/workspaces/default"
+  schema_validation_enabled = false
+
+  body = {
+    properties = {
+      aliasName = "gpt-latest"
+      backendModels = [
+        {
+          resourceId = azapi_resource.ai_gateway_foundry_model.id
+          priority   = 0
+          weight     = 70
+        },
+        {
+          resourceId = azapi_resource.ai_gateway_foundry_model_mini.id
+          priority   = 1
+          weight     = 30
+        }
+      ]
+    }
+  }
+}
